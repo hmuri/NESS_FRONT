@@ -4,20 +4,35 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "moment/locale/ko";
 import { useEffect, useState } from "react";
 
+const localizer = momentLocalizer(moment);
+
 moment.locale("ko");
-const Header: React.FC<ToolbarProps> = ({ label }) => {
-  const [formattedDate, setFormattedDate] = useState("");
+const Header: React.FC<ToolbarProps> = () => {
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [day, setDay] = useState("");
+  const [weekday, setWeekday] = useState("");
 
   useEffect(() => {
-    console.log("label" + label);
-    console.log("formattedDate" + formattedDate);
-    setFormattedDate(moment(label).format("YYYY년 M월"));
-  }, [label]);
+    const currentDate = moment(); // 현재 날짜 및 시간을 가져옵니다.
+    setYear(currentDate.format("YYYY"));
+    setMonth(currentDate.format("M월"));
+    setDay(currentDate.format("D일"));
+    setWeekday(currentDate.format("dddd")); // 요일
+  }, []);
+
   return (
     <div className="mt-[72px] flex items-center justify-center w-full mb-[21.5px]">
-      <div className="h-[41px] w-[142px] flex ">
-        <div className="w-[48px] px-[12px] pb-[6px] pt-[4px] rounded-l-md bg-gradient-to-b from-[#7A64FF] to-[#7A64FF33]"></div>
-        <div className="w-[94px] px-[12px]border border-t border-r border-b border-gray-200 rounded-r-md"></div>
+      <div className="h-[41px] w-[145px] flex ">
+        <div className="text-white w-[48px] px-[12px] pb-[6px] pt-[4px] rounded-l-md bg-gradient-to-b from-[#7A64FF] to-[#7A64FF33]">
+          <div className="text-[10px] text-center">{year}</div>
+          <div className="text-[16px] leading-[110%] text-center">{month}</div>
+        </div>
+        <div className="flex items-center w-[97px] px-[8px] border border-t border-r border-b border-gray-200 rounded-r-md">
+          <div className="text-[15px] text-center tracking-[0.3px]">
+            {day} {weekday}
+          </div>
+        </div>
       </div>
     </div>
   );
