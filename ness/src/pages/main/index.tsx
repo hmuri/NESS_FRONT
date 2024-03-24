@@ -1,7 +1,7 @@
 export default function Main() {
   return (
     <>
-      <div>
+      <div className="p-[20px]">
         <div className="mt-[40px] flex w-full mb-[45px]">
           <div className="flex flex-7/10 pr-[20px] h-100px items-center">
             <div className="text-[24px] font-medium ">

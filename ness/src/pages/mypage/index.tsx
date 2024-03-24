@@ -1,7 +1,7 @@
 export default function MyPage() {
   return (
     <>
-      <div>
+      <div className="p-[20px]">
         <div className="mt-[81px] flex flex-col w-full items-center">
           <div>
             <div className="w-[86px] h-[86px] bg-[#F2F0FF] rounded-[50%]"></div>
