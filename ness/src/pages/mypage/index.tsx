@@ -1,14 +1,21 @@
-export default function MyPage() {
+import axios from "axios";
+import { GetServerSidePropsContext } from "next";
+
+export default function MyPage({ profile }: any) {
   return (
     <>
       <div className="p-[20px]">
         <div className="mt-[81px] flex flex-col w-full items-center">
           <div>
-            <div className="w-[86px] h-[86px] bg-[#F2F0FF] rounded-[50%]"></div>
+            <img
+              src={profile.pictureUrl}
+              alt="Profile"
+              className="w-[86px] h-[86px] bg-[#F2F0FF] rounded-[50%]"
+            ></img>
           </div>
           <div className="flex items-center pt-[36px]">
             <div className="text-[24px] font-medium w-[200px] text-center overflow-wrap-break-word mb-[36px]">
-              민주
+              {profile.nickname}
             </div>
           </div>
         </div>
@@ -35,4 +42,47 @@ export default function MyPage() {
       </nav>
     </>
   );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { req } = context;
+  const cookies = req.headers.cookie;
+
+  let accessToken = "";
+
+  // 쿠키 문자열을 파싱하여 accessToken 추출
+  if (cookies) {
+    const cookieObj = Object.fromEntries(
+      cookies.split(";").map((cookie) => {
+        const [key, value] = cookie.split("=");
+        return [key.trim(), decodeURIComponent(value)];
+      })
+    );
+
+    accessToken = cookieObj.accessToken || "";
+  }
+
+  try {
+    const response = await axios.get("http://13.125.106.110:8080/profile", {
+      headers: {
+        Authorization: `${accessToken}`,
+      },
+    });
+    const profile = response.data;
+
+    // 페이지 컴포넌트로 프로필 정보 전달
+    return {
+      props: {
+        profile,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch profile", error);
+    // 에러 처리: 프로필 정보 없이 페이지 렌더링
+    return {
+      props: {
+        profile: {},
+      },
+    };
+  }
 }
