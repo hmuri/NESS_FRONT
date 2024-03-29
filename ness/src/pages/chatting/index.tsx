@@ -1,48 +1,37 @@
-import { GetServerSidePropsContext } from "next";
+import axios from "axios";
 import { IChatMessage, ISendMessage } from "../../module/interface/chatting";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { GetServerSidePropsContext } from "next";
 
-const Chatting = ({ accessToken }: any) => {
-  const [chatMessages, setChatMessages] = useState<IChatMessage[]>([]);
+interface IChattingProps {
+  defaultMessageList: IChatMessage[];
+  accessToken: string;
+}
+const Chatting = (props: IChattingProps) => {
+  const [chatMessages, setChatMessages] = useState<IChatMessage[]>(
+    props.defaultMessageList
+  );
   const [newMessage, setNewMessage] = useState("");
-  const [ws, setWs] = useState<WebSocket | null>(null);
-
-  useEffect(() => {
-    // WebSocket 연결 설정
-    const socket = new WebSocket(
-      `ws://localhost:3000?accessToken=${accessToken}`
-    );
-
-    socket.onopen = () => {
-      console.log("WebSocket Connected");
+  const handleSendMessage = async () => {
+    const newChatMessage: ISendMessage = {
+      chatType: "USER",
+      text: newMessage,
     };
-
-    socket.onmessage = (event) => {
-      const newMessage: IChatMessage = JSON.parse(event.data);
-      setChatMessages((prevMessages) => [...prevMessages, newMessage]);
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket Disconnected");
-    };
-
-    setWs(socket);
-
-    return () => {
-      socket.close();
-    };
-  }, [accessToken]);
-
-  const handleSendMessage = () => {
-    if (ws) {
-      const newChatMessage: ISendMessage = {
-        chatType: "USER",
-        text: newMessage,
-      };
-
-      ws.send(JSON.stringify(newChatMessage));
-      setNewMessage("");
+    try {
+      const response = await axios.post(
+        "http://13.125.106.110:8080/chat",
+        newChatMessage,
+        {
+          headers: {
+            Authorization: `${props.accessToken}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Failed to fetch profile", error);
     }
+
+    setNewMessage("");
   };
 
   return (
@@ -52,7 +41,7 @@ const Chatting = ({ accessToken }: any) => {
       </div>
       <div className="relative flex-1 w-full bg-[#F2F0FF] py-[26px]">
         <div className="px-[20px]">
-          {chatMessages.map((message, index) => {
+          {chatMessages?.map((message, index) => {
             const isUser = message.chatType === "USER";
             return (
               <div
@@ -86,13 +75,14 @@ const Chatting = ({ accessToken }: any) => {
     </div>
   );
 };
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const cookies = req.headers.cookie;
 
   let accessToken = "";
 
-  // 쿠키에서 액세스 토큰 추출
+  // 쿠키 문자열을 파싱하여 accessToken 추출
   if (cookies) {
     const cookieObj = Object.fromEntries(
       cookies.split(";").map((cookie) => {
@@ -103,12 +93,26 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     accessToken = cookieObj.accessToken || "";
   }
+  console.log("accessToken" + accessToken);
 
-  return {
-    props: {
-      accessToken,
-    },
-  };
+  try {
+    const response = await axios.get("http://13.125.106.110:8080/chat", {
+      headers: {
+        Authorization: `${accessToken}`,
+      },
+    });
+    console.log("response.data" + response.data.chatList);
+    const defaultMessageList = response.data.chatList;
+
+    return {
+      props: {
+        defaultMessageList,
+        accessToken,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch profile", error);
+  }
 }
 
 export default Chatting;

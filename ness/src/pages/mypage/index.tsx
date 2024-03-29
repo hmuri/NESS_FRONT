@@ -11,7 +11,7 @@ export default function MyPage({ profile }: any) {
               src={profile.pictureUrl}
               alt="Profile"
               className="w-[86px] h-[86px] bg-[#F2F0FF] rounded-[50%]"
-            ></img>
+            />
           </div>
           <div className="flex items-center pt-[36px]">
             <div className="text-[24px] font-medium w-[200px] text-center overflow-wrap-break-word mb-[36px]">
