@@ -1,55 +1,48 @@
 import { GetServerSidePropsContext } from "next";
 import { IChatMessage, ISendMessage } from "../../module/interface/chatting";
 import { useEffect, useState } from "react";
-import io, { Socket } from "socket.io-client";
-import axios from "axios";
 
 const Chatting = ({ accessToken }: any) => {
   const [chatMessages, setChatMessages] = useState<IChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [ws, setWs] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    // 소켓 연결 설정
-    const newSocket = io("http://localhost:3000", {
-      query: { accessToken }, // 서버 측에서 인증이 필요한 경우 사용
-    });
-    setSocket(newSocket);
+    // WebSocket 연결 설정
+    const socket = new WebSocket(
+      `ws://localhost:3000?accessToken=${accessToken}`
+    );
 
-    newSocket.on("receiveMessage", (message: IChatMessage) => {
-      setChatMessages((prevMessages) => [...prevMessages, message]);
-    });
+    socket.onopen = () => {
+      console.log("WebSocket Connected");
+    };
+
+    socket.onmessage = (event) => {
+      const newMessage: IChatMessage = JSON.parse(event.data);
+      setChatMessages((prevMessages) => [...prevMessages, newMessage]);
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket Disconnected");
+    };
+
+    setWs(socket);
 
     return () => {
-      void newSocket.close();
+      socket.close();
     };
-  }, []);
+  }, [accessToken]);
 
-  const handleSendMessage = async () => {
-    const newChatMessage: ISendMessage = {
-      chatType: "USER",
-      text: newMessage,
-    };
-
-    try {
-      const response = await axios.post("http://13.125.106.110:8080/chat", {
-        headers: {
-          Authorization: `${accessToken}`,
-        },
-        body: {
-          newChatMessage,
-        },
-      });
-    } catch (error) {
-      console.error("Failed to fetch profile", error);
-      // 에러 처리: 프로필 정보 없이 페이지 렌더링
-      return {
-        props: {
-          profile: {},
-        },
+  const handleSendMessage = () => {
+    if (ws) {
+      const newChatMessage: ISendMessage = {
+        chatType: "USER",
+        text: newMessage,
       };
+
+      ws.send(JSON.stringify(newChatMessage));
+      setNewMessage("");
     }
-    setNewMessage("");
   };
 
   return (
