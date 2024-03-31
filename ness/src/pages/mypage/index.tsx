@@ -1,5 +1,6 @@
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
+import Nav from "../../components/common/Nav";
 
 export default function MyPage({ profile }: any) {
   return (
@@ -19,7 +20,6 @@ export default function MyPage({ profile }: any) {
             </div>
           </div>
         </div>
-
         <div className="flex gap-[10px] flex-col">
           <div className="rounded-[10px] w-full h-[43px] flex items-center justify-center border-[#ECECEC]">
             <div className="text-[16px] font-[500] text-center">
@@ -33,13 +33,7 @@ export default function MyPage({ profile }: any) {
           </div>
         </div>
       </div>
-      <nav className="w-full fixed h-[90px] border-t border-gray-[#454545] bg-white bottom-0 left-0">
-        <div className="p-[20px] flex space-between ">
-          <div className="flex-grow text-center">일정</div>
-          <div className="flex-grow text-center">홈</div>
-          <div className="flex-grow text-center">계정</div>
-        </div>
-      </nav>
+      <Nav />
     </>
   );
 }
