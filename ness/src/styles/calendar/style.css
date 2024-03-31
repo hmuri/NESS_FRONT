@@ -1,0 +1,39 @@
+.rbc-off-range-bg {
+  background: white;
+}
+
+.rbc-off-range {
+  color: #999999;
+}
+
+.rbc-day-bg + .rbc-day-bg {
+  border: none;
+}
+
+.rbc-month-row + .rbc-month-row {
+  border: none;
+}
+
+.rbc-header + .rbc-header {
+  border-left: none;
+}
+.rbc-rtl .rbc-header + .rbc-header {
+  border-right: none;
+}
+
+.rbc-header {
+  color: #454545;
+
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 30px; /* 100% */
+  letter-spacing: 0.36px;
+  text-transform: uppercase;
+}
+
+.rbc-month-view {
+  border: none;
+}

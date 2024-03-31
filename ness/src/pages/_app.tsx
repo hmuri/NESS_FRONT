@@ -1,4 +1,6 @@
 import "@/styles/globals.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "@/styles/calendar/style.css";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
 

@@ -2,6 +2,8 @@ import axios from "axios";
 import { IChatMessage, ISendMessage } from "../../module/interface/chatting";
 import { useState } from "react";
 import { GetServerSidePropsContext } from "next";
+import Image from "next/image";
+import NessImg from "../../assets/ness_chat.png";
 
 interface IChattingProps {
   defaultMessageList: IChatMessage[];
@@ -36,7 +38,8 @@ const Chatting = (props: IChattingProps) => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="border-b border-gray-200 bg-white w-full h-[94px] fixed mt-[60px] relative flex justify-center items-center">
+      <div className="border-b border-gray-200 bg-white w-full h-[94px] gap-[5px] relative mt-[60px] flex-col flex justify-center items-center">
+        <Image src={NessImg} alt="" />
         네스
       </div>
       <div className="relative flex-1 w-full bg-[#F2F0FF] py-[26px]">

@@ -7,7 +7,6 @@ import {
   ToolbarProps,
 } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import Header from "@/components/calendar/Header";
 
 const localizer = momentLocalizer(moment);
@@ -48,7 +47,7 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div style={{ height: "500px" }}>
+    <div className="h-[800px] fixed bottom-[90px] w-full">
       <BigCalendar
         localizer={localizer}
         events={myEventsList}
