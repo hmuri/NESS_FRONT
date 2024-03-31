@@ -17,6 +17,7 @@ const Chatting = (props: IChattingProps) => {
       chatType: "USER",
       text: newMessage,
     };
+    setNewMessage("");
     try {
       const response = await axios.post(
         "http://13.125.106.110:8080/chat",
@@ -27,11 +28,10 @@ const Chatting = (props: IChattingProps) => {
           },
         }
       );
+      setChatMessages(response.data.chatList);
     } catch (error) {
       console.error("Failed to fetch profile", error);
     }
-
-    setNewMessage("");
   };
 
   return (
@@ -101,8 +101,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         Authorization: `${accessToken}`,
       },
     });
-    console.log("response.data" + response.data.chatList);
-    const defaultMessageList = response.data.chatList;
+    console.log("response.data" + response?.data.chatList);
+    const defaultMessageList = response?.data.chatList;
 
     return {
       props: {
