@@ -15,14 +15,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     try {
       // 서버에 authorizationCode 전송하여 JWT 토큰 받아옴
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/login/oauth/google?code=${code}`
+        `http://13.125.106.110:8080/login/oauth/google?code=${code}`
       );
 
       const { access_token, refresh_token } = response.data; // 응답에서 accessToken과 refreshToken을 추출
 
       // 쿠키에 access 토큰과 refresh 토큰 저장
       const cookieOptions = {
-        httpOnly: true,
+        httpOnly: false,
         secure: process.env.NODE_ENV !== "development",
         maxAge: 60 * 60 * 24 * 7, // 1주일
         path: "/",
