@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^3.0.0",
+    "@types/js-cookie": "^3.0.6",
     "axios": "^1.6.8",
     "cookie": "^0.6.0",
     "date-fns": "^3.6.0",
