@@ -1,66 +1,97 @@
-import React, { useState } from "react";
-import {
-  Calendar as BigCalendar,
-  momentLocalizer,
-  View,
-  NavigateAction,
-  ToolbarProps,
-} from "react-big-calendar";
+import React, { useEffect, useState } from "react";
+import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
+import axios from "axios";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Header from "@/components/calendar/Header";
+import Nav from "@/components/common/Nav";
+import "react-big-calendar/lib/css/react-big-calendar.css"; // BigCalendar 스타일
 
 const localizer = momentLocalizer(moment);
 
-interface Event {
+interface ScheduleEvent {
   title: string;
   start: Date;
-  end: Date;
+  end?: Date;
 }
 
-const myEventsList: Event[] = [
-  {
-    title: "Long Event",
-    start: moment().toDate(),
-    end: moment().add(1, "days").toDate(),
-  },
-];
+interface ScheduleDetail {
+  scheduleList: ScheduleEvent[];
+}
 
-const Calendar: React.FC = () => {
-  const [date, setDate] = useState<Date>(new Date());
+const CalendarPage: React.FC<ScheduleDetail> = ({ scheduleList }) => {
+  const [events, setEvents] = useState<ScheduleEvent[]>([]);
 
-  const handleNavigate = (
-    newDate: Date,
-    view: View,
-    action: NavigateAction
-  ) => {
-    switch (action) {
-      case "NEXT":
-        setDate(moment(newDate).add(1, "month").toDate());
-        break;
-      case "PREV":
-        setDate(moment(newDate).subtract(1, "month").toDate());
-        break;
-      case "TODAY":
-        setDate(new Date());
-        break;
-    }
-  };
+  useEffect(() => {
+    // 서버로부터 받은 스케줄 리스트를 이용해 이벤트 목록을 설정
+    const mappedEvents = scheduleList.map((event) => ({
+      ...event,
+      start: new Date(event.start),
+      end: event.end ? new Date(event.end) : new Date(event.start),
+    }));
+    setEvents(mappedEvents);
+  }, [scheduleList]);
 
   return (
     <div className="h-[800px] fixed bottom-[90px] w-full">
       <BigCalendar
         localizer={localizer}
-        events={myEventsList}
+        events={events}
         startAccessor="start"
         endAccessor="end"
-        date={date}
+        style={{ height: "100%", width: "100%" }}
         components={{
-          toolbar: Header as React.ComponentType<ToolbarProps>, // 타입스크립트 타입 캐스팅
+          toolbar: Header as React.ComponentType<any>, // 타입스크립트 타입 캐스팅
         }}
-        onNavigate={handleNavigate}
       />
+      <Nav />
     </div>
   );
 };
 
-export default Calendar;
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const { req, query } = context;
+  const cookies = req.headers.cookie;
+  let accessToken = "";
+
+  // 쿠키 문자열을 파싱하여 accessToken 추출
+  if (cookies) {
+    const cookieObj = Object.fromEntries(
+      cookies.split(";").map((cookie) => {
+        const [key, value] = cookie.split("=");
+        return [key.trim(), decodeURIComponent(value)];
+      })
+    );
+    accessToken = cookieObj.accessToken || "";
+  }
+  const month = query.month || moment().format("YYYY-MM"); // 현재 월을 기본값으로 사용
+
+  try {
+    const response = await axios.get(
+      `http://13.125.106.110:8080/schedule/dev?month=${month}`,
+      {
+        headers: {
+          Authorization: `${accessToken}`,
+        },
+      }
+    );
+    const scheduleList = response.data.scheduleList;
+
+    return {
+      props: {
+        scheduleList,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch schedule", error);
+    return {
+      props: {
+        scheduleList: [],
+      },
+    };
+  }
+};
+
+export default CalendarPage;
