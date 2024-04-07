@@ -96,7 +96,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     accessToken = cookieObj.accessToken || "";
   }
-  console.log("accessToken" + accessToken);
 
   try {
     const response = await axios.get("http://13.125.106.110:8080/chat", {

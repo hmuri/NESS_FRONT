@@ -57,11 +57,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   try {
-    const response = await axios.get("http://13.125.106.110:8080/profile", {
-      headers: {
-        Authorization: `${accessToken}`,
-      },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_BASE_URL}/profile`,
+      {
+        headers: {
+          Authorization: `${accessToken}`,
+        },
+      }
+    );
     const profile = response.data;
 
     // 페이지 컴포넌트로 프로필 정보 전달
