@@ -1,18 +1,23 @@
 import moment from "moment";
 
-interface DayModalProps {
-  isOpen: boolean;
-  onRequestClose: () => void;
-  selectedDate: Date | null;
+interface ScheduleEvent {
+  title: string;
+  start: Date;
+  end?: Date;
 }
 
-const DayModal = ({ isOpen, onRequestClose, selectedDate }: DayModalProps) => {
+interface DayModalProps {
+  events: ScheduleEvent[];
+  isOpen: boolean;
+  onRequestClose: () => void;
+}
+
+const DayModal = ({ events, isOpen, onRequestClose }: DayModalProps) => {
   if (!isOpen) return null;
-  console.log(isOpen);
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10"
       onClick={onRequestClose}
     >
       <div
@@ -20,11 +25,13 @@ const DayModal = ({ isOpen, onRequestClose, selectedDate }: DayModalProps) => {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-semibold">Selected Date</h2>
-        <p className="mt-2">
-          {selectedDate
-            ? moment(selectedDate).format("YYYY-MM-DD")
-            : "No date selected"}
-        </p>
+        {events.map((event, index) => (
+          <div key={index}>
+            <h3>{event.title}</h3>
+            <p>Start: {event.start.toString()}</p>
+            <p>End: {event.end ? event.end.toString() : "Not specified"}</p>
+          </div>
+        ))}
         <button
           className="mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
           onClick={onRequestClose}

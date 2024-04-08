@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/runtime": "^7.24.4",
     "@date-io/date-fns": "^3.0.0",
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.6.8",
@@ -21,9 +22,12 @@
     "react-dom": "^18",
     "react-widgets-date-fns": "^5.0.20",
     "socket.io-client": "^4.7.5",
-    "typed-events": "link:socket.io-client/build/typed-events"
+    "typed-events": "link:socket.io-client/build/typed-events",
+    "universal-cookie": "^7.1.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20",
     "@types/react": "^18",

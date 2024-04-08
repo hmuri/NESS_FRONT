@@ -103,7 +103,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         Authorization: `${accessToken}`,
       },
     });
-    console.log("response.data" + response?.data.chatList);
     const defaultMessageList = response?.data.chatList;
 
     return {

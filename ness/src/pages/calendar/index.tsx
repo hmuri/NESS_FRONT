@@ -8,11 +8,12 @@ import moment from "moment";
 import axios from "axios";
 import Header from "@/components/calendar/Header";
 import Nav from "@/components/common/Nav";
-import "react-big-calendar/lib/css/react-big-calendar.css"; // BigCalendar 스타일
-import Cookies from "js-cookie";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import Cookies from "universal-cookie";
 import DayModal from "@/components/calendar/DayModal";
 
 const localizer = momentLocalizer(moment);
+const cookies = new Cookies();
 
 interface ScheduleEvent {
   title: string;
@@ -26,20 +27,35 @@ interface ScheduleDetail {
 
 const CalendarPage: React.FC<ScheduleDetail> = () => {
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
-  const [month, setMonth] = useState(moment().format("YYYY-MM")); // 현재 월을 기본값으로 사용
+  const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedEvents, setSelectedEvents] = useState<ScheduleEvent[]>([]);
+  const [loadingError, setLoadingError] = useState<string | null>(null); // 로딩 에러 상태 추가
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
-    console.log("here");
-    setSelectedDate(slotInfo.start);
-    setModalIsOpen(true); // 날짜/시간 슬롯을 클릭했을 때 모달 열기
+    try {
+      const eventsForSelectedDate = events.filter((event) => {
+        const startOfDay = moment(event.start).startOf("day");
+        const endOfDay = moment(event.end).endOf("day");
+        const eventStart = moment(slotInfo.start);
+        return (
+          eventStart.isSameOrAfter(startOfDay) &&
+          eventStart.isSameOrBefore(endOfDay)
+        );
+      });
+
+      setSelectedEvents(eventsForSelectedDate);
+      setModalIsOpen(true);
+    } catch (error) {
+      console.error("Error handling slot selection", error);
+      // 여기에 사용자에게 에러가 발생했다는 것을 알리는 로직을 추가할 수 있습니다.
+    }
   };
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const accessToken = Cookies.get("accessToken");
-      console.log("accessToken" + accessToken);
+      const accessToken = cookies.get("accessToken");
+      setLoadingError(null); // 요청 전 에러 상태 초기화
       try {
         const response = await axios.get(
           `http://13.125.106.110:8080/schedule?month=${month}`,
@@ -50,10 +66,8 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
           }
         );
         const fetchedScheduleList = response.data.scheduleList;
-        console.log(JSON.stringify(fetchedScheduleList));
 
-        // 서버로부터 받은 스케줄 리스트를 이용해 이벤트 목록을 설정
-        const mappedEvents = fetchedScheduleList.map(
+        const mappedEvents = fetchedScheduleList?.map(
           (event: { start: string; end: string }) => ({
             ...event,
             start: new Date(event.start),
@@ -63,6 +77,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
         setEvents(mappedEvents);
       } catch (error) {
         console.error("Failed to fetch schedule", error);
+        setLoadingError("Failed to load events. Please try again later."); // 에러 상태 업데이트
       }
     };
 
@@ -72,24 +87,26 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   return (
     <div className="h-[800px] fixed bottom-[90px] w-full">
       <BigCalendar
-        onSelectSlot={handleSelectSlot}
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: "100%", width: "100%" }}
         selectable={true}
+        onSelectSlot={handleSelectSlot}
         components={{
-          toolbar: Header as React.ComponentType<any>, // 타입스크립트 타입 캐스팅
+          toolbar: Header as React.ComponentType<any>,
         }}
       />
       {modalIsOpen && (
         <DayModal
+          events={selectedEvents}
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}
-          selectedDate={selectedDate}
         />
       )}
+      {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
+      {/* 로딩 에러 메시지 표시 */}
       <Nav />
     </div>
   );
