@@ -22,6 +22,17 @@ interface DayModalProps {
   onRequestClose: () => void;
 }
 
+interface CategoryStyle {
+  [key: number]: { name: string; color: string };
+}
+
+const categoryStyles: CategoryStyle = {
+  1: { name: "인턴", color: "#7A64FF" },
+  2: { name: "공부", color: "#00C09E" },
+  3: { name: "기타", color: "#454545" },
+  5: { name: "개발", color: "#ffc0cb" },
+};
+
 const DayModal = ({
   events,
   isOpen,
@@ -46,27 +57,52 @@ const DayModal = ({
       onClick={onRequestClose}
     >
       <div
-        className="bg-white w-[348px] h-[501px] px-[25px] rounded-[20px] pt-[9px] "
+        className="bg-white w-[348px] h-[501px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-center my-[33px]">
+        <div className="flex justify-center mt-[33px] mb-[21px]">
           <div className="rounded-[20px] w-[115px] h-[40px] bg-[#F2F0FF]  py-[10px] px-[2px] text-[15px] font-semibold text-center">
             {moment(selectedDate).format("DD일 dddd")}
           </div>
         </div>
-        {events.map((event, index) => (
-          <div key={index}>
-            <h3>{event.title}</h3>
-            <p>Start: {event.start.toString()}</p>
-            <p>End: {event.end ? event.end.toString() : "Not specified"}</p>
+        {Object.entries(groupedEvents).map(([category, events], index) => (
+          <div key={index} className="mb-[33px]">
+            <div>
+              <div
+                className="px-[12px] py-[6px] text-[15px] text-white inline-flex rounded-[8px] mb-[21px]"
+                style={{
+                  backgroundColor: categoryStyles[events[0].categoryNum].color,
+                }}
+              >
+                {category}
+              </div>
+            </div>
+            {events.map((event, idx) => (
+              <div key={idx} className="flex items-center mb-[16px]">
+                <span
+                  className="inline-block w-3 h-3 rounded-full mr-2"
+                  style={{
+                    backgroundColor: categoryStyles[event.categoryNum].color,
+                  }}
+                ></span>
+                <p>{event.title}</p>
+                {/* <p>Start: {moment(event.start).format("YYYY-MM-DD HH:mm")}</p>
+                  <p>
+                    End:{" "}
+                    {event.end
+                      ? moment(event.end).format("YYYY-MM-DD HH:mm")
+                      : "Not specified"}
+                  </p> */}
+              </div>
+            ))}
           </div>
         ))}
-        <button
+        {/* <button
           className="mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
           onClick={onRequestClose}
         >
           Close
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Calendar as BigCalendar,
+  DateCellWrapperProps,
   SlotInfo,
   momentLocalizer,
 } from "react-big-calendar";
@@ -35,6 +36,18 @@ interface ScheduleDetail {
 }
 
 const CalendarPage: React.FC<ScheduleDetail> = () => {
+  const CustomDateCellWrapper: React.FC<DateCellWrapperProps> = ({
+    children,
+    value,
+  }) => {
+    const handleMoreClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation(); // 이벤트 버블링 방지
+      setModalIsOpen(true); // 모달 열기
+    };
+
+    return <div onClick={handleMoreClick}>{children}</div>;
+  };
+
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -113,6 +126,8 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
         onSelectSlot={handleSelectSlot}
         components={{
           toolbar: Header as React.ComponentType<any>,
+          dateCellWrapper:
+            CustomDateCellWrapper as React.ComponentType<DateCellWrapperProps>,
         }}
       />
       {modalIsOpen && (
