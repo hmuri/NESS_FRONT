@@ -19,6 +19,15 @@ interface ScheduleEvent {
   title: string;
   start: Date;
   end?: Date;
+  category: string;
+  categoryNum: number;
+  details: DetailList;
+}
+
+interface DetailList {
+  id: number;
+  location?: string | null;
+  person: string | null;
 }
 
 interface ScheduleDetail {
@@ -31,7 +40,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<ScheduleEvent[]>([]);
   const [loadingError, setLoadingError] = useState<string | null>(null); // 로딩 에러 상태 추가
-
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     try {
       const eventsForSelectedDate = events.filter((event) => {
@@ -45,6 +54,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
       });
 
       setSelectedEvents(eventsForSelectedDate);
+      setSelectedDate(slotInfo.start);
       setModalIsOpen(true);
     } catch (error) {
       console.error("Error handling slot selection", error);
@@ -68,10 +78,17 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
         const fetchedScheduleList = response.data.scheduleList;
 
         const mappedEvents = fetchedScheduleList?.map(
-          (event: { start: string; end: string }) => ({
+          (event: {
+            start: string;
+            end: string;
+            category: string;
+            details: DetailList;
+          }) => ({
             ...event,
             start: new Date(event.start),
             end: event.end ? new Date(event.end) : new Date(event.start),
+            category: event.category,
+            details: event.details,
           })
         );
         setEvents(mappedEvents);
@@ -102,6 +119,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
         <DayModal
           events={selectedEvents}
           isOpen={modalIsOpen}
+          selectedDate={selectedDate}
           onRequestClose={() => setModalIsOpen(false)}
         />
       )}

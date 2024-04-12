@@ -4,16 +4,41 @@ interface ScheduleEvent {
   title: string;
   start: Date;
   end?: Date;
+  category: string;
+  categoryNum: number;
+  details: DetailList;
+}
+
+interface DetailList {
+  id: number;
+  location?: string | null;
+  person: string | null;
 }
 
 interface DayModalProps {
   events: ScheduleEvent[];
   isOpen: boolean;
+  selectedDate: Date | null;
   onRequestClose: () => void;
 }
 
-const DayModal = ({ events, isOpen, onRequestClose }: DayModalProps) => {
+const DayModal = ({
+  events,
+  isOpen,
+  selectedDate,
+  onRequestClose,
+}: DayModalProps) => {
   if (!isOpen) return null;
+
+  const sortedEvents = events.sort((a, b) => a.categoryNum - b.categoryNum);
+
+  const groupedEvents = sortedEvents.reduce((acc, event) => {
+    if (!acc[event.category]) {
+      acc[event.category] = [];
+    }
+    acc[event.category].push(event);
+    return acc;
+  }, {} as Record<string, ScheduleEvent[]>);
 
   return (
     <div
@@ -21,10 +46,14 @@ const DayModal = ({ events, isOpen, onRequestClose }: DayModalProps) => {
       onClick={onRequestClose}
     >
       <div
-        className="bg-white p-4 rounded-lg shadow-lg max-w-sm"
+        className="bg-white w-[348px] h-[501px] px-[25px] rounded-[20px] pt-[9px] "
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-xl font-semibold">Selected Date</h2>
+        <div className="flex justify-center my-[33px]">
+          <div className="rounded-[20px] w-[115px] h-[40px] bg-[#F2F0FF]  py-[10px] px-[2px] text-[15px] font-semibold text-center">
+            {moment(selectedDate).format("DD일 dddd")}
+          </div>
+        </div>
         {events.map((event, index) => (
           <div key={index}>
             <h3>{event.title}</h3>
