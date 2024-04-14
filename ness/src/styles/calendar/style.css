@@ -35,6 +35,7 @@
 }
 
 .rbc-month-view {
+  display: flex;
   border: none;
 }
 
@@ -63,4 +64,24 @@
 .rbc-event-content {
   text-align: center;
   font-size: 12px;
+}
+
+.rbc-time-view {
+  display: none;
+}
+
+.rbc-button-link.rbc-show-more {
+  display: none;
+}
+
+.extra-events-info {
+  position: absolute;
+  bottom: 5px;
+  width: 100%;
+
+  background-color: #f0f0f0;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #555;
 }

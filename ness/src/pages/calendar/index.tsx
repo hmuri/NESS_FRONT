@@ -36,43 +36,55 @@ interface ScheduleDetail {
 }
 
 const CalendarPage: React.FC<ScheduleDetail> = () => {
-  const CustomDateCellWrapper: React.FC<DateCellWrapperProps> = ({
-    children,
-    value,
-  }) => {
-    const handleMoreClick = (event: React.MouseEvent<HTMLDivElement>) => {
-      event.stopPropagation(); // 이벤트 버블링 방지
-      setModalIsOpen(true); // 모달 열기
-    };
-
-    return <div onClick={handleMoreClick}>{children}</div>;
-  };
-
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<ScheduleEvent[]>([]);
   const [loadingError, setLoadingError] = useState<string | null>(null); // 로딩 에러 상태 추가
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const handleSelectSlot = (slotInfo: SlotInfo) => {
-    try {
-      const eventsForSelectedDate = events.filter((event) => {
-        const startOfDay = moment(event.start).startOf("day");
-        const endOfDay = moment(event.end).endOf("day");
-        const eventStart = moment(slotInfo.start);
-        return (
-          eventStart.isSameOrAfter(startOfDay) &&
-          eventStart.isSameOrBefore(endOfDay)
-        );
-      });
+  const handleSelectSlot = (date: Date) => {
+    const eventsForSelectedDate = events.filter((event) => {
+      const startOfDay = moment(event.start).startOf("day");
+      const endOfDay = event.end
+        ? moment(event.end).endOf("day")
+        : moment(event.start).endOf("day");
+      const eventDate = moment(date);
+      return (
+        eventDate.isSameOrAfter(startOfDay) &&
+        eventDate.isSameOrBefore(endOfDay)
+      );
+    });
 
-      setSelectedEvents(eventsForSelectedDate);
-      setSelectedDate(slotInfo.start);
-      setModalIsOpen(true);
-    } catch (error) {
-      console.error("Error handling slot selection", error);
-      // 여기에 사용자에게 에러가 발생했다는 것을 알리는 로직을 추가할 수 있습니다.
-    }
+    setSelectedEvents(eventsForSelectedDate);
+    setSelectedDate(date);
+    setModalIsOpen(true);
+  };
+
+  const CustomDateCellWrapper: React.FC<DateCellWrapperProps> = ({
+    children,
+    value,
+  }) => {
+    // 해당 날짜의 이벤트 필터링
+    const dateEvents = events.filter((event) => {
+      return moment(event.start).isSame(value, "day");
+    });
+
+    // 3개를 초과하는 이벤트 수 계산
+    const extraEventsCount = Math.max(0, dateEvents.length - 3);
+
+    return (
+      <div style={{ position: "relative", height: "100%", width: "100%" }}>
+        {children}
+        {extraEventsCount > 0 && (
+          <div
+            className="extra-events-info"
+            onClick={() => handleSelectSlot(value)}
+          >
+            +{extraEventsCount} more
+          </div>
+        )}
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -123,11 +135,10 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
         endAccessor="end"
         style={{ height: "100%", width: "100%" }}
         selectable={true}
-        onSelectSlot={handleSelectSlot}
+        onSelectSlot={(slotInfo) => handleSelectSlot(slotInfo.start)}
         components={{
           toolbar: Header as React.ComponentType<any>,
-          dateCellWrapper:
-            CustomDateCellWrapper as React.ComponentType<DateCellWrapperProps>,
+          dateCellWrapper: CustomDateCellWrapper,
         }}
       />
       {modalIsOpen && (
