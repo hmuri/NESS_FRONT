@@ -2,8 +2,7 @@
 
 export default function Login() {
   const handleGoogleLogin = () => {
-    window.location.href =
-      "https://accounts.google.com/o/oauth2/auth?client_id=470083887407-fur6m1hbh8ds0k75msk96tnd1f2mbdi7.apps.googleusercontent.com&redirect_uri=http://localhost:3000/login/oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+profile";
+    window.location.href = `https://accounts.google.com/o/oauth2/auth?client_id=470083887407-fur6m1hbh8ds0k75msk96tnd1f2mbdi7.apps.googleusercontent.com&redirect_uri=${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/login/oauth/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email+profile`;
   };
 
   return (
