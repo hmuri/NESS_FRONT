@@ -1,3 +1,4 @@
+import FloatingNess from "@/components/common/FloatingNess";
 import Nav from "@/components/common/Nav";
 export default function Main() {
   return (
@@ -39,6 +40,7 @@ export default function Main() {
         </div>
       </div>
       <Nav />
+      <FloatingNess />
     </>
   );
 }
