@@ -4,6 +4,7 @@ import {
   DateCellWrapperProps,
   momentLocalizer,
 } from "react-big-calendar";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import axios from "axios";
 import Header from "@/components/calendar/Header";
@@ -14,8 +15,10 @@ import DayModal from "@/components/calendar/DayModal";
 
 const localizer = momentLocalizer(moment);
 const cookies = new Cookies();
+const DnDCalendar = withDragAndDrop(BigCalendar);
 
 interface ScheduleEvent {
+  id: number;
   title: string;
   start: Date;
   end?: Date;
@@ -86,6 +89,17 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
     );
   };
 
+  const handleDragAndDrop = (args: any) => {
+    const { event, start, end } = args;
+    const updatedEvents = events.map((existingEvent) => {
+      if (existingEvent.id === event.id) {
+        return { ...existingEvent, start, end };
+      }
+      return existingEvent;
+    });
+    setEvents(updatedEvents);
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       const accessToken = cookies.get("accessToken");
@@ -110,6 +124,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
             details: DetailList;
           }) => ({
             ...event,
+            id: event.details.id,
             start: new Date(event.start),
             end: event.end ? new Date(event.end) : new Date(event.start),
             category: event.category,
@@ -128,14 +143,18 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
 
   return (
     <div className="h-[800px] fixed bottom-[90px] w-full">
-      <BigCalendar
+      <DnDCalendar
         localizer={localizer}
         events={events}
-        startAccessor="start"
-        endAccessor="end"
+        onEventDrop={handleDragAndDrop}
+        onEventResize={handleDragAndDrop}
+        startAccessor={(event: any) => new Date(event.start)}
+        endAccessor={(event: any) => new Date(event.end || event.start)}
         style={{ height: "100%", width: "100%" }}
         selectable={true}
-        onSelectSlot={(slotInfo) => handleSelectSlot(slotInfo.start)}
+        onSelectSlot={(slotInfo: { start: Date }) =>
+          handleSelectSlot(slotInfo.start)
+        }
         components={{
           toolbar: Header as React.ComponentType<any>,
           dateCellWrapper: CustomDateCellWrapper,
