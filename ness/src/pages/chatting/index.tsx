@@ -22,7 +22,7 @@ const Chatting = (props: IChattingProps) => {
     setNewMessage("");
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/chat`,
+        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/chat`,
         newChatMessage,
         {
           headers: {
@@ -99,7 +99,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/chat`,
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/chat`,
       {
         headers: {
           Authorization: `${accessToken}`,

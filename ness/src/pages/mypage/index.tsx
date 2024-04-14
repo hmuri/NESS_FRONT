@@ -58,7 +58,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}/profile`,
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/profile`,
       {
         headers: {
           Authorization: `${accessToken}`,

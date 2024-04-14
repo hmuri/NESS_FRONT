@@ -15,7 +15,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     try {
       // 서버에 authorizationCode 전송하여 JWT 토큰 받아옴
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/login/oauth/google?code=${code}`
+        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/login/oauth/google?code=${code}`
       );
 
       const { access_token, refresh_token } = response.data; // 응답에서 accessToken과 refreshToken을 추출

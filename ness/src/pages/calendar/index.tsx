@@ -89,10 +89,11 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       const accessToken = cookies.get("accessToken");
+      console.log("here" + process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL);
       setLoadingError(null); // 요청 전 에러 상태 초기화
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/schedule?month=${month}`,
+          `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule?month=${month}`,
           {
             headers: {
               Authorization: `${accessToken}`,
