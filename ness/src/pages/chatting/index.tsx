@@ -22,7 +22,7 @@ const Chatting = (props: IChattingProps) => {
     setNewMessage("");
     try {
       const response = await axios.post(
-        "http://13.125.106.110:8080/chat",
+        `${process.env.REACT_APP_API_BASE_URL}/chat`,
         newChatMessage,
         {
           headers: {
@@ -98,11 +98,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   try {
-    const response = await axios.get("http://13.125.106.110:8080/chat", {
-      headers: {
-        Authorization: `${accessToken}`,
-      },
-    });
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_BASE_URL}/chat`,
+      {
+        headers: {
+          Authorization: `${accessToken}`,
+        },
+      }
+    );
     const defaultMessageList = response?.data.chatList;
 
     return {

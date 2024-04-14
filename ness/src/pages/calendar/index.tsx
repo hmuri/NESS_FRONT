@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Calendar as BigCalendar,
   DateCellWrapperProps,
-  SlotInfo,
   momentLocalizer,
 } from "react-big-calendar";
 import moment from "moment";
@@ -93,7 +92,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
       setLoadingError(null); // 요청 전 에러 상태 초기화
       try {
         const response = await axios.get(
-          `http://13.125.106.110:8080/schedule?month=${month}`,
+          `${process.env.REACT_APP_API_BASE_URL}/schedule?month=${month}`,
           {
             headers: {
               Authorization: `${accessToken}`,
