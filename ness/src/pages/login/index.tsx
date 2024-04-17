@@ -6,9 +6,9 @@ export default function Login() {
   };
 
   return (
-    <div className="my-auto mx-auto">
+    <div className="h-[100vh] mx-auto flex justify-center flex-col">
       <div>
-        <div className="w-[150px] h-[150px] bg-gray-500 mt-[50%] mx-auto"></div>
+        <div className="w-[150px] h-[150px] bg-gray-500 mx-auto"></div>
       </div>
       <div className="text-center text-[20px] mt-[20px]">
         내 손 안의 비서, NESS

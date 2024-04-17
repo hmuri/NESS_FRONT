@@ -1,14 +1,62 @@
 import FloatingNess from "@/components/common/FloatingNess";
 import Nav from "@/components/common/Nav";
-export default function Main() {
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
+const token = cookies.get("accessToken") || "";
+
+interface IMainData {
+  recommendId: number;
+  recommend: string;
+  scheduleId?: number;
+  title?: string;
+  start?: string;
+  end?: string | null;
+  category?: string;
+  categoryNum?: number;
+  details?: ScheduleDetails;
+}
+
+interface ScheduleDetails {
+  location: string;
+  person: string;
+}
+
+const fetchChatMessages = async (): Promise<IMainData | undefined> => {
+  try {
+    const response = await axios.get<IMainData>(
+      `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/main`,
+      {
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch chat messages", error);
+  }
+};
+
+const Main = () => {
+  const [data, setData] = useState<IMainData | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetchChatMessages();
+      setData(result);
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       <div className="p-[20px]">
         <div className="mt-[40px] flex w-full mb-[45px]">
           <div className="flex flex-7/10 pr-[20px] h-100px items-center">
-            <div className="text-[24px] font-medium ">
-              민주님, 방학에는 역시 개발공부죠!
-            </div>
+            <div className="text-[24px] font-medium ">{data?.recommend}</div>
           </div>
           <div className="flex-3/10">
             <div className="w-[100px] h-[100px] bg-gray-500 "></div>
@@ -27,7 +75,9 @@ export default function Main() {
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           오늘의 일정 리마인드
         </div>
-        <div className="rounded-[10px] bg-[#ECECEC] w-[100%] h-[178px]"></div>
+        <div className="rounded-[10px] bg-[#ECECEC] w-[100%] h-[178px] px-[15px]">
+          {data?.title}
+        </div>
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           네스 보고서
         </div>
@@ -43,4 +93,6 @@ export default function Main() {
       <FloatingNess />
     </>
   );
-}
+};
+
+export default Main;
