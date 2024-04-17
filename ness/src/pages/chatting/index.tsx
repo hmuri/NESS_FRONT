@@ -59,12 +59,8 @@ const Chatting = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="border-b border-gray-200 bg-white w-full h-[94px] gap-[5px] relative mt-[60px] flex-col flex justify-center items-center">
-        <Image src={NessImg} alt="Ness Logo" />
-        네스
-      </div>
-      <div className="relative flex-1 w-full bg-[#F2F0FF] py-[26px]">
-        <div className="px-[20px]">
+      <div className="relative mt-[94px] flex-1 w-full bg-[#F2F0FF] py-[26px]">
+        <div className="px-[20px] pb-[50px]">
           {chatMessages.map((message, index) => (
             <div
               key={index}
@@ -84,7 +80,7 @@ const Chatting = () => {
             </div>
           ))}
         </div>
-        <div className="absolute bottom-[25px] left-[20px] right-[20px] flex">
+        <div className="fixed bg-[#F2F0FF] h-[66px] bottom-0 left-[20px] right-[20px] flex">
           <input
             className="w-full bg-white h-[41px] px-[22px] py-[13px] rounded-[20px] border border-purple-600 shadow-md"
             type="text"
@@ -94,6 +90,10 @@ const Chatting = () => {
           />
           <button onClick={handleSendMessage}>send</button>
         </div>
+      </div>
+      <div className="z-100 border-b border-gray-200 bg-white w-full h-[94px] gap-[5px] fixed top-0 flex-col flex justify-center items-center">
+        <Image src={NessImg} alt="Ness Logo" />
+        네스
       </div>
     </div>
   );
