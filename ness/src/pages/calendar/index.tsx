@@ -12,6 +12,7 @@ import Nav from "@/components/common/Nav";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Cookies from "universal-cookie";
 import DayModal from "@/components/calendar/DayModal";
+import FloatingNess from "@/components/common/FloatingNess";
 
 const localizer = momentLocalizer(moment);
 const cookies = new Cookies();
@@ -171,6 +172,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
       {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
       {/* 로딩 에러 메시지 표시 */}
       <Nav />
+      <FloatingNess />
     </div>
   );
 };

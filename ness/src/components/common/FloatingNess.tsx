@@ -10,7 +10,7 @@ const FloatingNess = () => {
       <Image
         src={NESS_MAIN_LOGO}
         alt="Ness Main Logo"
-        className="floatingImage absolute bottom-[80px] w-h-[50px] right-[20px]"
+        className="floatingImage fixed bottom-[80px] w-h-[50px] right-[20px]"
         onClick={() => router.push("/chatting")}
       />
     </div>
