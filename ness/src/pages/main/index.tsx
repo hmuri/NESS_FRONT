@@ -3,6 +3,11 @@ import Nav from "@/components/common/Nav";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
+import Image from "next/image";
+import BookImg from "../../assets/book.png";
+import AIImg from "../../assets/ai.png";
+import NoteBookImg from "../../assets/notebook.png";
+import ReactImg from "../../assets/react.png";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -42,6 +47,11 @@ const fetchChatMessages = async (): Promise<IMainData | undefined> => {
 
 const Main = () => {
   const [data, setData] = useState<IMainData | undefined>(undefined);
+  const items = [
+    { image: AIImg, text: "OPEN AI API 공부하기" },
+    { image: NoteBookImg, text: "개발 프로젝트 진행하기" },
+    { image: ReactImg, text: "React Native 공부하기" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,18 +69,28 @@ const Main = () => {
             <div className="text-[24px] font-medium ">{data?.recommend}</div>
           </div>
           <div className="flex-3/10">
-            <div className="w-[100px] h-[100px] bg-gray-500 "></div>
+            <Image src={BookImg} alt={""} width={100} height={100} />
           </div>
         </div>
         <div className="text-[20px] font-[500] mb-[10px]">
           이런 활동은 어떠세요?
         </div>
         <div>
-          <div className="bg-gray-500 w-[125px] h-[110px] rounded-[10px] opacity-40 relative p-y-[8px] p-x-[10px]">
-            <div className="absolute text-white left-[0px] top-[0px] z-10 m-[10px]">
-              리액트 네이티브 공부하기
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className="w-[125px] h-[110px] rounded-[10px] relative p-y-[8px] p-x-[10px]"
+              style={{
+                backgroundImage: `url(${item.image})`,
+                backgroundSize: "cover",
+                opacity: "0.8",
+              }}
+            >
+              <div className="absolute text-white left-[0px] top-[0px] z-10 m-[10px]">
+                {item.text}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           오늘의 일정 리마인드
