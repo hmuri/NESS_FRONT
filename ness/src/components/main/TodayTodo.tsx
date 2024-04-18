@@ -111,7 +111,7 @@ const categoryStyles: CategoryStyle = {
 };
 const TodayTodo = () => {
   return (
-    <div className="rounded-[10px] border-2 border-[#C9DBFF] bg-white w-[251px] h-[178px] px-[15px] overflow-auto py-[20px]">
+    <div className="rounded-[10px] border-1 border-[#C9DBFF] bg-white w-[253px] h-[178px] px-[15px] overflow-auto py-[20px]">
       <div>
         {events.map((event, idx) => (
           <div key={idx} className="mb-2">
