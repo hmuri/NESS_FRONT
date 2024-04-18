@@ -75,17 +75,14 @@ const Main = () => {
         <div className="text-[20px] font-[500] mb-[10px]">
           이런 활동은 어떠세요?
         </div>
-        <div>
+        <div className="flex flex-row gap-[8px] overflow-x-auto">
           {items.map((item, index) => (
-            <div
-              key={index}
-              className="w-[125px] h-[110px] rounded-[10px] relative p-y-[8px] p-x-[10px]"
-              style={{
-                backgroundImage: `url(${item.image})`,
-                backgroundSize: "cover",
-                opacity: "0.8",
-              }}
-            >
+            <div key={index} className="relative">
+              <Image
+                className="opacity-55 w-[125px] h-[110px] rounded-[10px] relative p-y-[8px] p-x-[10px]"
+                src={item.image}
+                alt=""
+              />
               <div className="absolute text-white left-[0px] top-[0px] z-10 m-[10px]">
                 {item.text}
               </div>
