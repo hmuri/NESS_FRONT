@@ -36,6 +36,7 @@
 
 .rbc-month-view {
   display: flex;
+  overflow: auto;
   border: none;
 }
 

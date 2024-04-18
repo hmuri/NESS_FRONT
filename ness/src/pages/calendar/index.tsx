@@ -143,7 +143,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   }, [month]);
 
   return (
-    <div className="h-[800px] fixed bottom-[90px] w-full">
+    <div className="h-[600px] mt-[120px] w-full">
       <DnDCalendar
         localizer={localizer}
         events={events}
