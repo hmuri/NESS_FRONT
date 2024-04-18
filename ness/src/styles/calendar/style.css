@@ -20,6 +20,9 @@
 .rbc-rtl .rbc-header + .rbc-header {
   border-right: none;
 }
+.rbc-row {
+  z-index: 3;
+}
 
 .rbc-header {
   color: #454545;
@@ -38,7 +41,6 @@
   display: flex;
   overflow: auto;
   border: none;
-  z-index: 1;
 }
 
 .rbc-today {
@@ -91,4 +93,12 @@
 .rbc-date-cell {
   text-align: center;
   font-size: 14px;
+}
+
+nav {
+  z-index: 15;
+}
+
+.chatting-img {
+  z-index: 15;
 }

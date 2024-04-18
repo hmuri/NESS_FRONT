@@ -134,7 +134,7 @@ const FloatingNess = ({ message }: FloatingNessProps) => {
       {message && (
         <div
           className={
-            "fixed text-[13px] bottom-[93px] right-[100px] max-w-[70%] px-[12px] py-[10px] rounded-[16px] bg-[#ECECEC] text-black shadow-lg"
+            "chatting-img fixed text-[13px] bottom-[93px] right-[100px] max-w-[70%] px-[12px] py-[10px] rounded-[16px] bg-[#ECECEC] text-black shadow-lg"
           }
         >
           <p>{message}</p>
@@ -142,7 +142,7 @@ const FloatingNess = ({ message }: FloatingNessProps) => {
       )}
       <Image
         src={nessChatImg}
-        className={"fixed bottom-[100px] right-[90px]"}
+        className="chatting-img fixed bottom-[100px] right-[90px]"
         alt=""
       />
     </div>

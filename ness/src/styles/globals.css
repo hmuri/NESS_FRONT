@@ -26,3 +26,15 @@ body {
 .remind-box {
   border: solid 1.5px #c9dbff;
 }
+
+nav {
+  z-index: 3;
+}
+
+.chatting-img {
+  z-index: 3;
+}
+
+.day-modal {
+  z-index: 15;
+}

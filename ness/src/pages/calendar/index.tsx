@@ -149,39 +149,41 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   }, [month]);
 
   return (
-    <div className="flex items-center">
-      <div className="h-[550px] mt-[120px] mb-[100px] w-full">
-        <DnDCalendar
-          localizer={localizer}
-          events={events}
-          onEventDrop={handleDragAndDrop}
-          onEventResize={handleDragAndDrop}
-          startAccessor={(event: any) => new Date(event.start)}
-          endAccessor={(event: any) => new Date(event.end || event.start)}
-          style={{ height: "100%", width: "100%" }}
-          selectable={true}
-          onSelectSlot={(slotInfo: { start: Date }) =>
-            handleSelectSlot(slotInfo.start)
-          }
-          components={{
-            toolbar: Header as React.ComponentType<any>,
-            dateCellWrapper: CustomDateCellWrapper,
-          }}
-        />
-        {modalIsOpen && (
-          <DayModal
-            events={selectedEvents}
-            isOpen={modalIsOpen}
-            selectedDate={selectedDate}
-            onRequestClose={() => setModalIsOpen(false)}
+    <>
+      <div className="flex items-center">
+        <div className="h-[550px] mt-[120px] mb-[100px] w-full">
+          <DnDCalendar
+            localizer={localizer}
+            events={events}
+            onEventDrop={handleDragAndDrop}
+            onEventResize={handleDragAndDrop}
+            startAccessor={(event: any) => new Date(event.start)}
+            endAccessor={(event: any) => new Date(event.end || event.start)}
+            style={{ height: "100%", width: "100%" }}
+            selectable={true}
+            onSelectSlot={(slotInfo: { start: Date }) =>
+              handleSelectSlot(slotInfo.start)
+            }
+            components={{
+              toolbar: Header as React.ComponentType<any>,
+              dateCellWrapper: CustomDateCellWrapper,
+            }}
           />
-        )}
-        {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
-        {/* 로딩 에러 메시지 표시 */}
-        <Nav />
-        {!modalIsOpen && <FloatingNess message="4월엔 일정이 많으시네요!" />}
+          <Nav />
+          {modalIsOpen && (
+            <DayModal
+              events={selectedEvents}
+              isOpen={modalIsOpen}
+              selectedDate={selectedDate}
+              onRequestClose={() => setModalIsOpen(false)}
+            />
+          )}
+          {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
+          {/* 로딩 에러 메시지 표시 */}
+        </div>
       </div>
-    </div>
+      {!modalIsOpen && <FloatingNess message="4월엔 일정이 많으시네요!" />}
+    </>
   );
 };
 
