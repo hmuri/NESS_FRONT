@@ -6,8 +6,9 @@ import Cookies from "universal-cookie";
 import Image from "next/image";
 import BookImg from "../../assets/book.png";
 import AIImg from "../../assets/ai.png";
-import NoteBookImg from "../../assets/notebook.png";
+import FireworkImg from "../../assets/firework.png";
 import ReactImg from "../../assets/react.png";
+import TodayTodo from "@/components/main/TodayTodo";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -49,7 +50,7 @@ const Main = () => {
   const [data, setData] = useState<IMainData | undefined>(undefined);
   const items = [
     { image: AIImg, text: "OPEN AI API 공부하기" },
-    { image: NoteBookImg, text: "개발 프로젝트 진행하기" },
+    { image: FireworkImg, text: "여의도 불꽃축제 가기" },
     { image: ReactImg, text: "React Native 공부하기" },
   ];
 
@@ -79,7 +80,7 @@ const Main = () => {
           {items.map((item, index) => (
             <div key={index} className="relative">
               <Image
-                className="opacity-55 w-[125px] h-[110px] rounded-[10px] relative p-y-[8px] p-x-[10px]"
+                className="opacity-70 w-[125px] h-[110px] rounded-[10px] relative p-y-[8px] p-x-[10px]"
                 src={item.image}
                 alt=""
               />
@@ -92,9 +93,7 @@ const Main = () => {
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           오늘의 일정 리마인드
         </div>
-        <div className="rounded-[10px] bg-[#ECECEC] w-[100%] h-[178px] px-[15px]">
-          {data?.title}
-        </div>
+        <TodayTodo />
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           네스 보고서
         </div>

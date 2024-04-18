@@ -86,23 +86,10 @@ const DayModal = ({
                   }}
                 ></span>
                 <p>{event.title}</p>
-                {/* <p>Start: {moment(event.start).format("YYYY-MM-DD HH:mm")}</p>
-                  <p>
-                    End:{" "}
-                    {event.end
-                      ? moment(event.end).format("YYYY-MM-DD HH:mm")
-                      : "Not specified"}
-                  </p> */}
               </div>
             ))}
           </div>
         ))}
-        {/* <button
-          className="mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
-          onClick={onRequestClose}
-        >
-          Close
-        </button> */}
       </div>
     </div>
   );
