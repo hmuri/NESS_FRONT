@@ -76,11 +76,17 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
     const extraEventsCount = Math.max(0, dateEvents.length - 2);
 
     return (
-      <div style={{ position: "relative", height: "100%", width: "100%" }}>
+      <div
+        style={{
+          position: "relative",
+          height: "100%",
+          width: "100%",
+        }}
+      >
         {children}
         {extraEventsCount > 0 && (
           <div
-            className="extra-events-info text-[8px]"
+            className="extra-events-info text-[8px] z-5"
             onClick={() => handleSelectSlot(value)}
           >
             {extraEventsCount} more
