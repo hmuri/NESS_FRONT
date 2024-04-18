@@ -14,3 +14,11 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
+.calendar-header {
+  background: linear-gradient(
+    0deg,
+    #7a64ff 48.57%,
+    rgba(122, 100, 255, 0.2) 198.78%
+  );
+}

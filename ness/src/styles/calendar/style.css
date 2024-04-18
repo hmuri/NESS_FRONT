@@ -85,3 +85,8 @@
   font-size: 0.75rem;
   color: #555;
 }
+
+.rbc-date-cell {
+  text-align: center;
+  font-size: 14px;
+}

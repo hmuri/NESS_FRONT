@@ -115,7 +115,7 @@ const Main = () => {
         </div>
       </div>
       <Nav />
-      <FloatingNess />
+      <FloatingNess message="환영해요!" />
     </>
   );
 };

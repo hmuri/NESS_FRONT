@@ -24,7 +24,7 @@ const Header: React.FC<ToolbarProps> = () => {
   return (
     <div className="mt-[72px] flex items-center justify-center w-full mb-[21.5px]">
       <div className="h-[41px] w-[145px] flex ">
-        <div className="text-white w-[48px] px-[12px] pb-[6px] pt-[4px] rounded-l-md bg-gradient-to-b from-[#7A64FF] to-[#7A64FF33]">
+        <div className="text-white w-[48px] px-[12px] pb-[6px] pt-[4px] rounded-l-md calendar-header">
           <div className="text-[10px] text-center">{year}</div>
           <div className="text-[16px] leading-[110%] text-center">{month}</div>
         </div>

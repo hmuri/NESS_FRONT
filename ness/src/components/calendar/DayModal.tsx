@@ -1,4 +1,5 @@
 import moment from "moment";
+import FloatingNess from "../common/FloatingNess";
 
 interface ScheduleEvent {
   title: string;
@@ -50,6 +51,7 @@ const DayModal = ({
     acc[event.category].push(event);
     return acc;
   }, {} as Record<string, ScheduleEvent[]>);
+  const ChatDate = moment(selectedDate).format("dddd");
 
   return (
     <div
@@ -91,6 +93,7 @@ const DayModal = ({
           </div>
         ))}
       </div>
+      <FloatingNess message={`${ChatDate} 일정을 확인해볼까요?`} />
     </div>
   );
 };
