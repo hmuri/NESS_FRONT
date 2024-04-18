@@ -62,7 +62,7 @@ const DayModal = ({
         className="bg-white w-[348px] h-[501px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-center mt-[33px] mb-[21px]">
+        <div className="flex justify-center mt-[15px] mb-[21px]">
           <div className="rounded-[20px] w-[115px] h-[40px] bg-[#F2F0FF]  py-[10px] px-[2px] text-[15px] font-semibold text-center">
             {moment(selectedDate).format("DD일 dddd")}
           </div>
