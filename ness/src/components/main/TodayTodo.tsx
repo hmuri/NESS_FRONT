@@ -110,16 +110,8 @@ const categoryStyles: CategoryStyle = {
   5: { name: "개발", color: "#ffc0cb" },
 };
 const TodayTodo = () => {
-  const groupedEvents = events.reduce((acc, event) => {
-    if (!acc[event.category]) {
-      acc[event.category] = [];
-    }
-    acc[event.category].push(event);
-    return acc;
-  }, {} as Record<string, ScheduleEvent[]>);
-
   return (
-    <div className="rounded-[10px] border-2 border-[#7A64FF] bg-white w-[100%] h-[178px] px-[15px] overflow-auto py-[20px]">
+    <div className="rounded-[10px] border-2 border-[#C9DBFF] bg-white w-[251px] h-[178px] px-[15px] overflow-auto py-[20px]">
       <div>
         {events.map((event, idx) => (
           <div key={idx} className="mb-2">
@@ -129,30 +121,30 @@ const TodayTodo = () => {
             </div>
             {event.category && (
               <div
-                className="inline-block text-[8px] py-[2px] px-[6px] mr-2 ml-2 bg-[#D9D9D9] rounded-[4px]"
+                className="inline-block text-[10px] py-[2px] px-[6px] mr-2 ml-2 bg-[#D9D9D9] rounded-[4px]"
                 style={{
                   color: categoryStyles[event.categoryNum].color,
                 }}
               >
-                <span className="text-[12px]">{event.category}</span>
+                <span>{event.category}</span>
               </div>
             )}
             {event.details.person ? (
-              <div className="inline-block text-[8px] py-[2px] px-[13px] mr-2 bg-[#D9D9D9] rounded-[4px]">
-                <span className="text-[12px]">{event.details.person}</span>
+              <div className="inline-block text-[10px] py-[2px] px-[9px] mr-2 bg-[#D9D9D9] rounded-[4px]">
+                <span>{event.details.person}</span>
               </div>
             ) : (
-              <div className="inline-block text-[8px] py-[2px] px-[13px] mr-2 bg-[#FDBFC3] rounded-[4px]">
-                <span className="text-[12px]">누구</span>
+              <div className="inline-block text-[10px] py-[2px] px-[9px] mr-2 bg-[#FFDCC9] rounded-[4px]">
+                <span>사람</span>
               </div>
             )}
             {event.details.location ? (
-              <div className="inline-block text-[8px] py-[2px] px-[13px] mr-2 bg-[#D9D9D9] rounded-[4px]">
-                <span className="text-[12px]">{event.details.location}</span>
+              <div className="inline-block text-[10px] py-[2px] px-[9px] mr-2 bg-[#D9D9D9] rounded-[4px]">
+                <span>{event.details.location}</span>
               </div>
             ) : (
-              <div className="inline-block text-[8px] py-[2px] px-[13px] mr-2 bg-[#FDBFC3] rounded-[4px]">
-                <span className="text-[12px]">장소</span>
+              <div className="inline-block text-[10px] py-[2px] px-[9px] mr-2 bg-[#FFDCC9] rounded-[4px]">
+                <span>위치</span>
               </div>
             )}
           </div>

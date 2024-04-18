@@ -9,6 +9,7 @@ import AIImg from "../../assets/ai.png";
 import FireworkImg from "../../assets/firework.png";
 import ReactImg from "../../assets/react.png";
 import TodayTodo from "@/components/main/TodayTodo";
+import WeatherImg from "../../assets/weather.png";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -93,14 +94,22 @@ const Main = () => {
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           오늘의 일정 리마인드
         </div>
-        <TodayTodo />
+        <div className="flex gap-[12px] justify-between">
+          <div className="flex flex-col justify-center gap-[5px] rounded-[10px] bg-[#C9DBFF] h-[178px] px-[15px] overflow-auto py-[20px]">
+            <Image src={WeatherImg} alt="" />
+            <div className="text-[#6B6B6B] text-center text-[16px]">22°C</div>
+          </div>
+          <TodayTodo />
+        </div>
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           네스 보고서
         </div>
         <div className="rounded-[10px] bg-[#F2F0FF] w-full min-h-[160px]">
           <div className="p-[20px]">
             <div className="text-[16px] font-[500] tracking-tighter">
-              이번 달 들어서 클라이밍을 자주 하셨네요!
+              오늘은 개발, 토익 공부하기 등의 활동이 있습니다. 이를 바탕으로
+              백엔드 공부를 더 공부하시는 건 어떨까요? 토익 공부도 체계적으로
+              진행해보시면 좋겠어요.
             </div>
           </div>
         </div>

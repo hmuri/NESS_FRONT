@@ -172,7 +172,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
       {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
       {/* 로딩 에러 메시지 표시 */}
       <Nav />
-      <FloatingNess />
+      <FloatingNess message="4월엔 일정이 많으시네요!" />
     </div>
   );
 };
