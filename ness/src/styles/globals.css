@@ -22,3 +22,7 @@ body {
     rgba(122, 100, 255, 0.2) 198.78%
   );
 }
+
+.remind-box {
+  border: solid 1.5px #c9dbff;
+}
