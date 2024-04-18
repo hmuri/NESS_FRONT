@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const Nav = () => {
   const router = useRouter();
   return (
-    <nav className="w-full fixed h-[90px] border-t border-gray-[#454545] bg-white bottom-0 left-0">
+    <nav className="w-full fixed h-[90px] border-t border-gray-[#454545] bg-white bottom-0 left-0 z-8">
       <div className="p-[20px] flex justify-between mx-[64px] ">
         <div
           className="text-center h-[47px] flex flex-col justify-between w-[28px] text-[13px] items-center "

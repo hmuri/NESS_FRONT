@@ -11,4 +11,5 @@
 
 .floatingImage {
   animation: floatAnimation 3s ease-in-out infinite;
+  z-index: 100;
 }

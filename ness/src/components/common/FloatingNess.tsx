@@ -11,9 +11,9 @@ interface FloatingNessProps {
 const FloatingNess = ({ message }: FloatingNessProps) => {
   const router = useRouter();
   return (
-    <div>
+    <div className="z-150">
       <div
-        className="floatingImage fixed bottom-[80px] w-h-[50px] right-[20px] z-100"
+        className="floatingImage fixed bottom-[80px] w-h-[50px] right-[20px] "
         onClick={() => router.push("/chatting")}
       >
         <svg
@@ -130,6 +130,7 @@ const FloatingNess = ({ message }: FloatingNessProps) => {
           </defs>
         </svg>
       </div>
+
       {message && (
         <div
           className={
@@ -139,6 +140,11 @@ const FloatingNess = ({ message }: FloatingNessProps) => {
           <p>{message}</p>
         </div>
       )}
+      <Image
+        src={nessChatImg}
+        className={"fixed bottom-[100px] right-[90px]"}
+        alt=""
+      />
     </div>
   );
 };

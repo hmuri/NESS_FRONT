@@ -73,17 +73,17 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
     });
 
     // 3개를 초과하는 이벤트 수 계산
-    const extraEventsCount = Math.max(0, dateEvents.length - 3);
+    const extraEventsCount = Math.max(0, dateEvents.length - 2);
 
     return (
       <div style={{ position: "relative", height: "100%", width: "100%" }}>
         {children}
         {extraEventsCount > 0 && (
           <div
-            className="extra-events-info"
+            className="extra-events-info text-[8px]"
             onClick={() => handleSelectSlot(value)}
           >
-            +{extraEventsCount} more
+            {extraEventsCount} more
           </div>
         )}
       </div>
@@ -143,36 +143,38 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   }, [month]);
 
   return (
-    <div className="h-[600px] mt-[120px] w-full">
-      <DnDCalendar
-        localizer={localizer}
-        events={events}
-        onEventDrop={handleDragAndDrop}
-        onEventResize={handleDragAndDrop}
-        startAccessor={(event: any) => new Date(event.start)}
-        endAccessor={(event: any) => new Date(event.end || event.start)}
-        style={{ height: "100%", width: "100%" }}
-        selectable={true}
-        onSelectSlot={(slotInfo: { start: Date }) =>
-          handleSelectSlot(slotInfo.start)
-        }
-        components={{
-          toolbar: Header as React.ComponentType<any>,
-          dateCellWrapper: CustomDateCellWrapper,
-        }}
-      />
-      {modalIsOpen && (
-        <DayModal
-          events={selectedEvents}
-          isOpen={modalIsOpen}
-          selectedDate={selectedDate}
-          onRequestClose={() => setModalIsOpen(false)}
+    <div className="flex items-center">
+      <div className="h-[550px] mt-[120px] mb-[100px] w-full">
+        <DnDCalendar
+          localizer={localizer}
+          events={events}
+          onEventDrop={handleDragAndDrop}
+          onEventResize={handleDragAndDrop}
+          startAccessor={(event: any) => new Date(event.start)}
+          endAccessor={(event: any) => new Date(event.end || event.start)}
+          style={{ height: "100%", width: "100%" }}
+          selectable={true}
+          onSelectSlot={(slotInfo: { start: Date }) =>
+            handleSelectSlot(slotInfo.start)
+          }
+          components={{
+            toolbar: Header as React.ComponentType<any>,
+            dateCellWrapper: CustomDateCellWrapper,
+          }}
         />
-      )}
-      {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
-      {/* 로딩 에러 메시지 표시 */}
-      <Nav />
-      {!modalIsOpen && <FloatingNess message="4월엔 일정이 많으시네요!" />}
+        {modalIsOpen && (
+          <DayModal
+            events={selectedEvents}
+            isOpen={modalIsOpen}
+            selectedDate={selectedDate}
+            onRequestClose={() => setModalIsOpen(false)}
+          />
+        )}
+        {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
+        {/* 로딩 에러 메시지 표시 */}
+        <Nav />
+        {!modalIsOpen && <FloatingNess message="4월엔 일정이 많으시네요!" />}
+      </div>
     </div>
   );
 };
