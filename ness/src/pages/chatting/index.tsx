@@ -7,6 +7,7 @@ import Cookies from "universal-cookie";
 import SendImg from "../../assets/send.png";
 import LeftChatImg from "../../assets/leftChat.png";
 import RightChatImg from "../../assets/rightChat.png";
+import { useRouter } from "next/router";
 
 const cookies = new Cookies();
 
@@ -15,6 +16,8 @@ const Chatting = () => {
   const [newMessage, setNewMessage] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -125,6 +128,29 @@ const Chatting = () => {
         </div>
       </div>
       <div className="z-100 border-b border-gray-200 bg-white w-full h-[94px] gap-[5px] fixed top-0 flex-col flex justify-center items-center">
+        <div className="fixed left-[10px]" onClick={() => router.push("/main")}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+          >
+            <circle cx="16" cy="16" r="16" fill="white" />
+            <path
+              d="M25 15.5139L10 15.5139"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M14.0385 11.4546L10 15.5139L14.0385 19.5732"
+              stroke="black"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
         <Image src={NessImg} alt="Ness Logo" />
         네스
       </div>

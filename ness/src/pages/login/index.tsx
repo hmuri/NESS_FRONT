@@ -1,4 +1,7 @@
 "use client";
+import Image from "next/image";
+import GoogleLogo from "../../assets/google logo.png";
+import NessLogo from "../../assets/nessLogo.png";
 
 export default function Login() {
   const handleGoogleLogin = () => {
@@ -8,7 +11,13 @@ export default function Login() {
   return (
     <div className="h-[100vh] mx-auto flex justify-center flex-col">
       <div>
-        <div className="w-[150px] h-[150px] bg-gray-500 mx-auto"></div>
+        <Image
+          src={NessLogo}
+          alt=""
+          width={150}
+          height={150}
+          className="mx-auto"
+        />
       </div>
       <div className="text-center text-[20px] mt-[20px]">
         내 손 안의 비서, NESS
@@ -17,7 +26,9 @@ export default function Login() {
         className=" mx-[20px] h-[44px] rounded-[4px] flex border border-gray-300 mt-[200px]"
         onClick={handleGoogleLogin}
       >
-        <div className="w-[51px] h-full flex border-r"></div>
+        <div className="w-[51px] h-full py-[8px] flex border-r justify-center">
+          <Image src={GoogleLogo} alt="" width={27} height={27} />
+        </div>
         <div className="flex w-full justify-center items-center">
           구글 아이디로 회원가입
         </div>
