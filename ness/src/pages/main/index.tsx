@@ -95,7 +95,7 @@ const Main = () => {
           오늘의 일정 리마인드
         </div>
         <div className="flex gap-[12px] justify-between">
-          <div className="flex flex-col justify-center gap-[5px] rounded-[10px] bg-[#C9DBFF] w-[100px] h-[178px] px-[15px] overflow-auto py-[20px]">
+          <div className="flex flex-col justify-center gap-[5px] rounded-[10px] bg-[#C9DBFF] w-[115px] h-[178px] px-[15px] overflow-auto py-[20px]">
             <Image src={WeatherImg} alt="" />
             <div className="text-[#6B6B6B] text-center text-[16px]">22°C</div>
           </div>
