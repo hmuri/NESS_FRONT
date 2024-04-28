@@ -6,18 +6,18 @@ import Cookies from "universal-cookie";
 import LeftChatImg from "../../assets/leftChat.png";
 import RightChatImg from "../../assets/rightChat.png";
 import { useRouter } from "next/router";
-import useSendMessage from "@/module/hooks/sendMessages";
+import { useSendMessage } from "@/module/hooks/sendMessages";
 import { useQueryClient } from "react-query";
+import useFetchChatMessages from "@/module/hooks/getMessages";
 
 const cookies = new Cookies();
 
 const Chatting = () => {
+  const { data: initialChatMessages } = useFetchChatMessages();
   const [chatMessages, setChatMessages] = useState<IChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [accessToken, setAccessToken] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { mutate: sendMessage, isLoading, isError } = useSendMessage();
-  const queryClient = useQueryClient();
+  const { mutate: sendMessage, isLoading } = useSendMessage();
 
   const router = useRouter();
 
@@ -28,47 +28,40 @@ const Chatting = () => {
   }, [chatMessages]);
 
   useEffect(() => {
-    const token = cookies.get("accessToken") || "";
-    setAccessToken(token);
-
-    const fetchChatMessages = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/chat`,
-          {
-            headers: {
-              Authorization: `${token}`,
-            },
-          }
-        );
-        setChatMessages(response.data.chatList);
-      } catch (error) {
-        console.error("Failed to fetch chat messages", error);
-      }
-    };
-
-    fetchChatMessages();
-  }, []);
+    if (initialChatMessages) {
+      setChatMessages(initialChatMessages);
+    }
+  }, [initialChatMessages]);
 
   const handleSendMessage = () => {
     const optimisticMessage: IChatMessage = {
       chatType: "USER",
       text: newMessage,
-      id: Date.now(), // 타임스탬프를 임시 ID로 사용
+      id: Date.now(),
       createdDate: new Date().toString(),
     };
 
     // 낙관적 UI 업데이트
-    queryClient.setQueryData<IChatMessage[]>("chatMessages", (oldMessages) => [
-      ...oldMessages!,
-      optimisticMessage,
-    ]);
+    setChatMessages((prevMessages) => [...prevMessages, optimisticMessage]);
     setNewMessage("");
 
-    // 메시지 전송
-    sendMessage(newMessage);
+    // 메시지 전송, onSuccess로 전체 리스트 업데이트
+    sendMessage(newMessage, {
+      onSuccess: (chatList) => {
+        setChatMessages(chatList);
+      },
+      onError: (error) => {
+        console.error("Failed to send message: ", error);
+        const errorMessage: IChatMessage = {
+          chatType: "AI",
+          text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
+          id: Date.now(),
+          createdDate: new Date().toString(),
+        };
+        setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
+      },
+    });
   };
-
   return (
     <div className="flex flex-col h-screen">
       <div className="relative mt-[94px] flex-1 w-full bg-[#F2F0FF] py-[26px]">
@@ -100,6 +93,7 @@ const Chatting = () => {
               </div>
             </div>
           ))}
+          {isLoading ? "Sending..." : "Send"}
           <div ref={messagesEndRef} />
         </div>
         <div className="fixed bg-[#F2F0FF] h-[66px] bottom-0 left-[20px] right-[20px] flex items-center">
@@ -110,9 +104,7 @@ const Chatting = () => {
             placeholder="채팅 입력하기"
             onChange={(e) => setNewMessage(e.target.value)}
           />
-          <button onClick={handleSendMessage} disabled={isLoading}>
-            {isLoading ? "Sending..." : "Send"}
-          </button>
+          <button onClick={handleSendMessage} disabled={isLoading}></button>
           <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
