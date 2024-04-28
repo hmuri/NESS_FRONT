@@ -1,16 +1,12 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { IChatMessage, ISendMessage } from "../../module/interface/chatting";
-import Cookies from "universal-cookie";
 import LeftChatImg from "../../assets/leftChat.png";
 import RightChatImg from "../../assets/rightChat.png";
 import { useRouter } from "next/router";
 import { useSendMessage } from "@/module/hooks/sendMessages";
-import { useQueryClient } from "react-query";
 import useFetchChatMessages from "@/module/hooks/getMessages";
-
-const cookies = new Cookies();
+import { LoadingLottie } from "@/module/LottieComponents";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -93,7 +89,7 @@ const Chatting = () => {
               </div>
             </div>
           ))}
-          {isLoading ? "Sending..." : "Send"}
+          {isLoading && <LoadingLottie />}
           <div ref={messagesEndRef} />
         </div>
         <div className="fixed bg-[#F2F0FF] h-[66px] bottom-0 left-[20px] right-[20px] flex items-center">
