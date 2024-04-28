@@ -20,6 +20,7 @@
     "react": "^18",
     "react-big-calendar": "1.11.2",
     "react-dom": "^18",
+    "react-query": "^3.39.3",
     "react-widgets-date-fns": "^5.0.20",
     "socket.io-client": "^4.7.5",
     "typed-events": "link:socket.io-client/build/typed-events",

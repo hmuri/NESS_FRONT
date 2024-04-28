@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import NessImg from "../../assets/ness_chat.png";
 import { IChatMessage, ISendMessage } from "../../module/interface/chatting";
 import Cookies from "universal-cookie";
-import SendImg from "../../assets/send.png";
 import LeftChatImg from "../../assets/leftChat.png";
 import RightChatImg from "../../assets/rightChat.png";
 import { useRouter } from "next/router";
+import useSendMessage from "@/module/hooks/sendMessages";
+import { useQueryClient } from "react-query";
 
 const cookies = new Cookies();
 
@@ -16,6 +16,8 @@ const Chatting = () => {
   const [newMessage, setNewMessage] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { mutate: sendMessage, isLoading, isError } = useSendMessage();
+  const queryClient = useQueryClient();
 
   const router = useRouter();
 
@@ -48,26 +50,23 @@ const Chatting = () => {
     fetchChatMessages();
   }, []);
 
-  const handleSendMessage = async () => {
-    const newChatMessage: ISendMessage = {
+  const handleSendMessage = () => {
+    const optimisticMessage: IChatMessage = {
       chatType: "USER",
       text: newMessage,
+      id: Date.now(), // 타임스탬프를 임시 ID로 사용
+      createdDate: new Date().toString(),
     };
+
+    // 낙관적 UI 업데이트
+    queryClient.setQueryData<IChatMessage[]>("chatMessages", (oldMessages) => [
+      ...oldMessages!,
+      optimisticMessage,
+    ]);
     setNewMessage("");
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/chat`,
-        newChatMessage,
-        {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        }
-      );
-      setChatMessages(response.data.chatList);
-    } catch (error) {
-      console.error("Failed to send message", error);
-    }
+
+    // 메시지 전송
+    sendMessage(newMessage);
   };
 
   return (
@@ -111,6 +110,9 @@ const Chatting = () => {
             placeholder="채팅 입력하기"
             onChange={(e) => setNewMessage(e.target.value)}
           />
+          <button onClick={handleSendMessage} disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send"}
+          </button>
           <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
