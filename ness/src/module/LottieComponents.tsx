@@ -7,13 +7,13 @@ export const LoadingLottie = () => {
     autoplay: true,
     animationData: loadingAnimation,
     rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice", // 애니메이션의 가로 세로 비를 유지
+      preserveAspectRatio: "xMinYMin meet", // 또는 'none'
     },
   };
 
   return (
-    <div>
-      <Lottie options={defaultOptions} height={99} width={41} />
+    <div className="w-[100px] ml-[-10px]">
+      <Lottie options={defaultOptions} height={41} width={99} />
     </div>
   );
 };
