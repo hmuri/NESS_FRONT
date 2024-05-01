@@ -11,6 +11,7 @@
   "dependencies": {
     "@babel/runtime": "^7.24.4",
     "@date-io/date-fns": "^3.0.0",
+    "@newhighsco/next-plugin-svgr": "^3.0.129",
     "@types/js-cookie": "^3.0.6",
     "axios": "^1.6.8",
     "cookie": "^0.6.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@babel/core": "^7.24.4",
     "@babel/preset-env": "^7.24.4",
+    "@svgr/webpack": "^8.1.0",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20",
     "@types/react": "^18",

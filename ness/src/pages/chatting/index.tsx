@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { useSendMessage } from "@/module/hooks/sendMessages";
 import useFetchChatMessages from "@/module/hooks/getMessages";
 import { LoadingLottie } from "@/module/LottieComponents";
+import { Icon_ness_main } from "@/module/icons";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -58,6 +59,7 @@ const Chatting = () => {
       },
     });
   };
+
   return (
     <div className="flex flex-col h-screen">
       <div className="relative mt-[94px] flex-1 w-full bg-[#F2F0FF] py-[26px]">
@@ -141,46 +143,7 @@ const Chatting = () => {
             />
           </svg>
         </div>
-        <svg
-          width="40"
-          height="40"
-          viewBox="0 0 40 40"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="20" cy="20" r="20" fill="#7A64FF" />
-          <path
-            d="M16.2963 27.1997C16.2963 27.1997 17.4963 27.9997 19.8963 27.9997C22.2963 27.9997 23.4963 27.1997 23.4963 27.1997"
-            stroke="black"
-            stroke-linecap="round"
-          />
-          <circle cx="25.6292" cy="25.926" r="0.740741" fill="white" />
-          <circle cx="28.8292" cy="25.926" r="0.740741" fill="white" />
-          <circle cx="27.2299" cy="27.5257" r="0.740741" fill="white" />
-          <circle cx="9.62966" cy="25.926" r="0.740741" fill="white" />
-          <circle cx="12.8297" cy="25.926" r="0.740741" fill="white" />
-          <circle cx="11.2304" cy="27.5257" r="0.740741" fill="white" />
-          <ellipse cx="26.192" cy="19.8961" rx="3.7037" ry="3.6" fill="white" />
-          <ellipse cx="26.1929" cy="19.896" rx="2.05761" ry="2" fill="black" />
-          <ellipse
-            cx="13.3916"
-            cy="19.8961"
-            rx="3.7037"
-            ry="3.6"
-            fill="white"
-          />
-          <ellipse cx="13.3907" cy="19.896" rx="2.05761" ry="2" fill="black" />
-          <path
-            d="M8.88892 15.2147C8.88892 15.2147 10.8889 14.8147 12.8889 14.8147C14.8889 14.8147 16.8889 15.2147 16.8889 15.2147"
-            stroke="black"
-            stroke-linecap="round"
-          />
-          <path
-            d="M22.4886 15.2147C22.4886 15.2147 24.4886 14.8147 26.4886 14.8147C28.4886 14.8147 30.4886 15.2147 30.4886 15.2147"
-            stroke="black"
-            stroke-linecap="round"
-          />
-        </svg>
+        <Icon_ness_main />
         네스
       </div>
     </div>
