@@ -32,6 +32,7 @@ const Chatting = () => {
 
   const handleSendMessage = () => {
     const optimisticMessage: IChatMessage = {
+      case: 0,
       chatType: "USER",
       text: newMessage,
       id: Date.now(),
@@ -50,6 +51,7 @@ const Chatting = () => {
       onError: (error) => {
         console.error("Failed to send message: ", error);
         const errorMessage: IChatMessage = {
+          case: 0,
           chatType: "AI",
           text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
           id: Date.now(),
@@ -64,33 +66,79 @@ const Chatting = () => {
     <div className="flex flex-col h-screen">
       <div className="relative mt-[94px] flex-1 w-full bg-[#F2F0FF] py-[26px]">
         <div className="px-[20px] pb-[50px]">
-          {chatMessages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex relative mb-[14px] ${
-                message.chatType === "USER" ? "justify-end" : "justify-start"
-              }`}
-            >
-              <div
-                className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
-                  message.chatType === "USER"
-                    ? "bg-[#7A64FF] text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                <Image
-                  src={message.chatType === "USER" ? RightChatImg : LeftChatImg}
-                  className={`absolute bottom-3 ${
+          {chatMessages.map((message, index) => {
+            if (message.case === 2) {
+              const parts = message.text.split("<separate>");
+              return (
+                <div
+                  key={index}
+                  className={`flex relative mb-[14px] ${
                     message.chatType === "USER"
-                      ? "right-[-11px]"
-                      : "left-[-11px]"
+                      ? "justify-end"
+                      : "justify-start"
                   }`}
-                  alt=""
-                />
-                <p>{message.text}</p>
-              </div>
-            </div>
-          ))}
+                >
+                  <div
+                    className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
+                      message.chatType === "USER"
+                        ? "bg-[#7A64FF] text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <Image
+                      src={
+                        message.chatType === "USER" ? RightChatImg : LeftChatImg
+                      }
+                      className={`absolute bottom-3 ${
+                        message.chatType === "USER"
+                          ? "right-[-11px]"
+                          : "left-[-11px]"
+                      }`}
+                      alt=""
+                    />
+                    <p>{parts[0]}</p>
+                  </div>
+                  {parts[1] && (
+                    <div className="p-[12px] mt-[4px] rounded-[16px] bg-[#F0F0F0] text-[#333]">
+                      {/* <pre>{JSON.stringify(JSON.parse(parts[1]), null, 2)}</pre> */}
+                    </div>
+                  )}
+                </div>
+              );
+            } else {
+              return (
+                <div
+                  key={index}
+                  className={`flex relative mb-[14px] ${
+                    message.chatType === "USER"
+                      ? "justify-end"
+                      : "justify-start"
+                  }`}
+                >
+                  <div
+                    className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
+                      message.chatType === "USER"
+                        ? "bg-[#7A64FF] text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <Image
+                      src={
+                        message.chatType === "USER" ? RightChatImg : LeftChatImg
+                      }
+                      className={`absolute bottom-3 ${
+                        message.chatType === "USER"
+                          ? "right-[-11px]"
+                          : "left-[-11px]"
+                      }`}
+                      alt=""
+                    />
+                    <p>{message.text}</p>
+                  </div>
+                </div>
+              );
+            }
+          })}
           {isLoading && <LoadingLottie />}
           <div ref={messagesEndRef} />
         </div>
