@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import moment from "moment";
+import "moment/locale/ko";
 import Image from "next/image";
 import { IChatMessage, ISendMessage } from "../../module/interface/chatting";
 import LeftChatImg from "../../assets/leftChat.png";
@@ -69,38 +71,49 @@ const Chatting = () => {
           {chatMessages.map((message, index) => {
             if (message.case === 2) {
               const parts = message.text.split("<separate>");
+              const data = JSON.parse(parts[1]);
+              const formattedDate = moment(data.date)
+                .locale("ko")
+                .format("MMMM Do dddd");
               return (
                 <div
                   key={index}
-                  className={`flex relative mb-[14px] ${
+                  className={`flex relative mb-[14px] flex-col ${
                     message.chatType === "USER"
                       ? "justify-end"
                       : "justify-start"
                   }`}
                 >
-                  <div
-                    className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
-                      message.chatType === "USER"
-                        ? "bg-[#7A64FF] text-white"
-                        : "bg-white text-black"
-                    }`}
-                  >
-                    <Image
-                      src={
-                        message.chatType === "USER" ? RightChatImg : LeftChatImg
-                      }
-                      className={`absolute bottom-3 ${
+                  <div className="relative">
+                    <div
+                      className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
                         message.chatType === "USER"
-                          ? "right-[-11px]"
-                          : "left-[-11px]"
+                          ? "bg-[#7A64FF] text-white"
+                          : "bg-white text-black"
                       }`}
-                      alt=""
-                    />
-                    <p>{parts[0]}</p>
+                    >
+                      <Image
+                        src={
+                          message.chatType === "USER"
+                            ? RightChatImg
+                            : LeftChatImg
+                        }
+                        className={`absolute bottom-3 ${
+                          message.chatType === "USER"
+                            ? "right-[-11px]"
+                            : "left-[-11px]"
+                        }`}
+                        alt=""
+                      />
+                      <p>{parts[0]}</p>
+                    </div>
                   </div>
                   {parts[1] && (
-                    <div className="p-[12px] mt-[4px] rounded-[16px] bg-[#F0F0F0] text-[#333]">
-                      {/* <pre>{JSON.stringify(JSON.parse(parts[1]), null, 2)}</pre> */}
+                    <div className="p-[12px] mt-[4px] rounded-[16px] bg-white text-[#333]">
+                      <div className="text-[15px] font-semibold">
+                        {formattedDate}
+                      </div>
+                      <pre>{JSON.stringify(JSON.parse(parts[1]), null, 2)}</pre>
                     </div>
                   )}
                 </div>
