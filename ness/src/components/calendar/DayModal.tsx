@@ -178,6 +178,145 @@ const EditSchedule = ({
   );
 };
 
+interface IAddcheduleProps {
+  setIsAllVisible: any;
+  selectedDate: Date | null;
+}
+
+const AddSchedule = ({ setIsAllVisible, selectedDate }: IAddcheduleProps) => {
+  // 상태를 관리할 useState 훅 추가
+  const [title, setTitle] = useState("");
+  const [startTime, setStartTime] = useState(moment().toDate() || "");
+  const [endTime, setEndTime] = useState(
+    moment().add(1, "hours").toDate() || ""
+  );
+  const [location, setLocation] = useState("");
+  const [person, setPerson] = useState("");
+
+  const cookies = new Cookies();
+
+  useEffect(() => {
+    if (!endTime) {
+      setEndTime(moment(startTime).add(1, "hours").toDate());
+    }
+  }, [startTime]);
+
+  useEffect(() => {
+    const updateSchedule = async () => {
+      const accessToken = cookies.get("accessToken");
+      const payload = {
+        title: title,
+        start: startTime,
+        end: endTime,
+        location: location,
+        person: person,
+      };
+
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule`,
+          payload,
+          {
+            headers: {
+              Authorization: `${accessToken}`,
+            },
+          }
+        );
+        console.log("Update response:", response);
+      } catch (error) {
+        console.error("Failed to update schedule:", error);
+      }
+    };
+    updateSchedule();
+  }, [title, startTime, endTime, location, person]);
+
+  return (
+    <div className="w-full px-[7px] mt-[10px]">
+      <div className="flex justify-between items-center cursor-pointer">
+        <div onClick={() => setIsAllVisible(true)}>
+          <Image src={LeftArrowImage} alt="" />
+        </div>
+        {/* <div
+          className="rounded-[20px] w-[115px] h-[40px] py-[10px] px-[2px] text-[15px] font-semibold text-center"
+          style={{
+            backgroundColor: categoryStyles[event.categoryNum].color,
+          }}
+        >
+          {event.category}
+        </div> */}
+        <div>
+          <Image src={TrashBinImage} alt="" />
+        </div>
+      </div>
+      <div className="w-full py-[18px] text-[24px] font-semibold">
+        <input
+          type="text"
+          className="w-full"
+          placeholder="제목"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
+      </div>
+      <div className="text-[14px] text-[#868686]">
+        <div className="flex justify-between py-[9px]">
+          <div className="w-[70px]">⏰ 시간</div>
+          <div className=" flex flex-col justify-end">
+            <input
+              type="time"
+              className="text-right w-full ml-[12px]"
+              value={moment(startTime).format("HH:mm")}
+              onChange={(e) => {
+                setStartTime(moment(e.target.value, "HH:mm").toDate());
+              }}
+            />
+            <div>
+              ~ {"  "}
+              <input
+                type="time"
+                className="text-right w-full"
+                value={endTime ? moment(endTime).format("HH:mm") : ""}
+                onChange={(e) => {
+                  setEndTime(moment(e.target.value, "HH:mm").toDate());
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between py-[9px]">
+          <div>🧭 위치</div>
+          <div>
+            <input
+              type="text"
+              placeholder="위치"
+              className="w-full text-right"
+              value={location}
+              onChange={(e) => {
+                setLocation(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="flex justify-between py-[9px]">
+          <div>👯 사람</div>
+          <div>
+            <input
+              type="text"
+              placeholder="사람"
+              className="w-full text-right"
+              value={person}
+              onChange={(e) => {
+                setPerson(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DayModal = ({
   events,
   isOpen,
@@ -186,8 +325,10 @@ const DayModal = ({
 }: DayModalProps) => {
   const [isAllVisible, setIsAllVisible] = useState(true);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleEvent>();
-  const modalChange = (event: ScheduleEvent) => {
-    setSelectedSchedule(event);
+  const modalChange = (event?: ScheduleEvent) => {
+    if (event) {
+      setSelectedSchedule(event);
+    }
     setIsAllVisible(false);
   };
 
@@ -219,7 +360,12 @@ const DayModal = ({
               <div className="rounded-[20px] w-[115px] h-[40px] bg-[#F2F0FF]  py-[10px] px-[2px] text-[15px] font-semibold text-center">
                 {moment(selectedDate).format("DD일 dddd")}
               </div>
-              <div className="absolute right-0 top-[8px]">
+              <div
+                className="absolute right-0 top-[8px]"
+                onClick={() => {
+                  modalChange();
+                }}
+              >
                 <Image
                   src={CalendarImage}
                   alt={"no image"}
@@ -262,14 +408,17 @@ const DayModal = ({
               </div>
             ))}
           </>
+        ) : selectedSchedule ? (
+          <EditSchedule
+            event={selectedSchedule}
+            setIsAllVisible={setIsAllVisible}
+            selectedDate={selectedDate}
+          />
         ) : (
-          selectedSchedule && (
-            <EditSchedule
-              event={selectedSchedule}
-              setIsAllVisible={setIsAllVisible}
-              selectedDate={selectedDate}
-            />
-          )
+          <AddSchedule
+            setIsAllVisible={setIsAllVisible}
+            selectedDate={selectedDate}
+          ></AddSchedule>
         )}
       </div>
       <FloatingNess message={`${ChatDate} 일정을 확인해볼까요?`} />
