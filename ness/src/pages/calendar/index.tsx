@@ -125,13 +125,14 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
 
         const mappedEvents = fetchedScheduleList?.map(
           (event: {
+            id: number;
             start: string;
             end: string;
             category: string;
             details: DetailList;
           }) => ({
             ...event,
-            id: event.details.id,
+            id: event.id,
             start: new Date(event.start),
             end: event.end ? new Date(event.end) : new Date(event.start),
             category: event.category,

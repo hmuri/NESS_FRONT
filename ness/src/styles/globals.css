@@ -38,3 +38,10 @@ nav {
 .day-modal {
   z-index: 15;
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+}
+
+input[type="time"] {
+  width: 100px;
+}

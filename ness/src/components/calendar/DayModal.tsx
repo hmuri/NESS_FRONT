@@ -2,11 +2,14 @@ import moment from "moment";
 import FloatingNess from "../common/FloatingNess";
 import CalendarImage from "../../assets/tabler_calendar-plus.png";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TrashBinImage from "../../assets/trash-bin.png";
 import LeftArrowImage from "../../assets/left_arrow.png";
+import axios from "axios";
+import Cookies from "universal-cookie";
 
 interface ScheduleEvent {
+  id: number;
   title: string;
   start: Date;
   end?: Date;
@@ -42,8 +45,55 @@ const categoryStyles: CategoryStyle = {
 interface IEditScheduleProps {
   event: ScheduleEvent;
   setIsAllVisible: any;
+  selectedDate: Date | null;
 }
-const EditSchedule = ({ event, setIsAllVisible }: IEditScheduleProps) => {
+const EditSchedule = ({
+  event,
+  setIsAllVisible,
+  selectedDate,
+}: IEditScheduleProps) => {
+  // 상태를 관리할 useState 훅 추가
+  const [title, setTitle] = useState(event.title);
+  const [startTime, setStartTime] = useState(event.start || "");
+  const [endTime, setEndTime] = useState(event.end || "");
+  const [location, setLocation] = useState(event.details.location || "");
+  const [person, setPerson] = useState(event.details.person || "");
+
+  const cookies = new Cookies();
+
+  useEffect(() => {
+    const updateSchedule = async () => {
+      const accessToken = cookies.get("accessToken");
+      const payload = {
+        id: event.id,
+        title: title,
+        start: startTime,
+        end: endTime || null,
+        location: location,
+        person: person,
+        categoryNum: event.categoryNum,
+      };
+
+      try {
+        const response = await axios.put(
+          `${
+            process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL
+          }/schedule?day=${moment(selectedDate).format("YYYY-MM-DD")}`,
+          payload,
+          {
+            headers: {
+              Authorization: `${accessToken}`,
+            },
+          }
+        );
+        console.log("Update response:", response);
+      } catch (error) {
+        console.error("Failed to update schedule:", error);
+      }
+    };
+    updateSchedule();
+  }, [title, startTime, endTime, location, person]);
+
   return (
     <div className="w-full px-[7px] mt-[10px]">
       <div className="flex justify-between items-center cursor-pointer">
@@ -63,32 +113,66 @@ const EditSchedule = ({ event, setIsAllVisible }: IEditScheduleProps) => {
         </div>
       </div>
       <div className="w-full py-[18px] text-[24px] font-semibold">
-        {event.title}
+        <input
+          type="text"
+          className="w-full"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
       </div>
       <div className="text-[14px] text-[#868686]">
-        {event.start && (
-          <div className="flex justify-between py-[9px]">
-            <div>⏰ 시간</div>
+        <div className="flex justify-between py-[9px]">
+          <div className="w-[70px]">⏰ 시간</div>
+          <div className=" flex flex-col justify-end">
+            <input
+              type="time"
+              className="text-right w-full ml-[12px]"
+              value={moment(startTime).format("HH:mm")}
+              onChange={(e) => {
+                setStartTime(moment(e.target.value, "HH:mm").toDate());
+              }}
+            />
             <div>
-              {moment(event.start).format("HH:mm")}
-              {event.end && <> ~ {moment(event.end).format("HH:mm")}</>}
+              ~ {"  "}
+              <input
+                type="time"
+                className="text-right w-full"
+                value={endTime ? moment(endTime).format("HH:mm") : ""}
+                onChange={(e) => {
+                  setEndTime(moment(e.target.value, "HH:mm").toDate());
+                }}
+              />
             </div>
           </div>
-        )}
-        {event.details.location && (
-          <div className="flex justify-between py-[9px]">
-            <div>🧭 위치</div>
-            <div>{event.details.location}</div>
+        </div>
+        <div className="flex justify-between py-[9px]">
+          <div>🧭 위치</div>
+          <div>
+            <input
+              type="text"
+              className="w-full text-right"
+              value={location}
+              onChange={(e) => {
+                setLocation(e.target.value);
+              }}
+            />
           </div>
-        )}
-        {event.details.person && (
-          <div className="flex justify-between py-[9px]">
-            <div>👯 사람</div>
-            <div>{event.details.person}</div>
+        </div>
+        <div className="flex justify-between py-[9px]">
+          <div>👯 사람</div>
+          <div>
+            <input
+              type="text"
+              className="w-full text-right"
+              value={person}
+              onChange={(e) => {
+                setPerson(e.target.value);
+              }}
+            />
           </div>
-        )}
-        <div></div>
-        <div></div>
+        </div>
       </div>
     </div>
   );
@@ -183,6 +267,7 @@ const DayModal = ({
             <EditSchedule
               event={selectedSchedule}
               setIsAllVisible={setIsAllVisible}
+              selectedDate={selectedDate}
             />
           )
         )}
