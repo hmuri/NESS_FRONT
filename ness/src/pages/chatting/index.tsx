@@ -9,7 +9,9 @@ import { useRouter } from "next/router";
 import { useSendMessage } from "@/module/hooks/sendMessages";
 import useFetchChatMessages from "@/module/hooks/getMessages";
 import { LoadingLottie } from "@/module/LottieComponents";
-import { Icon_ness_main } from "@/module/icons";
+import { Icon_correct, Icon_ness_main, Icon_wrong } from "@/module/icons";
+import Cookies from "universal-cookie";
+import axios from "axios";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -17,7 +19,18 @@ const Chatting = () => {
   const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { mutate: sendMessage, isLoading } = useSendMessage();
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [newSchedule, setNewSchedule] = useState({
+    id: 0,
+    title: "",
+    start: moment().toDate(),
+    end: moment().toDate(),
+    categoryNum: 6,
+    location: "",
+    people: "",
+  });
 
+  const cookies = new Cookies();
   const router = useRouter();
 
   useEffect(() => {
@@ -31,6 +44,49 @@ const Chatting = () => {
       setChatMessages(initialChatMessages);
     }
   }, [initialChatMessages]);
+
+  useEffect(() => {
+    chatMessages.forEach((message) => {
+      if (message.case === 2) {
+        const parts = message.text.split("<separate>");
+        const data = JSON.parse(parts[1]);
+        setNewSchedule((prevSchedule) => ({
+          ...prevSchedule,
+          id: message.id,
+          start: new Date(data.date),
+          end: new Date(data.date),
+          categoryNum: 6,
+          location: data.location ? data.location : "",
+          people: data.people ? data.people : "",
+          title: data.info,
+        }));
+      }
+    });
+  }, [chatMessages]);
+
+  const confirmSchedule = async (isAdded: boolean) => {
+    const accessToken = cookies.get("accessToken");
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${newSchedule.id}`,
+        newSchedule,
+        {
+          headers: {
+            Authorization: `${accessToken}`,
+          },
+        }
+      );
+      setChatMessages(response.data.chatList);
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+    }
+  };
+
+  const handleScheduleAdd = (isAdded: boolean) => {
+    setIsSelected(true);
+    confirmSchedule(isAdded);
+  };
 
   const handleSendMessage = () => {
     const optimisticMessage: IChatMessage = {
@@ -64,9 +120,19 @@ const Chatting = () => {
     });
   };
 
+  interface CategoryStyle {
+    [key: number]: { name: string; color: string };
+  }
+
+  const categoryStyles: CategoryStyle = {
+    1: { name: "인턴", color: "#7A64FF" },
+    2: { name: "공부", color: "#00C09E" },
+    3: { name: "기타", color: "#454545" },
+    5: { name: "개발", color: "#ffc0cb" },
+  };
   return (
     <div className="flex flex-col h-screen">
-      <div className="relative mt-[94px] flex-1 w-full bg-[#F2F0FF] py-[26px]">
+      <div className="relative mt-[94px] flex-1 bg-[#F2F0FF] py-[26px]">
         <div className="px-[20px] pb-[50px]">
           {chatMessages.map((message, index) => {
             if (message.case === 2) {
@@ -78,15 +144,15 @@ const Chatting = () => {
               return (
                 <div
                   key={index}
-                  className={`flex relative mb-[14px] flex-col ${
+                  className={`flex max-w-[70%] relative mb-[14px] flex-col ${
                     message.chatType === "USER"
                       ? "justify-end"
                       : "justify-start"
                   }`}
                 >
-                  <div className="relative">
+                  <div className="relative mb-[5px]">
                     <div
-                      className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
+                      className={`px-[12px] py-[10px] rounded-[16px] ${
                         message.chatType === "USER"
                           ? "bg-[#7A64FF] text-white"
                           : "bg-white text-black"
@@ -109,13 +175,52 @@ const Chatting = () => {
                     </div>
                   </div>
                   {parts[1] && (
-                    <div className="p-[12px] mt-[4px] rounded-[16px] bg-white text-[#333]">
-                      <div className="text-[15px] font-semibold">
+                    <div className="p-[12px] mt-[4px] rounded-[16px] max-w-[70%] inline bg-white text-[#333]">
+                      <div className="text-[15px] font-semibold mb-[11px]">
                         {formattedDate}
                       </div>
-                      <pre>{JSON.stringify(JSON.parse(parts[1]), null, 2)}</pre>
+                      <div className="flex gap-[11px] flex-row text-[15px]">
+                        <div
+                          className="rounded-[8px] py-[5px] h-[32px] px-[7px] text-[12px] inline font-semibold text-center text-white"
+                          style={{
+                            backgroundColor: categoryStyles[2].color,
+                          }}
+                        >
+                          📖 공부
+                        </div>
+                        <div>
+                          <div>{data.info}</div>
+                          <div>
+                            {data.location && <div>🧭 {data.location}</div>}
+                            {data.people && <div>👯 {data.people}</div>}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
+                  <div className="px-[10px] py-[5px] rounded-[10px] h-[30px] w-[65px] bg-white flex items-center mt-[5px] justify-between">
+                    <Icon_correct
+                      onClick={() => handleScheduleAdd(true)}
+                      className="cursor-pointer"
+                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="2"
+                      height="22"
+                      viewBox="0 0 2 22"
+                      fill="none"
+                    >
+                      <path
+                        d="M1 1L1 21"
+                        stroke="#B3B3B3"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                    <Icon_wrong
+                      onClick={() => handleScheduleAdd(false)}
+                      className="cursor-pointer"
+                    />
+                  </div>
                 </div>
               );
             } else {

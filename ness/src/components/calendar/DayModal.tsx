@@ -40,6 +40,7 @@ const categoryStyles: CategoryStyle = {
   2: { name: "공부", color: "#00C09E" },
   3: { name: "기타", color: "#454545" },
   5: { name: "개발", color: "#ffc0cb" },
+  6: { name: "미분류", color: "#d9d9d9" },
 };
 
 interface IEditScheduleProps {
