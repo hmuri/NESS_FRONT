@@ -12,6 +12,9 @@ import { LoadingLottie } from "@/module/LottieComponents";
 import { Icon_correct, Icon_ness_main, Icon_wrong } from "@/module/icons";
 import Cookies from "universal-cookie";
 import axios from "axios";
+import VoiceIcon from "../../assets/Voice.png";
+import StopIcon from "../../assets/Stop button.png";
+import useSpeechRecognition from "@/module/hooks/speechRecognition";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -20,6 +23,9 @@ const Chatting = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { mutate: sendMessage, isLoading } = useSendMessage();
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [isSTT, setIsSTT] = useState(false);
+  const { isListening, stopListening, startListening } =
+    useSpeechRecognition(setNewMessage);
   const [newSchedule, setNewSchedule] = useState({
     id: 0,
     title: "",
@@ -29,6 +35,15 @@ const Chatting = () => {
     location: "",
     people: "",
   });
+
+  const toggleListening = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+      setIsSTT(true);
+    }
+  };
 
   const cookies = new Cookies();
   const router = useRouter();
@@ -91,7 +106,7 @@ const Chatting = () => {
   const handleSendMessage = () => {
     const optimisticMessage: IChatMessage = {
       case: 0,
-      chatType: "USER",
+      chatType: isSTT ? "STT" : "USER",
       text: newMessage,
       id: Date.now(),
       createdDate: new Date().toString(),
@@ -102,22 +117,26 @@ const Chatting = () => {
     setNewMessage("");
 
     // 메시지 전송, onSuccess로 전체 리스트 업데이트
-    sendMessage(newMessage, {
-      onSuccess: (chatList) => {
-        setChatMessages(chatList);
-      },
-      onError: (error) => {
-        console.error("Failed to send message: ", error);
-        const errorMessage: IChatMessage = {
-          case: 0,
-          chatType: "AI",
-          text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
-          id: Date.now(),
-          createdDate: new Date().toString(),
-        };
-        setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
-      },
-    });
+    sendMessage(
+      { newMessage, isSTT },
+      {
+        onSuccess: (chatList) => {
+          setChatMessages(chatList);
+          setIsSTT(false);
+        },
+        onError: (error) => {
+          console.error("Failed to send message: ", error);
+          const errorMessage: IChatMessage = {
+            case: 0,
+            chatType: "AI",
+            text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
+            id: Date.now(),
+            createdDate: new Date().toString(),
+          };
+          setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
+        },
+      }
+    );
   };
 
   interface CategoryStyle {
@@ -145,7 +164,7 @@ const Chatting = () => {
                 <div
                   key={index}
                   className={`flex max-w-[70%] relative mb-[14px] flex-col ${
-                    message.chatType === "USER"
+                    message.chatType === "USER" || message.chatType === "STT"
                       ? "justify-end"
                       : "justify-start"
                   }`}
@@ -153,19 +172,22 @@ const Chatting = () => {
                   <div className="relative mb-[5px]">
                     <div
                       className={`px-[12px] py-[10px] rounded-[16px] ${
-                        message.chatType === "USER"
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
                           ? "bg-[#7A64FF] text-white"
                           : "bg-white text-black"
                       }`}
                     >
                       <Image
                         src={
-                          message.chatType === "USER"
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
                             ? RightChatImg
                             : LeftChatImg
                         }
                         className={`absolute bottom-3 ${
-                          message.chatType === "USER"
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
                             ? "right-[-11px]"
                             : "left-[-11px]"
                         }`}
@@ -228,24 +250,28 @@ const Chatting = () => {
                 <div
                   key={index}
                   className={`flex relative mb-[14px] ${
-                    message.chatType === "USER"
+                    message.chatType === "USER" || message.chatType === "STT"
                       ? "justify-end"
                       : "justify-start"
                   }`}
                 >
                   <div
                     className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
-                      message.chatType === "USER"
+                      message.chatType === "USER" || message.chatType === "STT"
                         ? "bg-[#7A64FF] text-white"
                         : "bg-white text-black"
                     }`}
                   >
                     <Image
                       src={
-                        message.chatType === "USER" ? RightChatImg : LeftChatImg
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
+                          ? RightChatImg
+                          : LeftChatImg
                       }
                       className={`absolute bottom-3 ${
-                        message.chatType === "USER"
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
                           ? "right-[-11px]"
                           : "left-[-11px]"
                       }`}
@@ -265,9 +291,16 @@ const Chatting = () => {
             className="w-full bg-white h-[41px] px-[22px] py-[13px] mr-[8px] rounded-[20px] border border-purple-600 shadow-md"
             type="text"
             value={newMessage}
-            placeholder="채팅 입력하기"
+            placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
             onChange={(e) => setNewMessage(e.target.value)}
           />
+          <div className="fixed right-[60px]">
+            <Image
+              src={isListening ? StopIcon : VoiceIcon}
+              alt=""
+              onClick={toggleListening}
+            />
+          </div>
           <button onClick={handleSendMessage} disabled={isLoading}></button>
           <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
             <svg
