@@ -36,7 +36,7 @@ export const patchActivateEmail = async (isActive: boolean) => {
 
 export const updatePersona = async (persona: string) => {
   try {
-    const response = await axiosInstance.patch(`/profile/nickname`, {
+    const response = await axiosInstance.patch(`/profile/persona`, {
       persona,
     });
     return response.status === 200;
