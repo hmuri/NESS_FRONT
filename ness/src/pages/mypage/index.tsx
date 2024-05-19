@@ -1,6 +1,8 @@
 import axios from "axios";
 import { GetServerSidePropsContext } from "next";
 import Nav from "../../components/common/Nav";
+import Image from "next/image";
+import { Icon_bell, Icon_person, Icon_right_arrow } from "@/module/icons";
 
 export default function MyPage({ profile }: any) {
   return (
@@ -15,21 +17,57 @@ export default function MyPage({ profile }: any) {
             />
           </div>
           <div className="flex items-center pt-[36px]">
-            <div className="text-[24px] font-medium w-[200px] text-center overflow-wrap-break-word mb-[36px]">
+            <div className="text-[24px] font-medium w-[200px] text-center overflow-wrap-break-word mb-[20px]">
               {profile.nickname}
             </div>
           </div>
         </div>
-        <div className="flex gap-[10px] flex-col">
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-center border-[#ECECEC]">
-            <div className="text-[16px] font-[500] text-center">
-              개인 정보 수정
+        <div className="flex flex-col w-full">
+          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
+            <div className="flex gap-[15px] items-center">
+              <Icon_person />
+              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+                <div>개인 정보 수정</div>
+                <div className="text-[#454545]">
+                  프로필 사진 및 닉네임을 수정합니다.
+                </div>
+              </div>
             </div>
+            <Icon_right_arrow />
           </div>
-          <div className="rounded-[10px] w-full h-[48px] flex items-center justify-center border-[#ECECEC]">
-            <div className="text-[16px] font-[500] text-center">
-              기타 필요한 버튼
+          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
+            <div className="flex gap-[15px] items-center ">
+              <Icon_bell />
+              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+                <div>알림</div>
+                <div className="text-[#454545]">
+                  이메일 알림 등을 설정합니다.
+                </div>
+              </div>
             </div>
+            <Icon_right_arrow />
+          </div>
+          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
+            <div className="flex gap-[15px] items-center ">
+              <Icon_person />
+              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+                <div>페르소나</div>
+                <div className="text-[#454545]">
+                  일정 관리 비서의 페르소나를 결정합니다.
+                </div>
+              </div>
+            </div>
+            <Icon_right_arrow />
+          </div>
+          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
+            <div className="flex gap-[15px] items-center">
+              <Icon_person />
+              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+                <div>기타 버튼</div>
+                <div className="text-[#454545]">기타 버튼입니다.</div>
+              </div>
+            </div>
+            <Icon_right_arrow />
           </div>
         </div>
       </div>
