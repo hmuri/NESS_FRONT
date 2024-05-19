@@ -3,12 +3,15 @@ import { getReportMemories, getReportTags } from "../apis/report";
 import { fetchRecommendMessage } from "../apis/main";
 import BookImg from "../../assets/book.png";
 import Image from "next/image";
+import Nav from "@/components/common/Nav";
 
 const Index = () => {
   const [tags, setTags] = useState<ReportTag[] | undefined>();
   const [reportMemoryList, setMemories] = useState<
     ReportMemory[] | undefined
   >();
+  const [selectedTag, setSelectedTag] = useState<ReportTag | undefined>();
+  const [isModal, setIsModal] = useState(false);
   const [memoriesByDate, setMemoriesByDate] = useState({});
   const [recommendMessage, setRecommendMessaage] = useState<
     IMainData | undefined
@@ -65,6 +68,11 @@ const Index = () => {
   const firstRow = memoryEntries.slice(0, 7);
   const secondRow = memoryEntries.slice(7);
 
+  const handleSelectTag = (tag: ReportTag) => {
+    setSelectedTag(tag);
+    setIsModal(true);
+  };
+
   return (
     <div className="p-[20px] mb-[100px]">
       <div className="mt-[40px] flex w-full mb-[45px]">
@@ -105,7 +113,11 @@ const Index = () => {
       </div>
       <div className="flex gap-[6px] flex-col">
         {tags?.map((tag) => (
-          <div key={tag.id} className="rounded-[10px] bg-[#F2F0FF] w-full">
+          <div
+            key={tag.id}
+            onClick={() => handleSelectTag(tag)}
+            className="rounded-[10px] bg-[#F2F0FF] w-full"
+          >
             <div className="px-[17px] py-[15px]">
               <div className="text-[16px] font-[500] tracking-tighter text-center">
                 {tag.title}
@@ -113,6 +125,41 @@ const Index = () => {
             </div>
           </div>
         ))}
+      </div>
+      <Nav />
+      {isModal && (
+        <TagModal selectedTag={selectedTag} setIsModal={setIsModal} />
+      )}
+    </div>
+  );
+};
+
+const TagModal = ({
+  selectedTag,
+  setIsModal,
+}: {
+  selectedTag: ReportTag | undefined;
+  setIsModal: any;
+}) => {
+  const handleModalClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation(); // 자식 요소로 이벤트 전파를 막음
+  };
+  return (
+    <div
+      className="w-[100vw] h-[100vh] bg-black fixed bottom-0 left-0 bg-opacity-50 z-20"
+      onClick={() => setIsModal(false)}
+    >
+      <div
+        onClick={handleModalClick}
+        className="fixed flex gap-[8px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px]"
+      >
+        <Image src={BookImg} alt="" width={100} height={100} />
+        <div className="text-[#7a64ff] font-semibold text-[20px]">
+          {selectedTag?.title}
+        </div>
+        <div>{selectedTag?.info}</div>
       </div>
     </div>
   );
