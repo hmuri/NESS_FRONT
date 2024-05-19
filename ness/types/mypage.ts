@@ -5,4 +5,5 @@ interface Profile {
   name: string;
   persona: string;
   isEmailActive: boolean;
+  email?: string;
 }

@@ -7,3 +7,6 @@ export { ReactComponent as Icon_persona_ness } from "../../assets/svg/persona_ne
 export { ReactComponent as Icon_spoit } from "../../assets/svg/spoit.svg";
 export { ReactComponent as Icon_right_arrow } from "../../assets/svg/right_arrow.svg";
 export { ReactComponent as Icon_camera } from "../../assets/svg/camera.svg";
+export { ReactComponent as Icon_send_email } from "../../assets/svg/send_email.svg";
+export { ReactComponent as Icon_select_off } from "../../assets/svg/select_off.svg";
+export { ReactComponent as Icon_select_on } from "../../assets/svg/select_on.svg";

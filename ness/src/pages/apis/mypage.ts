@@ -11,3 +11,25 @@ export const getProfile = async (): Promise<Profile> => {
     throw error; // 예외를 다시 던지거나, 기본값 반환 등
   }
 };
+
+export const testEmail = async () => {
+  try {
+    const response = await axiosInstance.post(`/email/test`);
+    console.log("Status Code:", response.status);
+    return response.status === 200;
+  } catch (error) {
+    console.error("Failed to test email:", error);
+    return false;
+  }
+};
+
+export const patchActivateEmail = async (isActive: boolean) => {
+  try {
+    const response = await axiosInstance.patch(`/email?isActive=${isActive}`);
+    console.log("Status Code:", response.status);
+    return response.status === 200;
+  } catch (error) {
+    console.error("Failed to test email:", error);
+    return false;
+  }
+};

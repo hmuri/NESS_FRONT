@@ -1,93 +1,91 @@
-import axios from "axios";
-import { GetServerSidePropsContext } from "next";
-import Nav from "../../components/common/Nav";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { getProfile, patchActivateEmail, testEmail } from "../apis/mypage";
+import Nav from "@/components/common/Nav";
 import {
-  Icon_bell,
-  Icon_person,
-  Icon_persona_ness,
-  Icon_right_arrow,
-  Icon_spoit,
+  Icon_camera,
+  Icon_select_off,
+  Icon_select_on,
+  Icon_send_email,
 } from "@/module/icons";
-import urls from "@/module/urls";
-import axiosInstance from "@/module/axiosInstance";
-import { getProfile } from "../apis/mypage";
 
 export default function Alarm() {
-  const profile = getProfile();
-  const router = useRouter();
+  const [profile, setProfile] = useState<Profile | undefined>();
+  const [emailSelected, setEmailSelected] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getProfile();
+      if (data) {
+        setProfile(data);
+        setEmailSelected(data.isEmailActive);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleEmailSend = async () => {
+    const response = await testEmail();
+    if (response) {
+      alert(
+        `${profile?.id}로 테스트 이메일이 발송되었습니다. 1분 내에 확인이 가능합니다.`
+      );
+    } else {
+      alert(
+        "이메일 발송에 실패했습니다. 문제가 계속될 경우, maxcse01@gmail.com으로 연락 바랍니다."
+      );
+    }
+  };
+  const handleEmailActivate = async () => {
+    const response = await patchActivateEmail(!emailSelected);
+    if (response) {
+      setEmailSelected(!emailSelected);
+    } else {
+      alert(
+        "이메일 활성화에 실패했습니다. 문제가 계속될 경우, maxcse01@gmail.com으로 연락 바랍니다."
+      );
+    }
+  };
+
   return (
     <>
-      <div className="p-[25px]">
-        <div className="mt-[76px] flex flex-col w-full items-center">
-          <div>
-            <img
-              src={profile.pictureUrl}
-              alt="Profile"
-              className="w-[86px] h-[86px] bg-[#F2F0FF] rounded-[50%]"
-            />
-          </div>
-          <div className="flex items-center pt-[36px]">
-            <div className="text-[24px] font-medium w-[200px] text-center overflow-wrap-break-word mb-[20px]">
-              {profile.nickname}
-            </div>
-          </div>
-        </div>
+      <div className="p-[25px] mt-[30px]">
+        <div className="text-[20px] py-[11px]">개인 정보 수정</div>
         <div className="flex flex-col w-full">
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div
-              className="flex gap-[15px] items-center"
-              onClick={() => router.push(urls.mypage.edit)}
-            >
-              <Icon_person />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
-                <div>개인 정보 수정</div>
-                <div className="text-[#454545]">
-                  프로필 사진 및 닉네임을 수정합니다.
-                </div>
+          <div className="rounded-[10px] w-full flex flex-col items-center">
+            <div className="w-full text-[16px] font-[500] flex my-[18px] justify-between items-center">
+              <div>
+                이메일 테스트 <br />
+                <span className="text-[#454545]">
+                  어떤 이메일이 오는지 테스트해보세요!
+                </span>
               </div>
+              <button
+                onClick={handleEmailSend}
+                className="w-[35px] h-[35px] rounded-[50%] bg-[#7A64FF] flex justify-center items-center"
+              >
+                <Icon_send_email />
+              </button>
             </div>
-            <Icon_right_arrow />
-          </div>
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div
-              className="flex gap-[15px] items-center "
-              onClick={() => router.push(urls.mypage.alarm)}
-            >
-              <Icon_bell />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
-                <div>알림</div>
-                <div className="text-[#454545]">
-                  이메일 알림 등을 설정합니다.
-                </div>
+            <div className="w-full text-[16px] font-[500] flex my-[18px] justify-between items-center">
+              <div>
+                End of Today with NESS <br />
+                <span className="text-[#454545]">
+                  내일 할 일 알림 이메일을 자정에 발송합니다.
+                </span>
               </div>
+              <button
+                onClick={handleEmailActivate}
+                className="flex justify-center items-center"
+              >
+                {emailSelected ? <Icon_select_on /> : <Icon_select_off />}
+              </button>
             </div>
-            <Icon_right_arrow />
-          </div>
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div
-              className="flex gap-[15px] items-center "
-              onClick={() => router.push(urls.mypage.edit)}
-            >
-              <Icon_persona_ness />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
-                <div>페르소나</div>
-                <div className="text-[#454545]">
-                  일정 관리 비서의 페르소나를 결정합니다.
-                </div>
-              </div>
+            <div className="w-full text-[16px] font-[500] text-center flex flex-col items-start my-[18px]">
+              <div>기타 기능</div>
+              <div className="text-[#454545]">기타 기능입니다.</div>
             </div>
-            <Icon_right_arrow />
-          </div>
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div className="flex gap-[15px] items-center">
-              <Icon_spoit />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
-                <div>기타 버튼</div>
-                <div className="text-[#454545]">기타 버튼입니다.</div>
-              </div>
-            </div>
-            <Icon_right_arrow />
           </div>
         </div>
       </div>
