@@ -9,12 +9,14 @@ import {
   Icon_normal,
   Icon_person,
   Icon_persona_ness,
+  Icon_radio,
   Icon_right_arrow,
   Icon_spoit,
+  Icon_unselected_radio,
 } from "@/module/icons";
 import urls from "@/module/urls";
 import { useEffect, useState } from "react";
-import { getProfile } from "../apis/mypage";
+import { getProfile, updatePersona } from "../apis/mypage";
 
 export default function Persona() {
   const [profile, setProfile] = useState<Profile | undefined>();
@@ -31,62 +33,64 @@ export default function Persona() {
 
     fetchProfile();
   }, []);
+
+  const handlePersonaChange = async (persona: string) => {
+    const response = await updatePersona(persona);
+    if (response) {
+      setSelectedNess(persona);
+    } else {
+      alert(
+        "페르소나를 업데이트하는 데에 실패하였습니다. 문제가 계속될 경우, maxcse01@gmail.com 으로 연락 부탁드립니다."
+      );
+    }
+  };
   return (
     <>
       <div className="p-[15px] mt-[30px]">
         <div className="text-[20px] py-[11px] ml-[10px]">페르소나 설정</div>
         <div className="flex flex-col w-full">
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div className="flex gap-[15px] items-center">
-              <div className="w-[50px] flex justify-center">
-                <Icon_normal />
+          {[
+            {
+              key: "NESS",
+              label: "기본 페르소나, NESS",
+              description: "일반적인 일정 관리 비서입니다.",
+              icon: <Icon_normal />,
+            },
+            {
+              key: "HARDNESS",
+              label: "하드 페르소나, HARD-NESS",
+              description: "일정관리를 빡세게 도와주는 비서입니다.",
+              icon: <Icon_hardness />,
+            },
+            {
+              key: "CALMNESS",
+              label: "이지 페르소나, CALM-NESS",
+              description: "일정관리를 평온히 도와주는 비서입니다.",
+              icon: <Icon_calmness />,
+            },
+          ].map((persona) => (
+            <div
+              className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]"
+              key={persona.key}
+            >
+              <div className="flex gap-[15px] items-center">
+                <div className="w-[50px] flex justify-center">
+                  {persona.icon}
+                </div>
+                <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+                  <div>{persona.label}</div>
+                  <div className="text-[#454545]">{persona.description}</div>
+                </div>
               </div>
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
-                <div>
-                  기본 페르소나,{" "}
-                  <span className="text-[#7A64FF] font-bold">NESS</span>
-                </div>
-                <div className="text-[#454545]">
-                  일반적인 일정 관리 비서입니다.
-                </div>
-              </div>
-            </div>
-            <Icon_right_arrow />
-          </div>
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div className="flex gap-[15px] items-center ">
-              <div className="w-[50px] flex justify-center">
-                <Icon_hardness />
-              </div>
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
-                <div>
-                  하드 페르소나, HARD-
-                  <span className="text-[#FF6464] font-bold">NESS</span>
-                </div>
-                <div className="text-[#454545]">
-                  일정관리를 빡게게 도와주는 비서입니다.
-                </div>
-              </div>
-            </div>
-            <Icon_right_arrow />
-          </div>
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div className="flex gap-[15px] items-center">
-              <div className="w-[50px] flex justify-center">
-                <Icon_calmness />
-              </div>
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
-                <div>
-                  이지 페르소나, CALM-
-                  <span className="text-[#759CFF] font-bold">NESS</span>
-                </div>
-                <div className="text-[#454545]">
-                  일정관리를 평온히 도와주는 비서입니다.
-                </div>
+              <div onClick={() => handlePersonaChange(persona.key)}>
+                {selectedNess === persona.key ? (
+                  <Icon_radio />
+                ) : (
+                  <Icon_unselected_radio />
+                )}
               </div>
             </div>
-            <Icon_right_arrow />
-          </div>
+          ))}
         </div>
       </div>
       <Nav />

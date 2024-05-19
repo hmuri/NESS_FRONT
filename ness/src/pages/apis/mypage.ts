@@ -33,3 +33,14 @@ export const patchActivateEmail = async (isActive: boolean) => {
     return false;
   }
 };
+
+export const updatePersona = async (persona: string) => {
+  try {
+    const response = await axiosInstance.patch(`/profile/nickname`, {
+      persona,
+    });
+    return response.status === 200;
+  } catch (error) {
+    console.error("Failed to update persona:", error);
+  }
+};

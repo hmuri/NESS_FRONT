@@ -13,3 +13,5 @@ export { ReactComponent as Icon_select_on } from "../../assets/svg/select_on.svg
 export { ReactComponent as Icon_hardness } from "../../assets/svg/hardness.svg";
 export { ReactComponent as Icon_calmness } from "../../assets/svg/calmness.svg";
 export { ReactComponent as Icon_normal } from "../../assets/svg/normalness.svg";
+export { ReactComponent as Icon_radio } from "../../assets/svg/radio.svg";
+export { ReactComponent as Icon_unselected_radio } from "../../assets/svg/unselected_radio.svg";
