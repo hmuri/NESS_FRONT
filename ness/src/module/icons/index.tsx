@@ -6,3 +6,4 @@ export { ReactComponent as Icon_bell } from "../../assets/svg/bell.svg";
 export { ReactComponent as Icon_persona_ness } from "../../assets/svg/persona_ness.svg";
 export { ReactComponent as Icon_spoit } from "../../assets/svg/spoit.svg";
 export { ReactComponent as Icon_right_arrow } from "../../assets/svg/right_arrow.svg";
+export { ReactComponent as Icon_camera } from "../../assets/svg/camera.svg";

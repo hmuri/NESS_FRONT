@@ -10,8 +10,11 @@ import {
   Icon_spoit,
 } from "@/module/icons";
 import urls from "@/module/urls";
+import axiosInstance from "@/module/axiosInstance";
+import { getProfile } from "../apis/mypage";
 
-export default function MyPage({ profile }: any) {
+export default function Alarm() {
+  const profile = getProfile();
   const router = useRouter();
   return (
     <>
@@ -91,50 +94,4 @@ export default function MyPage({ profile }: any) {
       <Nav />
     </>
   );
-}
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { req } = context;
-  const cookies = req.headers.cookie;
-
-  let accessToken = "";
-
-  // 쿠키 문자열을 파싱하여 accessToken 추출
-  if (cookies) {
-    const cookieObj = Object.fromEntries(
-      cookies.split(";").map((cookie) => {
-        const [key, value] = cookie.split("=");
-        return [key.trim(), decodeURIComponent(value)];
-      })
-    );
-
-    accessToken = cookieObj.accessToken || "";
-  }
-
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/profile`,
-      {
-        headers: {
-          Authorization: `${accessToken}`,
-        },
-      }
-    );
-    const profile = response.data;
-
-    // 페이지 컴포넌트로 프로필 정보 전달
-    return {
-      props: {
-        profile,
-      },
-    };
-  } catch (error) {
-    console.error("Failed to fetch profile", error);
-    // 에러 처리: 프로필 정보 없이 페이지 렌더링
-    return {
-      props: {
-        profile: {},
-      },
-    };
-  }
 }
