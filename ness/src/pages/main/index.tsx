@@ -1,6 +1,5 @@
 import FloatingNess from "@/components/common/FloatingNess";
 import Nav from "@/components/common/Nav";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Image from "next/image";
@@ -10,42 +9,10 @@ import FireworkImg from "../../assets/firework.png";
 import ReactImg from "../../assets/react.png";
 import TodayTodo from "@/components/main/TodayTodo";
 import WeatherImg from "../../assets/weather.png";
+import { fetchRecommendMessage } from "../apis/main";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
-
-interface IMainData {
-  recommendId: number;
-  recommend: string;
-  scheduleId?: number;
-  title?: string;
-  start?: string;
-  end?: string | null;
-  category?: string;
-  categoryNum?: number;
-  details?: ScheduleDetails;
-}
-
-interface ScheduleDetails {
-  location: string;
-  person: string;
-}
-
-const fetchChatMessages = async (): Promise<IMainData | undefined> => {
-  try {
-    const response = await axios.get<IMainData>(
-      `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/main`,
-      {
-        headers: {
-          Authorization: `${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch chat messages", error);
-  }
-};
 
 const Main = () => {
   const [data, setData] = useState<IMainData | undefined>(undefined);
@@ -57,7 +24,7 @@ const Main = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await fetchChatMessages();
+      const result = await fetchRecommendMessage();
       setData(result);
     };
 
@@ -121,3 +88,6 @@ const Main = () => {
 };
 
 export default Main;
+function fetchChatMessages() {
+  throw new Error("Function not implemented.");
+}
