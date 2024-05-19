@@ -64,7 +64,7 @@ export default function MyPage({ profile }: any) {
           <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
             <div
               className="flex gap-[15px] items-center "
-              onClick={() => router.push(urls.mypage.edit)}
+              onClick={() => router.push(urls.mypage.persona)}
             >
               <Icon_persona_ness />
               <div className="text-[16px] font-[500] text-center flex flex-col items-start">
