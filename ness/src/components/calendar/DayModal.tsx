@@ -312,21 +312,27 @@ const AddSchedule = ({
           <div className="w-[70px]">⏰ 시간</div>
           <div className=" flex flex-col justify-end">
             <input
-              type="time"
+              type="datetime-local"
               className="text-right w-full ml-[12px]"
-              value={moment(startTime).format("HH:mm")}
+              value={moment(startTime).format("YYYY-MM-DDTHH:mm")}
               onChange={(e) => {
-                setStartTime(moment(e.target.value, "HH:mm").toDate());
+                setStartTime(
+                  moment(e.target.value, "YYYY-MM-DDTHH:mm").toDate()
+                );
               }}
             />
             <div>
               ~ {"  "}
               <input
-                type="time"
-                className="text-right w-full"
-                value={endTime ? moment(endTime).format("HH:mm") : ""}
+                type="datetime-local"
+                className="text-right w-full ml-[12px]"
+                value={
+                  endTime ? moment(endTime).format("YYYY-MM-DDTHH:mm") : ""
+                }
                 onChange={(e) => {
-                  setEndTime(moment(e.target.value, "HH:mm").toDate());
+                  setEndTime(
+                    moment(e.target.value, "YYYY-MM-DDTHH:mm").toDate()
+                  );
                 }}
               />
             </div>
