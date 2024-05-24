@@ -45,6 +45,15 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   const [selectedEvents, setSelectedEvents] = useState<ScheduleEvent[]>([]);
   const [loadingError, setLoadingError] = useState<string | null>(null); // 로딩 에러 상태 추가
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const prevMonth = () => {
+    setMonth(moment(month).subtract(1, "months").format("YYYY-MM"));
+  };
+
+  const nextMonth = () => {
+    setMonth(moment(month).add(1, "months").format("YYYY-MM"));
+  };
+
   const handleSelectSlot = (date: Date) => {
     const eventsForSelectedDate = events.filter((event) => {
       const startOfDay = moment(event.start).startOf("day");
@@ -109,6 +118,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
+      console.log("currentMonth", month);
       const accessToken = cookies.get("accessToken");
       console.log("here" + process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL);
       setLoadingError(null); // 요청 전 에러 상태 초기화
@@ -165,9 +175,15 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
             onSelectSlot={(slotInfo: { start: Date }) =>
               handleSelectSlot(slotInfo.start)
             }
+            date={month}
             components={{
-              toolbar: Header as React.ComponentType<any>,
-              dateCellWrapper: CustomDateCellWrapper,
+              toolbar: (props) => (
+                <Header
+                  {...props}
+                  onPrevMonth={prevMonth}
+                  onNextMonth={nextMonth}
+                />
+              ),
             }}
           />
           <Nav />
