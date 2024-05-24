@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import GoogleLogo from "../../assets/google logo.png";
-import NessLogo from "../../assets/nessLogo.png";
+import GoogleLogo from "../../../public/assets/google logo.png";
+import NessLogo from "../../../public/assets/nessLogo.png";
 
 export default function Login() {
   const handleGoogleLogin = () => {

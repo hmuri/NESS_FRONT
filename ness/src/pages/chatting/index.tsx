@@ -3,8 +3,8 @@ import moment from "moment";
 import "moment/locale/ko";
 import Image from "next/image";
 import { IChatMessage, ISendMessage } from "../../module/interface/chatting";
-import LeftChatImg from "../../assets/leftChat.png";
-import RightChatImg from "../../assets/rightChat.png";
+import LeftChatImg from "../../../public/assets/leftChat.png";
+import RightChatImg from "../../../public/assets/rightChat.png";
 import { useRouter } from "next/router";
 import { useSendMessage } from "@/module/hooks/sendMessages";
 import useFetchChatMessages from "@/module/hooks/getMessages";
@@ -12,8 +12,8 @@ import { LoadingLottie } from "@/module/LottieComponents";
 import { Icon_correct, Icon_ness_main, Icon_wrong } from "@/module/icons";
 import Cookies from "universal-cookie";
 import axios from "axios";
-import VoiceIcon from "../../assets/Voice.png";
-import StopIcon from "../../assets/Stop button.png";
+import VoiceIcon from "../../../public/assets/Voice.png";
+import StopIcon from "../../../public/assets/Stop button.png";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
 
 const Chatting = () => {

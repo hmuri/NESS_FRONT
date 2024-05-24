@@ -1,6 +1,6 @@
-import CalendarImg from "../../assets/calendar.png";
-import NessImg from "../../assets/ness_nav.png";
-import AccoutImg from "../../assets/account.png";
+import CalendarImg from "../../../public/assets/calendar.png";
+import NessImg from "../../../public/assets/ness_nav.png";
+import AccoutImg from "../../../public/assets/account.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
 

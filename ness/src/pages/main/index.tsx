@@ -3,12 +3,12 @@ import Nav from "@/components/common/Nav";
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Image from "next/image";
-import BookImg from "../../assets/book.png";
-import AIImg from "../../assets/ai.png";
-import FireworkImg from "../../assets/firework.png";
-import ReactImg from "../../assets/react.png";
+import BookImg from "../../../public/assets/book.png";
+import AIImg from "../../../public/assets/ai.png";
+import FireworkImg from "../../../public/assets/firework.png";
+import ReactImg from "../../../public/assets/react.png";
 import TodayTodo from "@/components/main/TodayTodo";
-import WeatherImg from "../../assets/weather.png";
+import WeatherImg from "../../../public/assets/weather.png";
 import { fetchRecommendMessage } from "../../module/apis/main";
 
 const cookies = new Cookies();

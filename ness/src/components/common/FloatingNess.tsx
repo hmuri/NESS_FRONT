@@ -1,8 +1,8 @@
 // components/FloatingNess.js
 import Image from "next/image";
-import NESS_MAIN_LOGO from "../../assets/ness_main_logo.png";
+import NESS_MAIN_LOGO from "../../../public/assets/ness_main_logo.png";
 import { useRouter } from "next/router";
-import nessChatImg from "../../assets/nessChatImg.png";
+import nessChatImg from "../../../public/assets/nessChatImg.png";
 
 interface FloatingNessProps {
   message?: string;

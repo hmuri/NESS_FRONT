@@ -5,6 +5,7 @@ import "@/styles/FloatingNess.css";
 import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
   function setScreenSize() {
@@ -29,8 +30,13 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, []);
   return (
-    <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
-    </QueryClientProvider>
+    <>
+      <Head>
+        <link rel="icon" href="assets/ness_chat.png" type="image/png"></link>
+      </Head>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
+    </>
   );
 }

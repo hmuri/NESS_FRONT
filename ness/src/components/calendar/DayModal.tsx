@@ -1,10 +1,10 @@
 import moment from "moment";
 import FloatingNess from "../common/FloatingNess";
-import CalendarImage from "../../assets/tabler_calendar-plus.png";
+import CalendarImage from "../../../public/assets/tabler_calendar-plus.png";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import TrashBinImage from "../../assets/trash-bin.png";
-import LeftArrowImage from "../../assets/left_arrow.png";
+import TrashBinImage from "../../../public/assets/trash-bin.png";
+import LeftArrowImage from "../../../public/assets/left_arrow.png";
 import axios from "axios";
 import Cookies from "universal-cookie";
 

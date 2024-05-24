@@ -3,8 +3,8 @@ import { ToolbarProps, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "moment/locale/ko";
 import { useEffect, useState } from "react";
-import LeftArrow from "../../assets/left_arrow.png";
-import RightArrow from "../../assets/right_arrow.png";
+import LeftArrow from "../../../public/assets/left_arrow.png";
+import RightArrow from "../../../public/assets/right_arrow.png";
 import Image from "next/image";
 
 const localizer = momentLocalizer(moment);
