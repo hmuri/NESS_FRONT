@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { getProfile } from "../apis/mypage";
+import { getProfile } from "../../module/apis/mypage";
 import Nav from "@/components/common/Nav";
 import { Icon_camera } from "@/module/icons";
 

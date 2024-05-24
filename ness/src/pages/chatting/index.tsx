@@ -203,7 +203,7 @@ const Chatting = () => {
                       </div>
                       <div className="flex gap-[11px] flex-row text-[15px]">
                         <div
-                          className="rounded-[8px] py-[5px] h-[32px] px-[7px] text-[12px] inline font-semibold text-center text-white"
+                          className="rounded-[8px] py-[5px] h-[38px] px-[7px] text-[12px] inline font-semibold text-center text-white"
                           style={{
                             backgroundColor: categoryStyles[2].color,
                           }}

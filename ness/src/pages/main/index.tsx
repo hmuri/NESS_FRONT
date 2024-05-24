@@ -9,7 +9,7 @@ import FireworkImg from "../../assets/firework.png";
 import ReactImg from "../../assets/react.png";
 import TodayTodo from "@/components/main/TodayTodo";
 import WeatherImg from "../../assets/weather.png";
-import { fetchRecommendMessage } from "../apis/main";
+import { fetchRecommendMessage } from "../../module/apis/main";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -88,6 +88,3 @@ const Main = () => {
 };
 
 export default Main;
-function fetchChatMessages() {
-  throw new Error("Function not implemented.");
-}

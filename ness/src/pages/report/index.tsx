@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getReportMemories, getReportTags } from "../apis/report";
-import { fetchRecommendMessage } from "../apis/main";
+import { getReportMemories, getReportTags } from "../../module/apis/report";
+import { fetchRecommendMessage } from "../../module/apis/main";
 import BookImg from "../../assets/book.png";
 import Image from "next/image";
 import Nav from "@/components/common/Nav";

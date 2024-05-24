@@ -16,7 +16,7 @@ import {
 } from "@/module/icons";
 import urls from "@/module/urls";
 import { useEffect, useState } from "react";
-import { getProfile, updatePersona } from "../apis/mypage";
+import { getProfile, updatePersona } from "../../module/apis/mypage";
 
 export default function Persona() {
   const [profile, setProfile] = useState<Profile | undefined>();
