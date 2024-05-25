@@ -4,70 +4,61 @@ import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Image from "next/image";
 import BookImg from "../../../public/assets/book.png";
-import AIImg from "../../../public/assets/ai.png";
-import FireworkImg from "../../../public/assets/firework.png";
-import ReactImg from "../../../public/assets/react.png";
-import TodayTodo from "@/components/main/TodayTodo";
-import WeatherImg from "../../../public/assets/weather.png";
+import NoIMG from "../../../public/assets/no_image.png";
 import { fetchRecommendMessage } from "../../module/apis/main";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
 
 const Main = () => {
+  const NoIMG = "assets/no_image.png";
   const [data, setData] = useState<IMainData | undefined>(undefined);
-  const items = [
-    { image: AIImg, text: "OPEN AI API 공부하기" },
-    { image: FireworkImg, text: "여의도 불꽃축제 가기" },
-    { image: ReactImg, text: "React Native 공부하기" },
-  ];
+  const [items, setItems] = useState<IActivity[] | undefined>(undefined);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchRecommendMessage();
       setData(result);
+      setItems(result?.activityList);
     };
 
     fetchData();
   }, []);
+
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
+    event.currentTarget.src = NoIMG;
+  };
+
   return (
     <>
-      <div className="p-[20px] mb-[100px]">
-        <div className="mt-[40px] flex w-full mb-[45px]">
-          <div className="flex flex-7/10 pr-[20px] h-100px items-center">
+      <div className="p-[20px] mb-[100px] flex flex-col md:items-center">
+        <div className="mt-[40px] flex justify-between w-full md:max-w-[600px] mb-[45px]">
+          <div className="flex pr-[20px] h-100px md:items-center">
             <div className="text-[24px] font-medium ">{data?.recommend}</div>
           </div>
-          <div className="flex-3/10">
+          <div className="flex">
             <Image src={BookImg} alt={""} width={100} height={100} />
           </div>
         </div>
-        <div className="text-[20px] font-[500] mb-[10px]">
+        <div className="text-[20px] font-[500] mb-[10px] md:w-full md:max-w-[600px]">
           이런 활동은 어떠세요?
         </div>
-        <div className="flex flex-row gap-[8px] overflow-x-auto">
-          {items.map((item, index) => (
+        <div className="flex flex-row items-center justify-between gap-[8px] overflow-x-auto md:w-full md:max-w-[600px]">
+          {items?.map((item, index) => (
             <div key={index} className="relative">
-              <Image
-                className="opacity-70 w-[125px] h-[110px] rounded-[10px] relative p-y-[8px] p-x-[10px]"
-                src={item.image}
+              <img
+                className="opacity-70 w-[125px] h-[110px] rounded-[10px] relative py-[8px] px-[10px] md:w-[200px] md:h-[150px]"
+                src={item.imageTag}
                 alt=""
+                onError={handleImageError} // onError 이벤트 핸들러 설정
               />
               <div className="absolute text-white left-[0px] top-[0px] z-10 m-[10px]">
-                {item.text}
+                {item.activity}
               </div>
             </div>
           ))}
         </div>
-        <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
-          오늘의 일정 리마인드
-        </div>
-        <div className="flex gap-[12px] justify-between">
-          <div className="flex flex-col justify-center items-center gap-[5px] rounded-[10px] bg-[#C9DBFF] w-[115px] h-[178px] px-[15px] overflow-auto py-[20px]">
-            <Image src={WeatherImg} alt="" />
-            <div className="text-[#6B6B6B] text-center text-[16px]">22°C</div>
-          </div>
-          <TodayTodo />
-        </div>
+
         <div className="text-[20px] font-[500] mb-[10px] mt-[40px]">
           네스 보고서
         </div>
