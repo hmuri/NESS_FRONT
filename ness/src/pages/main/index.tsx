@@ -6,6 +6,8 @@ import Image from "next/image";
 import BookImg from "../../../public/assets/book.png";
 import NoIMG from "../../../public/assets/no_image.png";
 import { fetchRecommendMessage } from "../../module/apis/main";
+import { getProfile } from "@/module/apis/mypage";
+import { Icon_calmness, Icon_hardness, Icon_normal } from "@/module/icons";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -14,6 +16,7 @@ const Main = () => {
   const NoIMG = "assets/no_image.png";
   const [data, setData] = useState<IMainData | undefined>(undefined);
   const [items, setItems] = useState<IActivity[] | undefined>(undefined);
+  const [selectedNess, setSelectedNess] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +28,17 @@ const Main = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getProfile();
+      if (data) {
+        setSelectedNess(data.persona);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
     event.currentTarget.src = NoIMG;
   };
@@ -33,11 +47,17 @@ const Main = () => {
     <>
       <div className="p-[20px] mb-[100px] flex flex-col md:items-center">
         <div className="mt-[40px] flex justify-between w-full md:max-w-[600px] mb-[45px]">
-          <div className="flex pr-[20px] h-100px md:items-center">
-            <div className="text-[24px] font-medium ">{data?.recommend}</div>
+          <div className="flex items-center pr-[20px]">
+            {selectedNess == "NESS" ? (
+              <Icon_normal />
+            ) : selectedNess == "HARDNESS" ? (
+              <Icon_hardness />
+            ) : (
+              <Icon_calmness />
+            )}
           </div>
-          <div className="flex">
-            <Image src={BookImg} alt={""} width={100} height={100} />
+          <div className="flex h-100px md:items-center">
+            <div className="text-[24px] font-medium ">{data?.recommend}</div>
           </div>
         </div>
         <div className="text-[20px] font-[500] mb-[10px] md:w-full md:max-w-[600px]">
@@ -79,3 +99,6 @@ const Main = () => {
 };
 
 export default Main;
+function setSelectedNess(persona: string) {
+  throw new Error("Function not implemented.");
+}

@@ -4,6 +4,8 @@ import { fetchRecommendMessage } from "../../module/apis/main";
 import BookImg from "../../../public/assets/book.png";
 import Image from "next/image";
 import Nav from "@/components/common/Nav";
+import { getProfile } from "@/module/apis/mypage";
+import { Icon_calmness, Icon_hardness, Icon_normal } from "@/module/icons";
 
 const Index = () => {
   const [tags, setTags] = useState<ReportTag[] | undefined>();
@@ -16,6 +18,7 @@ const Index = () => {
   const [recommendMessage, setRecommendMessaage] = useState<
     IMainData | undefined
   >();
+  const [selectedNess, setSelectedNess] = useState<string>("");
   const fetchTags = async () => {
     const data = await getReportTags();
     if (data) {
@@ -73,6 +76,17 @@ const Index = () => {
     setIsModal(true);
   };
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getProfile();
+      if (data) {
+        setSelectedNess(data.persona);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <div className="p-[20px] mb-[100px]">
       <div className="mt-[40px] flex w-full mb-[45px]">
@@ -128,16 +142,22 @@ const Index = () => {
       </div>
       <Nav />
       {isModal && (
-        <TagModal selectedTag={selectedTag} setIsModal={setIsModal} />
+        <TagModal
+          selectedNess={selectedNess}
+          selectedTag={selectedTag}
+          setIsModal={setIsModal}
+        />
       )}
     </div>
   );
 };
 
 const TagModal = ({
+  selectedNess,
   selectedTag,
   setIsModal,
 }: {
+  selectedNess: string;
   selectedTag: ReportTag | undefined;
   setIsModal: any;
 }) => {
@@ -153,9 +173,15 @@ const TagModal = ({
     >
       <div
         onClick={handleModalClick}
-        className="fixed flex gap-[8px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px]"
+        className="fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px]"
       >
-        <Image src={BookImg} alt="" width={100} height={100} />
+        {selectedNess == "NESS" ? (
+          <Icon_normal />
+        ) : selectedNess == "HARDNESS" ? (
+          <Icon_hardness />
+        ) : (
+          <Icon_calmness />
+        )}
         <div className="text-[#7a64ff] font-semibold text-[20px]">
           {selectedTag?.title}
         </div>
