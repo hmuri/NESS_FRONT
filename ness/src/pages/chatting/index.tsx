@@ -31,7 +31,7 @@ const Chatting = () => {
     title: "",
     start: moment().toDate(),
     end: moment().toDate(),
-    categoryNum: 6,
+    categoryNum: 0,
     location: "",
     people: "",
   });
@@ -68,9 +68,9 @@ const Chatting = () => {
         setNewSchedule((prevSchedule) => ({
           ...prevSchedule,
           id: message.id,
-          start: new Date(data.date),
-          end: new Date(data.date),
-          categoryNum: 6,
+          start: new Date(data.start_time),
+          end: new Date(data.end_time),
+          categoryNum: data.category.id,
           location: data.location ? data.location : "",
           people: data.people ? data.people : "",
           title: data.info,
@@ -139,16 +139,6 @@ const Chatting = () => {
     );
   };
 
-  interface CategoryStyle {
-    [key: number]: { name: string; color: string };
-  }
-
-  const categoryStyles: CategoryStyle = {
-    1: { name: "인턴", color: "#7A64FF" },
-    2: { name: "공부", color: "#00C09E" },
-    3: { name: "기타", color: "#454545" },
-    5: { name: "개발", color: "#ffc0cb" },
-  };
   return (
     <div className="flex flex-col h-screen">
       <div className="relative mt-[94px] flex-1 bg-[#F2F0FF] py-[26px]">
@@ -157,7 +147,7 @@ const Chatting = () => {
             if (message.case === 2) {
               const parts = message.text.split("<separate>");
               const data = JSON.parse(parts[1]);
-              const formattedDate = moment(data.date)
+              const formattedDate = moment(data.start_time)
                 .locale("ko")
                 .format("MMMM Do dddd");
               return (
@@ -205,10 +195,10 @@ const Chatting = () => {
                         <div
                           className="rounded-[8px] py-[5px] h-[38px] px-[7px] text-[12px] inline font-semibold text-center text-white"
                           style={{
-                            backgroundColor: categoryStyles[2].color,
+                            backgroundColor: data.category.color,
                           }}
                         >
-                          📖 공부
+                          {data.category.name}
                         </div>
                         <div>
                           <div>{data.info}</div>
