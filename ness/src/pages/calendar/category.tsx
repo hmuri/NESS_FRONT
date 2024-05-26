@@ -1,6 +1,10 @@
 import Nav from "@/components/common/Nav";
 import { getCategoryList } from "@/module/apis/calendar";
-import { addCategory, updateCategory } from "@/module/apis/edit";
+import {
+  addCategory,
+  deleteCategory,
+  updateCategory,
+} from "@/module/apis/edit";
 import { Icon_add_category } from "@/module/icons";
 import { useEffect, useState } from "react";
 
@@ -77,6 +81,25 @@ const AddView = ({
 
   const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCategory(event.target.value);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteCategory(selectedCategory?.categoryNum);
+      if (response?.status == 200) {
+        alert("정상적으로 삭제되었습니다!");
+      } else {
+        throw new Error(response?.data.message || "Addition failed");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(`${error.message}`);
+      } else {
+        alert("알 수 없는 오류가 발생하였습니다.");
+      }
+    } finally {
+      setIsAddView(false);
+    }
   };
 
   return (
@@ -174,6 +197,14 @@ const AddView = ({
                 </button>
               ))}
             </div>
+          </div>
+        )}
+        {isModify && (
+          <div
+            className="w-full h-[40px] rounded-[5px] bg-[#CCC] mt-[40px] flex justify-center items-center text-[#FF6464]"
+            onClick={handleDelete}
+          >
+            삭제하기
           </div>
         )}
       </div>

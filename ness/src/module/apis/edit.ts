@@ -76,3 +76,12 @@ export const updateCategory = async (
     console.error("Failed to update persona:", error);
   }
 };
+
+export const deleteCategory = async (id: number | undefined) => {
+  try {
+    const response = await axiosInstance.delete(`/category?categoryId=${id}`);
+    return response;
+  } catch (error) {
+    console.error("Failed to update persona:", error);
+  }
+};
