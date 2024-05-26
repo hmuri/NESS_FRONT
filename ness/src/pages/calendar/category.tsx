@@ -46,7 +46,11 @@ const AddView = ({
     try {
       let response;
       if (isModify) {
-        response = await updateCategory(category, selectedColor.code);
+        response = await updateCategory(
+          category,
+          selectedColor.code,
+          selectedCategory?.categoryNum
+        );
         if (response?.status === 200) {
           alert("정상적으로 수정되었습니다!");
         } else {
@@ -192,7 +196,7 @@ const Category = () => {
     };
 
     fetchData();
-  }, []);
+  }, [isAddView]);
 
   const clickCategory = (category: ICategory) => {
     if (category.category == "🍀미분류") {

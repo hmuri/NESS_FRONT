@@ -65,9 +65,10 @@ export const addCategory = async (category: string, categoryColor: string) => {
 
 export const updateCategory = async (
   category: string,
-  categoryColor: string
+  categoryColor: string,
+  id: number | undefined
 ) => {
-  const payload = { category, categoryColor };
+  const payload = { category, categoryColor, id };
   try {
     const response = await axiosInstance.put(`/category`, payload);
     return response;
