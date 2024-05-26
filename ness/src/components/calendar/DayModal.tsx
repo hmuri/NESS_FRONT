@@ -7,6 +7,7 @@ import TrashBinImage from "../../../public/assets/trash-bin.png";
 import LeftArrowImage from "../../../public/assets/left_arrow.png";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { getCategoryList } from "@/module/apis/calendar";
 
 interface ScheduleEvent {
   id: number;
@@ -75,13 +76,12 @@ const EditSchedule = ({
         location: location,
         person: person,
         categoryNum: event.categoryNum,
+        originalTime: selectedDate,
       };
 
       try {
         const response = await axios.put(
-          `${
-            process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL
-          }/schedule?day=${moment(selectedDate).format("YYYY-MM-DD")}`,
+          `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule`,
           payload,
           {
             headers: {
@@ -206,12 +206,18 @@ interface IAddcheduleProps {
   setIsAllVisible: any;
   selectedDate: Date | null;
   setUpdatedEvent: any;
+  selectedCategory: ICategory;
+  setSelectedCategory: any;
+  categoryList: ICategoryList;
 }
 
 const AddSchedule = ({
   setUpdatedEvent,
   setIsAllVisible,
   selectedDate,
+  selectedCategory,
+  setSelectedCategory,
+  categoryList,
 }: IAddcheduleProps) => {
   // 상태를 관리할 useState 훅 추가
   const [title, setTitle] = useState("");
@@ -240,7 +246,7 @@ const AddSchedule = ({
       end: endTime,
       location: location,
       person: person,
-      categoryNum: 6,
+      categoryNum: selectedCategory.categoryNum,
     };
 
     try {
@@ -268,14 +274,14 @@ const AddSchedule = ({
         <div onClick={() => setIsAllVisible(true)}>
           <Image src={LeftArrowImage} alt="" />
         </div>
-        {/* <div
+        <div
           className="rounded-[20px] w-[115px] h-[40px] py-[10px] px-[2px] text-[15px] font-semibold text-center"
           style={{
-            backgroundColor: categoryStyles[event.categoryNum].color,
+            backgroundColor: selectedCategory.categoryColor,
           }}
         >
-          {event.category}
-        </div> */}
+          {selectedCategory.category}
+        </div>
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -380,6 +386,25 @@ const DayModal = ({
   const [isAllVisible, setIsAllVisible] = useState(true);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleEvent>();
   const [updatedEvent, setUpdatedEvent] = useState<ScheduleEvent[]>(events);
+  const [categoryList, setCategoryList] = useState<ICategoryList | undefined>();
+  const [selectedCategory, setSelectedCategory] = useState<
+    ICategory | undefined
+  >({
+    categoryNum: 1,
+    category: "🍀미분류",
+    categoryColor: "#D9D9D9",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getCategoryList();
+      setCategoryList(result);
+      console.log("categoryList" + JSON.stringify(categoryList));
+    };
+
+    fetchData();
+  }, []);
+
   const modalChange = (event?: ScheduleEvent) => {
     if (event) {
       setSelectedSchedule(event);
@@ -484,6 +509,9 @@ const DayModal = ({
             setIsAllVisible={setIsAllVisible}
             selectedDate={selectedDate}
             setUpdatedEvent={setUpdatedEvent}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            categoryList={categoryList}
           ></AddSchedule>
         )}
       </div>

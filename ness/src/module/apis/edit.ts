@@ -30,7 +30,7 @@ export const uploadFileToS3 = async (preSignedUrl: string, file: File) => {
 export const updateProfile = async (imageUrl: string, nickname: string) => {
   const payload = { nickname, imageUrl };
   try {
-    const response = await axiosInstance.put(`/profile`, { payload });
+    const response = await axiosInstance.put(`/profile`, payload);
     return response.status === 200;
   } catch (error) {
     console.error("Failed to update persona:", error);
