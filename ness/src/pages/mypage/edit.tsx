@@ -3,12 +3,18 @@ import { useRouter } from "next/router";
 import { getProfile } from "../../module/apis/mypage";
 import Nav from "@/components/common/Nav";
 import { Icon_camera } from "@/module/icons";
+import {
+  getPreSignedUrl,
+  updateProfile,
+  uploadFileToS3,
+} from "@/module/apis/edit";
 
 export default function Edit() {
   const [profile, setProfile] = useState<Profile | undefined>();
   const [nickname, setNickname] = useState<string>("");
   const [pictureUrl, setPictureUrl] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null | undefined>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -28,19 +34,35 @@ export default function Edit() {
   };
 
   const handlePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
+    event.preventDefault();
+    const newFile = event.target.files?.[0];
+    if (newFile) {
+      setFile(newFile);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPictureUrl(reader.result as string);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(newFile);
     }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("Updated profile:", { nickname, pictureUrl });
+    if (file) {
+      const filename = `${new Date().getTime()}_${file.name}`;
+      const preSignedUrlData = await getPreSignedUrl(filename);
+      const uploadSuccess = await uploadFileToS3(
+        preSignedUrlData.preSignedUrl,
+        file
+      );
+      if (uploadSuccess) {
+        await updateProfile(preSignedUrlData.key, nickname);
+      } else {
+        console.error("Failed to upload file to S3");
+      }
+    } else {
+      await updateProfile(pictureUrl, nickname);
+    }
   };
 
   const handleButtonClick = () => {
@@ -74,6 +96,7 @@ export default function Edit() {
                 style={{ display: "none" }}
               />
               <button
+                type="button"
                 onClick={handleButtonClick}
                 className="absolute w-[35px] h-[35px] rounded-[50%] bg-[#7A64FF] bottom-[5px] right-[10px] flex justify-center items-center"
               >

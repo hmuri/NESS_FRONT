@@ -1,16 +1,9 @@
 interface IMainData {
-  recommendId: number;
+  activityList: IActivity[];
   recommend: string;
-  scheduleId?: number;
-  title?: string;
-  start?: string;
-  end?: string | null;
-  category?: string;
-  categoryNum?: number;
-  details?: ScheduleDetails;
 }
 
-interface ScheduleDetails {
-  location: string;
-  person: string;
+interface IActivity {
+  activity: string;
+  imageTag: string;
 }

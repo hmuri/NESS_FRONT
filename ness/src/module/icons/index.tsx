@@ -15,3 +15,6 @@ export { ReactComponent as Icon_calmness } from "../../../public/assets/svg/calm
 export { ReactComponent as Icon_normal } from "../../../public/assets/svg/normalness.svg";
 export { ReactComponent as Icon_radio } from "../../../public/assets/svg/radio.svg";
 export { ReactComponent as Icon_unselected_radio } from "../../../public/assets/svg/unselected_radio.svg";
+export { ReactComponent as Icon_chat } from "../../../public/assets/svg/chat.svg";
+export { ReactComponent as Icon_report } from "../../../public/assets/svg/report.svg";
+export { ReactComponent as Icon_home } from "../../../public/assets/svg/home.svg";

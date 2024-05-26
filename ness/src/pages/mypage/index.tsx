@@ -37,7 +37,7 @@ export default function MyPage({ profile }: any) {
               onClick={() => router.push(urls.mypage.edit)}
             >
               <Icon_person />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+              <div className="text-[16px] font-[500] flex flex-col items-start">
                 <div>개인 정보 수정</div>
                 <div className="text-[#454545]">
                   프로필 사진 및 닉네임을 수정합니다.
@@ -52,7 +52,7 @@ export default function MyPage({ profile }: any) {
               onClick={() => router.push(urls.mypage.alarm)}
             >
               <Icon_bell />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+              <div className="text-[16px] font-[500] flex flex-col items-start">
                 <div>알림</div>
                 <div className="text-[#454545]">
                   이메일 알림 등을 설정합니다.
@@ -67,7 +67,7 @@ export default function MyPage({ profile }: any) {
               onClick={() => router.push(urls.mypage.persona)}
             >
               <Icon_persona_ness />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+              <div className="text-[16px] font-[500] flex flex-col items-start">
                 <div>페르소나</div>
                 <div className="text-[#454545]">
                   일정 관리 비서의 페르소나를 결정합니다.
@@ -79,7 +79,7 @@ export default function MyPage({ profile }: any) {
           <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
             <div className="flex gap-[15px] items-center">
               <Icon_spoit />
-              <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+              <div className="text-[16px] font-[500] flex flex-col items-start">
                 <div>기타 버튼</div>
                 <div className="text-[#454545]">기타 버튼입니다.</div>
               </div>

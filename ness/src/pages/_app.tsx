@@ -33,6 +33,12 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <link rel="icon" href="assets/ness_chat.png" type="image/png"></link>
+        <link
+          rel="preload"
+          as="style"
+          crossOrigin=""
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable-dynamic-subset.css"
+        />
       </Head>
       <QueryClientProvider client={queryClient}>
         <Component {...pageProps} />

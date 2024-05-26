@@ -1,20 +1,11 @@
-import axios from "axios";
-import { GetServerSidePropsContext } from "next";
 import Nav from "../../components/common/Nav";
-import { useRouter } from "next/router";
 import {
-  Icon_bell,
   Icon_calmness,
   Icon_hardness,
   Icon_normal,
-  Icon_person,
-  Icon_persona_ness,
   Icon_radio,
-  Icon_right_arrow,
-  Icon_spoit,
   Icon_unselected_radio,
 } from "@/module/icons";
-import urls from "@/module/urls";
 import { useEffect, useState } from "react";
 import { getProfile, updatePersona } from "../../module/apis/mypage";
 
@@ -77,7 +68,7 @@ export default function Persona() {
                 <div className="w-[50px] flex justify-center">
                   {persona.icon}
                 </div>
-                <div className="text-[16px] font-[500] text-center flex flex-col items-start">
+                <div className="text-[16px] font-[500] flex flex-col items-start">
                   <div>{persona.label}</div>
                   <div className="text-[#454545]">{persona.description}</div>
                 </div>
