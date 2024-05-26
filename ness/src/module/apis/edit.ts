@@ -36,3 +36,42 @@ export const updateProfile = async (imageUrl: string, nickname: string) => {
     console.error("Failed to update persona:", error);
   }
 };
+
+export const addCategory = async (category: string, categoryColor: string) => {
+  const payload = { category, categoryColor };
+  try {
+    const response = await axiosInstance.post(`/category`, payload);
+    if (response.status !== 200) {
+      throw new Error(response.data.message || "Unknown error occurred");
+    }
+    return response;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      // Axios 에러인지 확인
+      const message = error.response?.data.message || "Failed to add category";
+      console.error("Failed to add category:", message);
+      throw new Error(message);
+    } else if (error instanceof Error) {
+      // 일반적인 에러
+      console.error("Error:", error.message);
+      throw error;
+    } else {
+      // 알 수 없는 타입의 에러
+      console.error("An unexpected error occurred");
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
+
+export const updateCategory = async (
+  category: string,
+  categoryColor: string
+) => {
+  const payload = { category, categoryColor };
+  try {
+    const response = await axiosInstance.put(`/category`, payload);
+    return response;
+  } catch (error) {
+    console.error("Failed to update persona:", error);
+  }
+};

@@ -398,7 +398,7 @@ const CategoryModal = ({
   setCategoryModalOpen,
 }: ICategoryModal) => {
   return (
-    <div className="w-full h-[50vh] max-h-[400px] rounded-t-[20px] bg-white fixed left-0 z-20 p-[40px]">
+    <div className="box-shadow w-full h-[50vh] max-h-[400px] rounded-t-[20px] bg-white fixed left-0 z-20 p-[40px]">
       <div className="flex justify-between mb-[20px]">
         <div className="text-[#454545] text-[20px] font-semibold">카테고리</div>
         <div>
@@ -462,7 +462,6 @@ const DayModal = ({
     const fetchData = async () => {
       const result = await getCategoryList();
       setCategoryList(result);
-      console.log("categoryList" + JSON.stringify(categoryList));
     };
 
     fetchData();

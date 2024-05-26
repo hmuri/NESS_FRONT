@@ -18,3 +18,4 @@ export { ReactComponent as Icon_unselected_radio } from "../../../public/assets/
 export { ReactComponent as Icon_chat } from "../../../public/assets/svg/chat.svg";
 export { ReactComponent as Icon_report } from "../../../public/assets/svg/report.svg";
 export { ReactComponent as Icon_home } from "../../../public/assets/svg/home.svg";
+export { ReactComponent as Icon_add_category } from "../../../public/assets/svg/add_category.svg";
