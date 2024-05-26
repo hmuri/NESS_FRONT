@@ -16,6 +16,7 @@ interface ScheduleEvent {
   end?: Date;
   category: string;
   categoryNum: number;
+  categoryColor: string;
   details: DetailList;
 }
 
@@ -32,29 +33,25 @@ interface DayModalProps {
   onRequestClose: () => void;
 }
 
-interface CategoryStyle {
-  [key: number]: { name: string; color: string };
-}
-
-const categoryStyles: CategoryStyle = {
-  1: { name: "인턴", color: "#7A64FF" },
-  2: { name: "공부", color: "#00C09E" },
-  3: { name: "기타", color: "#454545" },
-  5: { name: "개발", color: "#ffc0cb" },
-  6: { name: "미분류", color: "#d9d9d9" },
-};
-
 interface IEditScheduleProps {
   event: ScheduleEvent;
   setIsAllVisible: any;
   selectedDate: Date | null;
   setUpdatedEvent: any;
+  selectedCategory: ICategory | undefined;
+  setSelectedCategory: any;
+  categoryList: ICategoryList | undefined;
+  setCategoryModalOpen: any;
 }
 const EditSchedule = ({
   event,
   setIsAllVisible,
   selectedDate,
   setUpdatedEvent,
+  selectedCategory,
+  setSelectedCategory,
+  categoryList,
+  setCategoryModalOpen,
 }: IEditScheduleProps) => {
   // 상태를 관리할 useState 훅 추가
   const [title, setTitle] = useState(event.title);
@@ -67,6 +64,14 @@ const EditSchedule = ({
   const accessToken = cookies.get("accessToken");
 
   useEffect(() => {
+    setSelectedCategory({
+      categoryNum: event.categoryNum,
+      category: event.category,
+      categoryColor: event.categoryColor,
+    });
+  }, []);
+
+  useEffect(() => {
     const updateSchedule = async () => {
       const payload = {
         id: event.id,
@@ -75,7 +80,7 @@ const EditSchedule = ({
         end: endTime || null,
         location: location,
         person: person,
-        categoryNum: event.categoryNum,
+        categoryNum: selectedCategory?.categoryNum,
         originalTime: selectedDate,
       };
 
@@ -96,7 +101,7 @@ const EditSchedule = ({
       }
     };
     updateSchedule();
-  }, [title, startTime, endTime, location, person]);
+  }, [title, startTime, endTime, location, person, selectedCategory]);
 
   const deleteSchedule = async (id: number) => {
     try {
@@ -125,10 +130,11 @@ const EditSchedule = ({
         <div
           className="rounded-[20px] w-[115px] h-[40px] py-[10px] px-[2px] text-[15px] font-semibold text-center"
           style={{
-            backgroundColor: categoryStyles[event.categoryNum].color,
+            backgroundColor: selectedCategory?.categoryColor,
           }}
+          onClick={() => setCategoryModalOpen(true)}
         >
-          {event.category}
+          {selectedCategory?.category}
         </div>
         <div onClick={() => deleteSchedule(event.id)}>
           <Image src={TrashBinImage} alt="" />
@@ -206,9 +212,10 @@ interface IAddcheduleProps {
   setIsAllVisible: any;
   selectedDate: Date | null;
   setUpdatedEvent: any;
-  selectedCategory: ICategory;
+  selectedCategory: ICategory | undefined;
   setSelectedCategory: any;
-  categoryList: ICategoryList;
+  categoryList: ICategoryList | undefined;
+  setCategoryModalOpen: any;
 }
 
 const AddSchedule = ({
@@ -218,6 +225,7 @@ const AddSchedule = ({
   selectedCategory,
   setSelectedCategory,
   categoryList,
+  setCategoryModalOpen,
 }: IAddcheduleProps) => {
   // 상태를 관리할 useState 훅 추가
   const [title, setTitle] = useState("");
@@ -246,7 +254,7 @@ const AddSchedule = ({
       end: endTime,
       location: location,
       person: person,
-      categoryNum: selectedCategory.categoryNum,
+      categoryNum: selectedCategory?.categoryNum,
     };
 
     try {
@@ -277,10 +285,11 @@ const AddSchedule = ({
         <div
           className="rounded-[20px] w-[115px] h-[40px] py-[10px] px-[2px] text-[15px] font-semibold text-center"
           style={{
-            backgroundColor: selectedCategory.categoryColor,
+            backgroundColor: selectedCategory?.categoryColor,
           }}
+          onClick={() => setCategoryModalOpen(true)}
         >
-          {selectedCategory.category}
+          {selectedCategory?.category}
         </div>
         <div>
           <svg
@@ -377,6 +386,59 @@ const AddSchedule = ({
   );
 };
 
+interface ICategoryModal {
+  setSelectedCategory: any;
+  categoryList: ICategoryList | undefined;
+  setCategoryModalOpen: any;
+}
+
+const CategoryModal = ({
+  setSelectedCategory,
+  categoryList,
+  setCategoryModalOpen,
+}: ICategoryModal) => {
+  return (
+    <div className="w-full h-[50vh] max-h-[400px] rounded-t-[20px] bg-white fixed left-0 z-20 p-[40px]">
+      <div className="flex justify-between mb-[20px]">
+        <div className="text-[#454545] text-[20px] font-semibold">카테고리</div>
+        <div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="25"
+            viewBox="0 0 24 25"
+            fill="none"
+            onClick={() => {
+              setCategoryModalOpen(false);
+            }}
+          >
+            <path
+              d="M8.99999 16.3164L5.70668 13.0231C5.47282 12.7892 5.15563 12.6578 4.8249 12.6578C4.49417 12.6578 4.17699 12.7892 3.94312 13.0231C3.70926 13.2569 3.57788 13.5741 3.57788 13.9048C3.57788 14.0686 3.61014 14.2308 3.6728 14.382C3.73547 14.5333 3.82733 14.6708 3.94312 14.7866L8.12313 18.9666C8.61076 19.4542 9.39905 19.4542 9.88668 18.9666L20.4667 8.38661C20.7005 8.15275 20.8319 7.83556 20.8319 7.50483C20.8319 7.1741 20.7005 6.85692 20.4667 6.62306C20.2328 6.38919 19.9156 6.25781 19.5849 6.25781C19.2542 6.25781 18.937 6.3892 18.7031 6.62306L8.99999 16.3164Z"
+              fill="#A7A7A7"
+              stroke="#A7A7A7"
+              stroke-width="0.5"
+            />
+          </svg>
+        </div>
+      </div>
+      <div className="flex flex-wrap justify-between gap-[10px]">
+        {categoryList?.categoryList.map((category) => (
+          <div
+            key={category.categoryNum}
+            className="w-[130px] py-[10px] text-center rounded-[10px]"
+            style={{
+              backgroundColor: category.categoryColor,
+            }}
+            onClick={() => setSelectedCategory(category)}
+          >
+            {category.category}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const DayModal = ({
   events,
   isOpen,
@@ -386,7 +448,8 @@ const DayModal = ({
   const [isAllVisible, setIsAllVisible] = useState(true);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleEvent>();
   const [updatedEvent, setUpdatedEvent] = useState<ScheduleEvent[]>(events);
-  const [categoryList, setCategoryList] = useState<ICategoryList | undefined>();
+  const [categoryList, setCategoryList] = useState<ICategoryList>();
+  const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<
     ICategory | undefined
   >({
@@ -469,8 +532,7 @@ const DayModal = ({
                   <div
                     className="px-[12px] py-[6px] text-[15px] text-white inline-flex rounded-[8px] mb-[21px]"
                     style={{
-                      backgroundColor:
-                        categoryStyles[events[0].categoryNum].color,
+                      backgroundColor: events[0].categoryColor,
                     }}
                   >
                     <span className="text-white">{category}</span>
@@ -487,8 +549,7 @@ const DayModal = ({
                     <span
                       className="inline-block w-3 h-3 rounded-full mr-2"
                       style={{
-                        backgroundColor:
-                          categoryStyles[event.categoryNum].color,
+                        backgroundColor: event.categoryColor,
                       }}
                     ></span>
                     <p>{event.title}</p>
@@ -503,6 +564,10 @@ const DayModal = ({
             setIsAllVisible={setIsAllVisible}
             selectedDate={selectedDate}
             setUpdatedEvent={setUpdatedEvent}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            categoryList={categoryList}
+            setCategoryModalOpen={setCategoryModalOpen}
           />
         ) : (
           <AddSchedule
@@ -512,7 +577,15 @@ const DayModal = ({
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
             categoryList={categoryList}
+            setCategoryModalOpen={setCategoryModalOpen}
           ></AddSchedule>
+        )}
+        {categoryModalOpen && (
+          <CategoryModal
+            setSelectedCategory={setSelectedCategory}
+            categoryList={categoryList}
+            setCategoryModalOpen={setCategoryModalOpen}
+          />
         )}
       </div>
       <FloatingNess message={`${ChatDate} 일정을 확인해볼까요?`} />
