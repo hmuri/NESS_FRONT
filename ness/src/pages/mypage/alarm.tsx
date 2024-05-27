@@ -53,8 +53,8 @@ export default function Alarm() {
   };
 
   return (
-    <>
-      <div className="p-[25px] mt-[30px]">
+    <div className="p-[25px] mt-[30px] flex justify-center items-center">
+      <div className="md:w-[600px]">
         <div className="text-[20px] py-[11px]">개인 정보 수정</div>
         <div className="flex flex-col w-full">
           <div className="rounded-[10px] w-full flex flex-col items-center">
@@ -94,6 +94,6 @@ export default function Alarm() {
         </div>
       </div>
       <Nav />
-    </>
+    </div>
   );
 }

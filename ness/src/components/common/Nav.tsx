@@ -31,7 +31,7 @@ const Nav = () => {
           채팅
         </div>
         <div
-          className="text-center h-[55px] flex flex-col justify-between w-[40px] text-[13px] items-center"
+          className="text-center h-[55px] flex flex-col justify-between w-[55px] text-[13px] items-center"
           onClick={() => router.push("/main")}
         >
           <Icon_home />홈

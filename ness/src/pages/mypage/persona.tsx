@@ -36,8 +36,8 @@ export default function Persona() {
     }
   };
   return (
-    <>
-      <div className="p-[15px] mt-[30px]">
+    <div className="p-[15px] mt-[30px] flex justify-center items-center">
+      <div className="md:w-[600px]">
         <div className="text-[20px] py-[11px] ml-[10px]">페르소나 설정</div>
         <div className="flex flex-col w-full">
           {[
@@ -85,6 +85,6 @@ export default function Persona() {
         </div>
       </div>
       <Nav />
-    </>
+    </div>
   );
 }

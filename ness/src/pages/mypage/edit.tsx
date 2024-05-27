@@ -70,8 +70,8 @@ export default function Edit() {
   };
 
   return (
-    <>
-      <div className="p-[25px] mt-[30px]">
+    <div className="p-[25px] mt-[30px] flex justify-center items-center w-full">
+      <div className="md:w-[600px]">
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between items-center">
             <div className="text-[20px]">개인 정보 수정</div>
@@ -118,6 +118,6 @@ export default function Edit() {
         </form>
       </div>
       <Nav />
-    </>
+    </div>
   );
 }
