@@ -26,3 +26,4 @@ export { ReactComponent as Icon_category } from "../../../public/assets/svg/cate
 export { ReactComponent as Icon_calendar } from "../../../public/assets/svg/calendar.svg";
 export { ReactComponent as Icon_account } from "../../../public/assets/svg/account.svg";
 export { ReactComponent as Icon_left_arrow } from "../../../public/assets/svg/left_arrow.svg";
+export { ReactComponent as Icon_mic } from "../../../public/assets/svg/mic.svg";

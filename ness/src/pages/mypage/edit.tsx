@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { getProfile } from "../../module/apis/mypage";
 import Nav from "@/components/common/Nav";
-import { Icon_camera } from "@/module/icons";
+import { Icon_camera, Icon_left_arrow } from "@/module/icons";
 import {
   getPreSignedUrl,
   updateProfile,
@@ -45,7 +45,7 @@ export default function Edit() {
       reader.readAsDataURL(newFile);
     }
   };
-
+  const router = useRouter();
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (file) {
@@ -74,7 +74,8 @@ export default function Edit() {
       <div className="md:w-[600px]">
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between items-center">
-            <div className="text-[20px]">개인 정보 수정</div>
+            <Icon_left_arrow onClick={() => router.back()} />
+            <div className="text-[20px] font-medium">개인 정보 수정</div>
             <button
               type="submit"
               className="h-[30px] text-[14px] rounded-[5px] bg-[#7A64FF] px-[14px] text-white"

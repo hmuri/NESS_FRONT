@@ -15,7 +15,7 @@ export default function MyPage({ profile }: any) {
   const router = useRouter();
   return (
     <div className="flex w-full justify-center items-center">
-      <div className="p-[25px] md:w-[600px]">
+      <div className="p-[25px] md:w-[600px] md:px-0">
         <div className="mt-[76px] flex flex-col w-full items-center">
           <div>
             <img
@@ -38,7 +38,7 @@ export default function MyPage({ profile }: any) {
             <div className="flex gap-[15px] items-center">
               <Icon_person />
               <div className="text-[16px] font-[500] flex flex-col items-start">
-                <div>이메일 알림</div>
+                <div>개인 정보 수정</div>
                 <div className="text-[#454545]">
                   프로필 사진 및 닉네임을 수정합니다.
                 </div>

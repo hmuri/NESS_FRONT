@@ -9,12 +9,24 @@ import { useRouter } from "next/router";
 import { useSendMessage } from "@/module/hooks/sendMessages";
 import useFetchChatMessages from "@/module/hooks/getMessages";
 import { LoadingLottie } from "@/module/LottieComponents";
-import { Icon_correct, Icon_ness_main, Icon_wrong } from "@/module/icons";
+import {
+  Icon_big_calm_ness,
+  Icon_big_hard_ness,
+  Icon_big_normal_ness,
+  Icon_calmness,
+  Icon_correct,
+  Icon_hardness,
+  Icon_mic,
+  Icon_ness_main,
+  Icon_normal,
+  Icon_wrong,
+} from "@/module/icons";
 import Cookies from "universal-cookie";
 import axios from "axios";
 import VoiceIcon from "../../../public/assets/Voice.png";
 import StopIcon from "../../../public/assets/Stop button.png";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
+import { getProfile } from "@/module/apis/mypage";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -23,6 +35,7 @@ const Chatting = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { mutate: sendMessage, isLoading } = useSendMessage();
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [selectedNess, setSelectedNess] = useState<string>("");
   const [isSTT, setIsSTT] = useState(false);
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
@@ -59,6 +72,17 @@ const Chatting = () => {
       setChatMessages(initialChatMessages);
     }
   }, [initialChatMessages]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getProfile();
+      if (data) {
+        setSelectedNess(data.persona);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   useEffect(() => {
     chatMessages.forEach((message) => {
@@ -307,12 +331,12 @@ const Chatting = () => {
             placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
             onChange={(e) => setNewMessage(e.target.value)}
           />
-          <div className="fixed right-[60px]">
-            <Image
-              src={isListening ? StopIcon : VoiceIcon}
-              alt=""
-              onClick={toggleListening}
-            />
+          <div className="fixed right-[70px] cursor-pointer">
+            {isListening ? (
+              <Image src={StopIcon} alt="" onClick={toggleListening} />
+            ) : (
+              <Icon_mic onClick={toggleListening} />
+            )}
           </div>
           <button onClick={handleSendMessage} disabled={isLoading}></button>
           <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
@@ -355,7 +379,13 @@ const Chatting = () => {
             />
           </svg>
         </div>
-        <Icon_ness_main />
+        {selectedNess == "NESS" ? (
+          <Icon_normal />
+        ) : selectedNess == "HARDNESS" ? (
+          <Icon_hardness />
+        ) : (
+          <Icon_calmness />
+        )}
         네스
       </div>
     </div>
