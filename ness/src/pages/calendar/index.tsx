@@ -24,6 +24,7 @@ interface ScheduleEvent {
   start: Date;
   end?: Date;
   category: string;
+  categoryColor: string;
   categoryNum: number;
   details: DetailList;
 }
