@@ -19,3 +19,6 @@ export { ReactComponent as Icon_chat } from "../../../public/assets/svg/chat.svg
 export { ReactComponent as Icon_report } from "../../../public/assets/svg/report.svg";
 export { ReactComponent as Icon_home } from "../../../public/assets/svg/home.svg";
 export { ReactComponent as Icon_add_category } from "../../../public/assets/svg/add_category.svg";
+export { ReactComponent as Icon_big_hard_ness } from "../../../public/assets/svg/big_hard_ness.svg";
+export { ReactComponent as Icon_big_calm_ness } from "../../../public/assets/svg/big_calm_ness.svg";
+export { ReactComponent as Icon_big_normal_ness } from "../../../public/assets/svg/big_normal_ness.svg";

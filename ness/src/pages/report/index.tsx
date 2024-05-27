@@ -5,7 +5,14 @@ import BookImg from "../../../public/assets/book.png";
 import Image from "next/image";
 import Nav from "@/components/common/Nav";
 import { getProfile } from "@/module/apis/mypage";
-import { Icon_calmness, Icon_hardness, Icon_normal } from "@/module/icons";
+import {
+  Icon_big_calm_ness,
+  Icon_big_hard_ness,
+  Icon_big_normal_ness,
+  Icon_calmness,
+  Icon_hardness,
+  Icon_normal,
+} from "@/module/icons";
 
 const Index = () => {
   const [tags, setTags] = useState<ReportTag[] | undefined>();
@@ -176,11 +183,11 @@ const TagModal = ({
         className="fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px]"
       >
         {selectedNess == "NESS" ? (
-          <Icon_normal />
+          <Icon_big_normal_ness />
         ) : selectedNess == "HARDNESS" ? (
-          <Icon_hardness />
+          <Icon_big_hard_ness />
         ) : (
-          <Icon_calmness />
+          <Icon_big_calm_ness />
         )}
         <div className="text-[#7a64ff] font-semibold text-[20px]">
           {selectedTag?.title}
