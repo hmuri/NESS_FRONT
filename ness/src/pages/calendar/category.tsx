@@ -240,8 +240,8 @@ const Category = () => {
   };
 
   return (
-    <>
-      <div className="p-[30px] mt-[30px]">
+    <div className="p-[30px] mt-[30px] flex justify-center">
+      <div className="md:max-w-[600px] w-full">
         {!isAddView ? (
           <>
             <div className="flex items-center mb-[40px] justify-between">
@@ -281,7 +281,7 @@ const Category = () => {
       </div>
 
       <Nav />
-    </>
+    </div>
   );
 };
 

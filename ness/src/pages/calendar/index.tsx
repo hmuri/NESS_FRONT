@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Calendar as BigCalendar,
   DateCellWrapperProps,
+  EventPropGetter,
   momentLocalizer,
 } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
@@ -49,6 +50,20 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
 
   const prevMonth = () => {
     setMonth(moment(month).subtract(1, "months").format("YYYY-MM"));
+  };
+
+  const eventStyleGetter = (
+    event: any
+  ): React.HTMLAttributes<HTMLDivElement> => {
+    const customEvent = event as ScheduleEvent;
+    return {
+      style: {
+        backgroundColor: customEvent.categoryColor,
+        opacity: 0.8,
+        borderRadius: "5px",
+        color: "white",
+      },
+    };
   };
 
   const nextMonth = () => {
@@ -186,6 +201,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
                 />
               ),
             }}
+            eventPropGetter={eventStyleGetter}
           />
           <Nav />
           {modalIsOpen && (
@@ -200,7 +216,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
           {/* 로딩 에러 메시지 표시 */}
         </div>
       </div>
-      {!modalIsOpen && <FloatingNess message="4월엔 일정이 많으시네요!" />}
+      {!modalIsOpen && <FloatingNess message="오늘도 힘내세요!" />}
     </>
   );
 };
