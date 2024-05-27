@@ -109,14 +109,13 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
         }}
       >
         {children}
-        {extraEventsCount > 0 && (
-          <div
-            className="extra-events-info text-[8px] z-5"
-            onClick={() => handleSelectSlot(value)}
-          >
-            {extraEventsCount} more
-          </div>
-        )}
+
+        <div
+          className="extra-events-info text-[8px] z-5 opacity-0"
+          onClick={() => handleSelectSlot(value)}
+        >
+          {extraEventsCount} more
+        </div>
       </div>
     );
   };
