@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import GoogleLogo from "../../../public/assets/google logo.png";
-import NessLogo from "../../../public/assets/nessLogo.png";
+import FloatingBigNess from "@/components/common/FloatingBigNess";
 
 export default function Login() {
   const handleGoogleLogin = () => {
@@ -9,21 +9,15 @@ export default function Login() {
   };
 
   return (
-    <div className="h-[100vh] mx-auto flex justify-center flex-col">
-      <div>
-        <Image
-          src={NessLogo}
-          alt=""
-          width={150}
-          height={150}
-          className="mx-auto"
-        />
+    <div className="h-[100vh] mx-auto flex justify-center items-center flex-col px-[20px] md:px-0">
+      <div className="flex justify-center mb-[20px]">
+        <FloatingBigNess />
       </div>
       <div className="text-center text-[20px] mt-[20px]">
         내 손 안의 비서, NESS
       </div>
       <div
-        className=" mx-[20px] h-[44px] rounded-[4px] flex border border-gray-300 mt-[200px]"
+        className=" h-[44px] rounded-[4px] flex border border-gray-300 mt-[200px] w-full md:w-[600px]"
         onClick={handleGoogleLogin}
       >
         <div className="w-[51px] h-full py-[8px] flex border-r justify-center">
