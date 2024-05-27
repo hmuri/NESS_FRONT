@@ -96,7 +96,7 @@ const Index = () => {
 
   return (
     <div className="p-[20px] mb-[100px] flex justify-center ">
-      <div className="md:max-w-[600px]">
+      <div className="md:w-[600px]">
         <div className="mt-[40px] flex w-full mb-[45px]">
           <div className="w-full flex flex-col pr-[20px] h-100px items-center gap-[40px]">
             {selectedNess == "NESS" ? (
@@ -183,12 +183,12 @@ const TagModal = ({
   };
   return (
     <div
-      className="w-[100vw] h-[100vh] bg-black fixed bottom-0 left-0 bg-opacity-50 z-20"
+      className="w-[100vw] h-[100vh] bg-black fixed bottom-0 left-0 bg-opacity-50 z-20 flex justify-center"
       onClick={() => setIsModal(false)}
     >
       <div
         onClick={handleModalClick}
-        className="fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px]"
+        className="fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px] md:w-[650px] md:rounded-t-[20px]"
       >
         {selectedNess == "NESS" ? (
           <Icon_big_normal_ness />

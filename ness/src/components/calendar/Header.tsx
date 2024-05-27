@@ -32,14 +32,9 @@ const Header: React.FC<
         <Image src={LeftArrow} alt="" />
       </button>
       <div className="h-[41px] flex bg-white">
-        <div className="text-white w-[48px] px-[12px] pb-[6px] pt-[4px] rounded-l-md calendar-header">
+        <div className="text-white font-semibold w-[100px] px-[12px] pb-[6px] pt-[4px] rounded-md calendar-header">
           <div className="text-[10px] text-center">{year}</div>
           <div className="text-[16px] leading-[110%] text-center">{month}</div>
-        </div>
-        <div className="flex items-center px-[12px] border border-t border-r border-b border-gray-200 rounded-r-md">
-          <div className="text-[15px] text-center tracking-[0.3px]">
-            {day} {weekday}
-          </div>
         </div>
       </div>
       <button onClick={onNextMonth}>
