@@ -14,8 +14,8 @@ import urls from "@/module/urls";
 export default function MyPage({ profile }: any) {
   const router = useRouter();
   return (
-    <>
-      <div className="p-[25px]">
+    <div className="flex w-full justify-center items-center">
+      <div className="p-[25px] md:w-[600px]">
         <div className="mt-[76px] flex flex-col w-full items-center">
           <div>
             <img
@@ -89,7 +89,7 @@ export default function MyPage({ profile }: any) {
         </div>
       </div>
       <Nav />
-    </>
+    </div>
   );
 }
 

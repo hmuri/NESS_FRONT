@@ -23,3 +23,5 @@ export { ReactComponent as Icon_big_hard_ness } from "../../../public/assets/svg
 export { ReactComponent as Icon_big_calm_ness } from "../../../public/assets/svg/big_calm_ness.svg";
 export { ReactComponent as Icon_big_normal_ness } from "../../../public/assets/svg/big_normal_ness.svg";
 export { ReactComponent as Icon_category } from "../../../public/assets/svg/category.svg";
+export { ReactComponent as Icon_calendar } from "../../../public/assets/svg/calendar.svg";
+export { ReactComponent as Icon_account } from "../../../public/assets/svg/account.svg";

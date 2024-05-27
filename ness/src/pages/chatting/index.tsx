@@ -64,17 +64,34 @@ const Chatting = () => {
     chatMessages.forEach((message) => {
       if (message.case === 2) {
         const parts = message.text.split("<separate>");
-        const data = JSON.parse(parts[1]);
-        setNewSchedule((prevSchedule) => ({
-          ...prevSchedule,
-          id: message.id,
-          start: new Date(data.start_time),
-          end: new Date(data.end_time),
-          categoryNum: data.category.id,
-          location: data.location ? data.location : "",
-          people: data.people ? data.people : "",
-          title: data.info,
-        }));
+        let jsonData = parts[1].trim();
+
+        const jsonStart = jsonData.indexOf("{");
+        const jsonEnd = jsonData.lastIndexOf("}") + 1;
+
+        if (jsonStart >= 0 && jsonEnd > jsonStart) {
+          jsonData = jsonData.substring(jsonStart, jsonEnd);
+        }
+
+        try {
+          const data = JSON.parse(jsonData);
+
+          setNewSchedule((prevSchedule) => ({
+            ...prevSchedule,
+            id: message.id,
+            start: new Date(data.start_time),
+            end: data.end_time
+              ? new Date(data.end_time)
+              : new Date(new Date(data.start_time).getTime() + 3600000),
+            categoryNum: data.category.id,
+            location: data.location ? data.location : "",
+            people: data.people ? data.people : "",
+            title: data.info,
+          }));
+        } catch (error) {
+          console.error("Error parsing JSON data: ", error);
+          // JSON 파싱 에러 처리
+        }
       }
     });
   }, [chatMessages]);
@@ -146,7 +163,13 @@ const Chatting = () => {
           {chatMessages.map((message, index) => {
             if (message.case === 2) {
               const parts = message.text.split("<separate>");
-              const data = JSON.parse(parts[1]);
+              let jsonData = parts[1].trim();
+              const jsonStart = jsonData.indexOf("{");
+              const jsonEnd = jsonData.lastIndexOf("}") + 1;
+              if (jsonStart >= 0 && jsonEnd > jsonStart) {
+                jsonData = jsonData.substring(jsonStart, jsonEnd); // JSON 데이터 추출
+              }
+              const data = JSON.parse(jsonData);
               const formattedDate = moment(data.start_time)
                 .locale("ko")
                 .format("MMMM Do dddd");
@@ -193,7 +216,7 @@ const Chatting = () => {
                       </div>
                       <div className="flex gap-[11px] flex-row text-[15px]">
                         <div
-                          className="rounded-[8px] py-[5px] h-[38px] px-[7px] text-[12px] inline font-semibold text-center text-white"
+                          className="rounded-[8px] h-[38px] px-[7px] text-[12px] flex items-center inline font-semibold text-center text-white"
                           style={{
                             backgroundColor: data.category.color,
                           }}
