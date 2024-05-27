@@ -200,6 +200,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
                   onNextMonth={nextMonth}
                 />
               ),
+              dateCellWrapper: CustomDateCellWrapper,
             }}
             eventPropGetter={eventStyleGetter}
           />
