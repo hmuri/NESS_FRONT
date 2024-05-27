@@ -106,7 +106,7 @@ const Index = () => {
             ) : (
               <Icon_big_calm_ness />
             )}
-            <div className="text-[24px] font-medium ">
+            <div className="text-[24px] font-medium whitespace-normal break-words">
               {recommendMessage?.recommend}
             </div>
           </div>
