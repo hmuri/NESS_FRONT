@@ -17,12 +17,16 @@ const Main = () => {
   const [data, setData] = useState<IMainData | undefined>(undefined);
   const [items, setItems] = useState<IActivity[] | undefined>(undefined);
   const [selectedNess, setSelectedNess] = useState<string>("");
+  const [scheduleList, setScheduleList] = useState<
+    ScheduleItem[] | undefined
+  >();
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchRecommendMessage();
       setData(result);
       setItems(result?.activityList);
+      setScheduleList(result?.scheduleList);
     };
 
     fetchData();
@@ -85,9 +89,36 @@ const Main = () => {
         <div className="rounded-[10px] bg-[#F2F0FF] w-full min-h-[160px]">
           <div className="p-[20px]">
             <div className="text-[16px] font-[500] tracking-tighter">
-              오늘은 개발, 토익 공부하기 등의 활동이 있습니다. 이를 바탕으로
-              백엔드 공부를 더 공부하시는 건 어떨까요? 토익 공부도 체계적으로
-              진행해보시면 좋겠어요.
+              {scheduleList?.map((schedule) => (
+                <div
+                  key={schedule.id}
+                  className="p-[20px] border-b border-gray-300"
+                >
+                  <div className="text-[16px] font-[500]">
+                    <strong>{schedule.title}</strong> (
+                    {schedule.details.location})
+                  </div>
+                  <div className="text-[14px]">
+                    <div>
+                      시작 시간: {new Date(schedule.start).toLocaleString()}
+                    </div>
+                    <div>
+                      종료 시간: {new Date(schedule.end).toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="text-[14px] mt-[4px]">
+                    {schedule.details.person && (
+                      <div>함께하는 사람: {schedule.details.person}</div>
+                    )}
+                    <div style={{ color: schedule.categoryColor }}>
+                      카테고리: {schedule.category}
+                    </div>
+                  </div>
+                  <div className="text-[14px] mt-[4px] italic">
+                    {schedule.nessComment}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
