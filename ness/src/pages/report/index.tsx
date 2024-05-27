@@ -188,7 +188,7 @@ const TagModal = ({
     >
       <div
         onClick={handleModalClick}
-        className="fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px] md:w-[650px] md:rounded-t-[20px]"
+        className="box-shadow fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px] md:w-[650px] md:rounded-t-[20px]"
       >
         {selectedNess == "NESS" ? (
           <Icon_big_normal_ness />
