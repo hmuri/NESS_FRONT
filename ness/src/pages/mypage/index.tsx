@@ -31,11 +31,11 @@ export default function MyPage({ profile }: any) {
           </div>
         </div>
         <div className="flex flex-col w-full">
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div
-              className="flex gap-[15px] items-center"
-              onClick={() => router.push(urls.mypage.edit)}
-            >
+          <div
+            className="cursor-pointer rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]"
+            onClick={() => router.push(urls.mypage.edit)}
+          >
+            <div className="flex gap-[15px] items-center">
               <Icon_person />
               <div className="text-[16px] font-[500] flex flex-col items-start">
                 <div>개인 정보 수정</div>
@@ -46,11 +46,11 @@ export default function MyPage({ profile }: any) {
             </div>
             <Icon_right_arrow />
           </div>
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div
-              className="flex gap-[15px] items-center "
-              onClick={() => router.push(urls.mypage.alarm)}
-            >
+          <div
+            className="cursor-pointer rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]"
+            onClick={() => router.push(urls.mypage.alarm)}
+          >
+            <div className="flex gap-[15px] items-center ">
               <Icon_bell />
               <div className="text-[16px] font-[500] flex flex-col items-start">
                 <div>알림</div>
@@ -61,11 +61,11 @@ export default function MyPage({ profile }: any) {
             </div>
             <Icon_right_arrow />
           </div>
-          <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div
-              className="flex gap-[15px] items-center "
-              onClick={() => router.push(urls.mypage.persona)}
-            >
+          <div
+            className="cursor-pointer rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]"
+            onClick={() => router.push(urls.mypage.persona)}
+          >
+            <div className="flex gap-[15px] items-center ">
               <Icon_persona_ness />
               <div className="text-[16px] font-[500] flex flex-col items-start">
                 <div>페르소나</div>

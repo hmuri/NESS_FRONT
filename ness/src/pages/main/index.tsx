@@ -28,6 +28,12 @@ const Main = () => {
     ScheduleItem[] | undefined
   >();
 
+  const imageUrls = [
+    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-1.png",
+    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-2.png",
+    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-3.png",
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchRecommendMessage();
@@ -50,8 +56,12 @@ const Main = () => {
     fetchProfile();
   }, []);
 
-  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    event.currentTarget.src = NoIMG;
+  const handleImageError = (
+    event: React.SyntheticEvent<HTMLImageElement>,
+    index: number
+  ) => {
+    const nextIndex = index % imageUrls.length;
+    event.currentTarget.src = imageUrls[nextIndex];
   };
 
   return (
@@ -78,22 +88,23 @@ const Main = () => {
           {items?.map((item, index) => (
             <div key={index} className="relative">
               <img
-                className="opacity-70 w-[125px] h-[110px] rounded-[10px] relative md:w-[200px] md:h-[150px]"
+                className=" w-[125px] h-[110px] rounded-[10px] relative md:w-[200px] md:h-[150px]"
                 src={item.imageTag}
                 alt=""
-                onError={handleImageError} // onError 이벤트 핸들러 설정
+                onError={(e) => handleImageError(e, index)} // onError 이벤트 핸들러 설정
               />
-              <div className="absolute text-white left-[0px] top-[0px] z-10 m-[10px]">
+              <div className="absolute rounded-[10px] w-full bg-black opacity-50 h-full text-white left-[0px] top-[0px] z-10 p-[10px]"></div>
+              <div className="absolute rounded-[10px] w-full h-full text-white left-[0px] top-[0px] z-10 p-[10px]">
                 {item.activity}
               </div>
             </div>
           ))}
         </div>
 
-        <div className="text-[20px] font-[500] mb-[10px] mt-[40px] md:max-w-[600px]">
+        <div className="text-[20px] w-full font-[500] mb-[10px] mt-[40px] text-left  md:max-w-[600px]">
           일정 리마인드
         </div>
-        <div className=" rounded-[10px] bg-[#F2F0FF] w-full min-h-[160px]">
+        <div className=" rounded-[10px] bg-[#F2F0FF] w-full min-h-[160px] md:max-w-[600px]">
           <div className="m-[20px] relative">
             <div className="absolute left-[60px] top-1 bottom-0 w-[1px] bg-[#7A64FF]"></div>
             {scheduleList?.map((schedule) => (
