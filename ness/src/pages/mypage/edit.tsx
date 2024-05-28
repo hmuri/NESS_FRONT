@@ -71,7 +71,7 @@ export default function Edit() {
 
   return (
     <div className="p-[25px] mt-[30px] flex justify-center items-center w-full">
-      <div className="md:w-[600px]">
+      <div className="w-full md:w-[600px]">
         <form onSubmit={handleSubmit}>
           <div className="flex justify-between items-center">
             <Icon_left_arrow onClick={() => router.back()} />

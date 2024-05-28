@@ -56,7 +56,7 @@ export default function Alarm() {
 
   return (
     <div className="p-[25px] mt-[30px] flex justify-center items-center">
-      <div className="md:w-[600px]">
+      <div className="w-full md:w-[600px]">
         <div className="flex items-center justify-between">
           <Icon_left_arrow onClick={() => router.back()} />
           <div className="text-[20px] py-[11px]">이메일 알림</div>

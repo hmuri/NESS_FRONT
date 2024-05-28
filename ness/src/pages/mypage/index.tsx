@@ -15,7 +15,7 @@ export default function MyPage({ profile }: any) {
   const router = useRouter();
   return (
     <div className="flex w-full justify-center items-center">
-      <div className="p-[25px] md:w-[600px] md:px-0">
+      <div className="p-[25px] w-full md:w-[600px] md:px-0">
         <div className="mt-[76px] flex flex-col w-full items-center">
           <div>
             <img

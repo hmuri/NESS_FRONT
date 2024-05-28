@@ -40,7 +40,7 @@ export default function Persona() {
   };
   return (
     <div className="p-[15px] mt-[30px] flex justify-center items-center">
-      <div className="md:w-[600px]">
+      <div className="w-full md:w-[600px]">
         <div className="flex items-center justify-between">
           <Icon_left_arrow onClick={() => router.back()} />
           <div className="text-[20px] py-[11px]">페르소나 설정</div>
