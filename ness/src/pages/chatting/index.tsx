@@ -9,12 +9,24 @@ import { useRouter } from "next/router";
 import { useSendMessage } from "@/module/hooks/sendMessages";
 import useFetchChatMessages from "@/module/hooks/getMessages";
 import { LoadingLottie } from "@/module/LottieComponents";
-import { Icon_correct, Icon_ness_main, Icon_wrong } from "@/module/icons";
+import {
+  Icon_big_calm_ness,
+  Icon_big_hard_ness,
+  Icon_big_normal_ness,
+  Icon_calmness,
+  Icon_correct,
+  Icon_hardness,
+  Icon_mic,
+  Icon_ness_main,
+  Icon_normal,
+  Icon_wrong,
+} from "@/module/icons";
 import Cookies from "universal-cookie";
 import axios from "axios";
 import VoiceIcon from "../../../public/assets/Voice.png";
 import StopIcon from "../../../public/assets/Stop button.png";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
+import { getProfile } from "@/module/apis/mypage";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -23,6 +35,7 @@ const Chatting = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { mutate: sendMessage, isLoading } = useSendMessage();
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [selectedNess, setSelectedNess] = useState<string>("");
   const [isSTT, setIsSTT] = useState(false);
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
@@ -61,20 +74,48 @@ const Chatting = () => {
   }, [initialChatMessages]);
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getProfile();
+      if (data) {
+        setSelectedNess(data.persona);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
     chatMessages.forEach((message) => {
       if (message.case === 2) {
         const parts = message.text.split("<separate>");
-        const data = JSON.parse(parts[1]);
-        setNewSchedule((prevSchedule) => ({
-          ...prevSchedule,
-          id: message.id,
-          start: new Date(data.start_time),
-          end: new Date(data.end_time),
-          categoryNum: data.category.id,
-          location: data.location ? data.location : "",
-          people: data.people ? data.people : "",
-          title: data.info,
-        }));
+        let jsonData = parts[1].trim();
+
+        const jsonStart = jsonData.indexOf("{");
+        const jsonEnd = jsonData.lastIndexOf("}") + 1;
+
+        if (jsonStart >= 0 && jsonEnd > jsonStart) {
+          jsonData = jsonData.substring(jsonStart, jsonEnd);
+        }
+
+        try {
+          const data = JSON.parse(jsonData);
+
+          setNewSchedule((prevSchedule) => ({
+            ...prevSchedule,
+            id: message.id,
+            start: new Date(data.start_time),
+            end: data.end_time
+              ? new Date(data.end_time)
+              : new Date(new Date(data.start_time).getTime() + 3600000),
+            categoryNum: data.category.id,
+            location: data.location ? data.location : "",
+            people: data.people ? data.people : "",
+            title: data.info,
+          }));
+        } catch (error) {
+          console.error("Error parsing JSON data: ", error);
+          // JSON 파싱 에러 처리
+        }
       }
     });
   }, [chatMessages]);
@@ -146,7 +187,13 @@ const Chatting = () => {
           {chatMessages.map((message, index) => {
             if (message.case === 2) {
               const parts = message.text.split("<separate>");
-              const data = JSON.parse(parts[1]);
+              let jsonData = parts[1].trim();
+              const jsonStart = jsonData.indexOf("{");
+              const jsonEnd = jsonData.lastIndexOf("}") + 1;
+              if (jsonStart >= 0 && jsonEnd > jsonStart) {
+                jsonData = jsonData.substring(jsonStart, jsonEnd); // JSON 데이터 추출
+              }
+              const data = JSON.parse(jsonData);
               const formattedDate = moment(data.start_time)
                 .locale("ko")
                 .format("MMMM Do dddd");
@@ -193,7 +240,7 @@ const Chatting = () => {
                       </div>
                       <div className="flex gap-[11px] flex-row text-[15px]">
                         <div
-                          className="rounded-[8px] py-[5px] h-[38px] px-[7px] text-[12px] inline font-semibold text-center text-white"
+                          className="rounded-[8px] h-[38px] px-[7px] text-[12px] flex items-center inline font-semibold text-center text-white"
                           style={{
                             backgroundColor: data.category.color,
                           }}
@@ -284,12 +331,12 @@ const Chatting = () => {
             placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
             onChange={(e) => setNewMessage(e.target.value)}
           />
-          <div className="fixed right-[60px]">
-            <Image
-              src={isListening ? StopIcon : VoiceIcon}
-              alt=""
-              onClick={toggleListening}
-            />
+          <div className="fixed right-[70px] cursor-pointer">
+            {isListening ? (
+              <Image src={StopIcon} alt="" onClick={toggleListening} />
+            ) : (
+              <Icon_mic onClick={toggleListening} />
+            )}
           </div>
           <button onClick={handleSendMessage} disabled={isLoading}></button>
           <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
@@ -332,7 +379,13 @@ const Chatting = () => {
             />
           </svg>
         </div>
-        <Icon_ness_main />
+        {selectedNess == "NESS" ? (
+          <Icon_normal />
+        ) : selectedNess == "HARDNESS" ? (
+          <Icon_hardness />
+        ) : (
+          <Icon_calmness />
+        )}
         네스
       </div>
     </div>

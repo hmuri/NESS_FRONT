@@ -5,7 +5,14 @@ import BookImg from "../../../public/assets/book.png";
 import Image from "next/image";
 import Nav from "@/components/common/Nav";
 import { getProfile } from "@/module/apis/mypage";
-import { Icon_calmness, Icon_hardness, Icon_normal } from "@/module/icons";
+import {
+  Icon_big_calm_ness,
+  Icon_big_hard_ness,
+  Icon_big_normal_ness,
+  Icon_calmness,
+  Icon_hardness,
+  Icon_normal,
+} from "@/module/icons";
 
 const Index = () => {
   const [tags, setTags] = useState<ReportTag[] | undefined>();
@@ -88,57 +95,65 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="p-[20px] mb-[100px]">
-      <div className="mt-[40px] flex w-full mb-[45px]">
-        <div className="w-full flex flex-col pr-[20px] h-100px items-center gap-[40px]">
-          <Image src={BookImg} alt={""} width={100} height={100} />
-          <div className="text-[24px] font-medium ">
-            {recommendMessage?.recommend}
-          </div>
-        </div>
-      </div>
-      <div className="text-[20px] font-[500] mb-[10px]">네스 보고서</div>
-      <div className="rounded-[10px] bg-[#ECECEC] w-full h-[114px] flex items-center">
-        <div className="w-full px-[5px]">
-          <div className=" flex justify-between ">
-            {firstRow.map(([date, memory]) => (
-              <div
-                key={date}
-                className="w-[43px] h-[43px] rounded-[12px] bg-[#D9D9D9] flex items-center justify-center m-1"
-              >
-                {memory ? <>{memory}</> : <></>}
-              </div>
-            ))}
-          </div>
-          <div className=" flex justify-between">
-            {secondRow.map(([date, memory]) => (
-              <div
-                key={date}
-                className="w-[43px] h-[43px] rounded-[12px] bg-[#D9D9D9] flex items-center justify-center m-1"
-              >
-                {memory ? <>{memory}</> : <></>}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="text-[20px] font-[500] mb-[15px] mt-[40px]">
-        당신의 태그
-      </div>
-      <div className="flex gap-[6px] flex-col">
-        {tags?.map((tag) => (
-          <div
-            key={tag.id}
-            onClick={() => handleSelectTag(tag)}
-            className="rounded-[10px] bg-[#F2F0FF] w-full"
-          >
-            <div className="px-[17px] py-[15px]">
-              <div className="text-[16px] font-[500] tracking-tighter text-center">
-                {tag.title}
-              </div>
+    <div className="p-[20px] mb-[100px] flex justify-center ">
+      <div className="md:w-[600px]">
+        <div className="mt-[40px] flex w-full mb-[45px]">
+          <div className="w-full flex flex-col pr-[20px] h-100px items-center gap-[40px]">
+            {selectedNess == "NESS" ? (
+              <Icon_big_normal_ness />
+            ) : selectedNess == "HARDNESS" ? (
+              <Icon_big_hard_ness />
+            ) : (
+              <Icon_big_calm_ness />
+            )}
+            <div className="text-[24px] font-medium whitespace-normal break-words">
+              {recommendMessage?.recommend}
             </div>
           </div>
-        ))}
+        </div>
+        <div className="text-[20px] font-[500] mb-[10px]">당신의 메모리</div>
+        <div className="rounded-[10px] bg-[#F2F0FF] w-full h-[114px] flex items-center">
+          <div className="w-full px-[5px]">
+            <div className=" flex justify-between ">
+              {firstRow.map(([date, memory]) => (
+                <div
+                  key={date}
+                  className="w-[43px] h-[43px] rounded-[12px] text-[30px] flex items-center justify-center m-1"
+                >
+                  {memory ? <>{memory}</> : <></>}
+                </div>
+              ))}
+            </div>
+            <div className=" flex justify-between">
+              {secondRow.map(([date, memory]) => (
+                <div
+                  key={date}
+                  className="w-[43px] h-[43px] rounded-[12px] text-[30px] flex items-center justify-center m-1"
+                >
+                  {memory ? <>{memory}</> : <></>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="text-[20px] font-[500] mb-[15px] mt-[40px]">
+          당신의 태그
+        </div>
+        <div className="flex gap-[6px] flex-col">
+          {tags?.map((tag) => (
+            <div
+              key={tag.id}
+              onClick={() => handleSelectTag(tag)}
+              className="rounded-[10px] bg-[#F2F0FF] w-full"
+            >
+              <div className="px-[17px] py-[15px]">
+                <div className="text-[16px] font-[500] tracking-tighter text-center">
+                  {tag.title}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       <Nav />
       {isModal && (
@@ -168,19 +183,19 @@ const TagModal = ({
   };
   return (
     <div
-      className="w-[100vw] h-[100vh] bg-black fixed bottom-0 left-0 bg-opacity-50 z-20"
+      className="w-[100vw] h-[100vh] bg-black fixed bottom-0 left-0 bg-opacity-50 z-20 flex justify-center"
       onClick={() => setIsModal(false)}
     >
       <div
         onClick={handleModalClick}
-        className="fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px]"
+        className="box-shadow fixed flex gap-[15px] flex-col items-center justify-center px-[30px] bottom-0 bg-white w-full h-[300px] rounded-t-[12px] md:w-[650px] md:rounded-t-[20px]"
       >
         {selectedNess == "NESS" ? (
-          <Icon_normal />
+          <Icon_big_normal_ness />
         ) : selectedNess == "HARDNESS" ? (
-          <Icon_hardness />
+          <Icon_big_hard_ness />
         ) : (
-          <Icon_calmness />
+          <Icon_big_calm_ness />
         )}
         <div className="text-[#7a64ff] font-semibold text-[20px]">
           {selectedTag?.title}

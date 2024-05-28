@@ -8,6 +8,7 @@ import {
 import Nav from "@/components/common/Nav";
 import {
   Icon_camera,
+  Icon_left_arrow,
   Icon_select_off,
   Icon_select_on,
   Icon_send_email,
@@ -16,6 +17,7 @@ import {
 export default function Alarm() {
   const [profile, setProfile] = useState<Profile | undefined>();
   const [emailSelected, setEmailSelected] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -53,9 +55,13 @@ export default function Alarm() {
   };
 
   return (
-    <>
-      <div className="p-[25px] mt-[30px]">
-        <div className="text-[20px] py-[11px]">개인 정보 수정</div>
+    <div className="p-[25px] mt-[30px] flex justify-center items-center">
+      <div className="md:w-[600px]">
+        <div className="flex items-center justify-between">
+          <Icon_left_arrow onClick={() => router.back()} />
+          <div className="text-[20px] py-[11px]">이메일 알림</div>
+          <div className="w-[32px]" />
+        </div>
         <div className="flex flex-col w-full">
           <div className="rounded-[10px] w-full flex flex-col items-center">
             <div className="w-full text-[16px] font-[500] flex my-[18px] justify-between items-center">
@@ -94,6 +100,6 @@ export default function Alarm() {
         </div>
       </div>
       <Nav />
-    </>
+    </div>
   );
 }

@@ -1,58 +1,16 @@
-<svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="28"
-            viewBox="0 0 28 28"
-            fill="none"
-          >
-            <circle cx="14" cy="14" r="14" fill="#454545" />
-            <path
-              d="M11.4074 19.0398C11.4074 19.0398 12.2474 19.5998 13.9274 19.5998C15.6074 19.5998 16.4474 19.0398 16.4474 19.0398"
-              stroke="black"
-              stroke-linecap="round"
-            />
-            <circle cx="17.9404" cy="18.1482" r="0.518519" fill="white" />
-            <circle cx="20.1805" cy="18.1482" r="0.518519" fill="white" />
-            <circle cx="19.0609" cy="19.2678" r="0.518519" fill="white" />
-            <circle cx="6.74075" cy="18.1482" r="0.518519" fill="white" />
-            <circle cx="8.9808" cy="18.1482" r="0.518519" fill="white" />
-            <circle cx="7.86122" cy="19.2678" r="0.518519" fill="white" />
-            <ellipse
-              cx="18.3344"
-              cy="13.9272"
-              rx="2.59259"
-              ry="2.52"
-              fill="white"
-            />
-            <ellipse
-              cx="18.335"
-              cy="13.9271"
-              rx="1.44033"
-              ry="1.4"
-              fill="black"
-            />
-            <ellipse
-              cx="9.37412"
-              cy="13.9272"
-              rx="2.59259"
-              ry="2.52"
-              fill="white"
-            />
-            <ellipse
-              cx="9.37353"
-              cy="13.9271"
-              rx="1.44033"
-              ry="1.4"
-              fill="black"
-            />
-            <path
-              d="M6.22223 10.6504C6.22223 10.6504 7.62223 10.3704 9.02223 10.3704C10.4222 10.3704 11.8222 10.6504 11.8222 10.6504"
-              stroke="black"
-              stroke-linecap="round"
-            />
-            <path
-              d="M15.7421 10.6504C15.7421 10.6504 17.1421 10.3704 18.5421 10.3704C19.9421 10.3704 21.3421 10.6504 21.3421 10.6504"
-              stroke="black"
-              stroke-linecap="round"
-            />
-          </svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+  <circle cx="14.5" cy="14" r="14" fill="#454545"/>
+  <path d="M11.9073 19.04C11.9073 19.04 12.7473 19.6 14.4273 19.6C16.1073 19.6 16.9473 19.04 16.9473 19.04" stroke="black" stroke-linecap="round"/>
+  <circle cx="18.4404" cy="18.1479" r="0.518519" fill="white"/>
+  <circle cx="20.6805" cy="18.1479" r="0.518519" fill="white"/>
+  <circle cx="19.5609" cy="19.2675" r="0.518519" fill="white"/>
+  <circle cx="7.24069" cy="18.1479" r="0.518519" fill="white"/>
+  <circle cx="9.48068" cy="18.1479" r="0.518519" fill="white"/>
+  <circle cx="8.36117" cy="19.2675" r="0.518519" fill="white"/>
+  <ellipse cx="18.8343" cy="13.9277" rx="2.59259" ry="2.52" fill="white"/>
+  <ellipse cx="18.8349" cy="13.9278" rx="1.44033" ry="1.4" fill="black"/>
+  <ellipse cx="9.87409" cy="13.9277" rx="2.59259" ry="2.52" fill="white"/>
+  <ellipse cx="9.87356" cy="13.9278" rx="1.44033" ry="1.4" fill="black"/>
+  <path d="M6.72217 10.6506C6.72217 10.6506 8.12217 10.3706 9.52217 10.3706C10.9222 10.3706 12.3222 10.6506 12.3222 10.6506" stroke="black" stroke-linecap="round"/>
+  <path d="M16.2419 10.6506C16.2419 10.6506 17.6419 10.3706 19.0419 10.3706C20.4419 10.3706 21.8419 10.6506 21.8419 10.6506" stroke="black" stroke-linecap="round"/>
+</svg>

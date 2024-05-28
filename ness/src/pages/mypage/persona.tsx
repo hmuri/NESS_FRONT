@@ -2,16 +2,19 @@ import Nav from "../../components/common/Nav";
 import {
   Icon_calmness,
   Icon_hardness,
+  Icon_left_arrow,
   Icon_normal,
   Icon_radio,
   Icon_unselected_radio,
 } from "@/module/icons";
 import { useEffect, useState } from "react";
 import { getProfile, updatePersona } from "../../module/apis/mypage";
+import { useRouter } from "next/router";
 
 export default function Persona() {
   const [profile, setProfile] = useState<Profile | undefined>();
   const [selectedNess, setSelectedNess] = useState<string>("");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -36,9 +39,13 @@ export default function Persona() {
     }
   };
   return (
-    <>
-      <div className="p-[15px] mt-[30px]">
-        <div className="text-[20px] py-[11px] ml-[10px]">페르소나 설정</div>
+    <div className="p-[15px] mt-[30px] flex justify-center items-center">
+      <div className="md:w-[600px]">
+        <div className="flex items-center justify-between">
+          <Icon_left_arrow onClick={() => router.back()} />
+          <div className="text-[20px] py-[11px]">페르소나 설정</div>
+          <div className="w-[32px]" />
+        </div>
         <div className="flex flex-col w-full">
           {[
             {
@@ -85,6 +92,6 @@ export default function Persona() {
         </div>
       </div>
       <Nav />
-    </>
+    </div>
   );
 }

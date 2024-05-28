@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="100" viewBox="0 0 110 100" fill="none">
+  <circle cx="60" cy="50" r="50" fill="#FF6464"/>
+  <path d="M51.2318 76.0562C51.2318 76.0562 54.2318 78.0562 60.2318 78.0562C66.2318 78.0562 69.2318 76.0562 69.2318 76.0562" stroke="black" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="75.9711" cy="57.7974" rx="9.25926" ry="9" fill="white"/>
+  <ellipse cx="75.9731" cy="57.7974" rx="5.14403" ry="5" fill="black"/>
+  <ellipse cx="43.9701" cy="57.7974" rx="9.25926" ry="9" fill="white"/>
+  <ellipse cx="43.968" cy="57.7974" rx="5.14403" ry="5" fill="black"/>
+  <path d="M32.8572 43.8313C32.8572 43.8313 37.954 43.9817 42.8259 45.1064C47.6977 46.2312 52.3446 48.3303 52.3446 48.3303" stroke="black" stroke-width="2" stroke-linecap="round"/>
+  <path d="M67.0815 48.3308C67.0815 48.3308 71.7284 46.2317 76.6003 45.1069C81.4721 43.9822 86.5689 43.8318 86.5689 43.8318" stroke="black" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="75.9994" cy="71.2063" rx="1.85185" ry="1.85185" fill="white"/>
+  <circle cx="83.9996" cy="71.2068" r="1.85185" fill="white"/>
+  <circle cx="80.0011" cy="75.2049" r="1.85185" fill="white"/>
+  <ellipse cx="36.0005" cy="71.2059" rx="1.85185" ry="1.85185" fill="white"/>
+  <ellipse cx="44.0007" cy="71.2063" rx="1.85185" ry="1.85185" fill="white"/>
+  <ellipse cx="40.0022" cy="75.2044" rx="1.85185" ry="1.85185" fill="white"/>
+  <path d="M18.9265 21.4621C20.3202 19.4589 21.8565 17.5625 23.521 15.7876H96.489C100.759 20.3412 104.187 25.6945 106.522 31.5987H13.6114C12.8692 33.4385 12.2333 35.3326 11.7112 37.2733H0.158691L5.84189 29.996L0.158691 21.4621H18.9265Z" fill="#DCDCDD"/>
+</svg>

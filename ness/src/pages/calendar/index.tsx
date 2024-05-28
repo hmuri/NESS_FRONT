@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Calendar as BigCalendar,
   DateCellWrapperProps,
+  EventPropGetter,
   momentLocalizer,
 } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
@@ -51,6 +52,20 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
     setMonth(moment(month).subtract(1, "months").format("YYYY-MM"));
   };
 
+  const eventStyleGetter = (
+    event: any
+  ): React.HTMLAttributes<HTMLDivElement> => {
+    const customEvent = event as ScheduleEvent;
+    return {
+      style: {
+        backgroundColor: customEvent.categoryColor,
+        opacity: 0.8,
+        borderRadius: "5px",
+        color: "white",
+      },
+    };
+  };
+
   const nextMonth = () => {
     setMonth(moment(month).add(1, "months").format("YYYY-MM"));
   };
@@ -94,14 +109,13 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
         }}
       >
         {children}
-        {extraEventsCount > 0 && (
-          <div
-            className="extra-events-info text-[8px] z-5"
-            onClick={() => handleSelectSlot(value)}
-          >
-            {extraEventsCount} more
-          </div>
-        )}
+
+        <div
+          className="extra-events-info text-[8px] z-5 opacity-0"
+          onClick={() => handleSelectSlot(value)}
+        >
+          {extraEventsCount} more
+        </div>
       </div>
     );
   };
@@ -185,7 +199,9 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
                   onNextMonth={nextMonth}
                 />
               ),
+              dateCellWrapper: CustomDateCellWrapper,
             }}
+            eventPropGetter={eventStyleGetter}
           />
           <Nav />
           {modalIsOpen && (
@@ -200,7 +216,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
           {/* 로딩 에러 메시지 표시 */}
         </div>
       </div>
-      {!modalIsOpen && <FloatingNess message="4월엔 일정이 많으시네요!" />}
+      {!modalIsOpen && <FloatingNess message="오늘도 힘내세요!" />}
     </>
   );
 };

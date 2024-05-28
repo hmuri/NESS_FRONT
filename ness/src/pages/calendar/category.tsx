@@ -5,8 +5,10 @@ import {
   deleteCategory,
   updateCategory,
 } from "@/module/apis/edit";
-import { Icon_add_category } from "@/module/icons";
+import { Icon_add_category, Icon_left_arrow } from "@/module/icons";
 import { useEffect, useState } from "react";
+import LeftArrowImage from "../../../public/assets/left_arrow.png";
+import Image from "next/image";
 
 interface IAddViewProps {
   selectedCategory: ICategory | undefined;
@@ -105,6 +107,7 @@ const AddView = ({
   return (
     <div>
       <div className="flex justify-between items-center">
+        <Icon_left_arrow onClick={() => setIsAddView(false)} />
         <div className="text-[20px]">
           {isModify ? "카테고리 수정" : "카테고리 추가"}
         </div>
@@ -154,54 +157,56 @@ const AddView = ({
           </div>
         </div>
         {isColorView && (
-          <div className="box-shadow w-full h-[50vh] max-h-[400px] rounded-t-[20px] bg-white fixed left-0 bottom-0 z-20 p-[40px]">
-            <div className="flex justify-between mb-[20px]">
-              <div className="text-[#454545] text-[20px] font-semibold">
-                카테고리 색상
+          <div className="fixed w-full flex items-center justify-center left-0 bottom-0 z-20">
+            <div className="box-shadow w-full h-[50vh] max-h-[400px] rounded-t-[20px] bg-white p-[40px] md:w-[650px] md:rounded-t-[20px]">
+              <div className="flex justify-between mb-[20px]">
+                <div className="text-[#454545] text-[20px] font-semibold">
+                  카테고리 색상
+                </div>
+                <div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="25"
+                    viewBox="0 0 24 25"
+                    fill="none"
+                    onClick={() => {
+                      setIsColorView(false);
+                    }}
+                  >
+                    <path
+                      d="M8.99999 16.3164L5.70668 13.0231C5.47282 12.7892 5.15563 12.6578 4.8249 12.6578C4.49417 12.6578 4.17699 12.7892 3.94312 13.0231C3.70926 13.2569 3.57788 13.5741 3.57788 13.9048C3.57788 14.0686 3.61014 14.2308 3.6728 14.382C3.73547 14.5333 3.82733 14.6708 3.94312 14.7866L8.12313 18.9666C8.61076 19.4542 9.39905 19.4542 9.88668 18.9666L20.4667 8.38661C20.7005 8.15275 20.8319 7.83556 20.8319 7.50483C20.8319 7.1741 20.7005 6.85692 20.4667 6.62306C20.2328 6.38919 19.9156 6.25781 19.5849 6.25781C19.2542 6.25781 18.937 6.3892 18.7031 6.62306L8.99999 16.3164Z"
+                      fill="#A7A7A7"
+                      stroke="#A7A7A7"
+                      stroke-width="0.5"
+                    />
+                  </svg>
+                </div>
               </div>
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="25"
-                  viewBox="0 0 24 25"
-                  fill="none"
-                  onClick={() => {
-                    setIsColorView(false);
-                  }}
-                >
-                  <path
-                    d="M8.99999 16.3164L5.70668 13.0231C5.47282 12.7892 5.15563 12.6578 4.8249 12.6578C4.49417 12.6578 4.17699 12.7892 3.94312 13.0231C3.70926 13.2569 3.57788 13.5741 3.57788 13.9048C3.57788 14.0686 3.61014 14.2308 3.6728 14.382C3.73547 14.5333 3.82733 14.6708 3.94312 14.7866L8.12313 18.9666C8.61076 19.4542 9.39905 19.4542 9.88668 18.9666L20.4667 8.38661C20.7005 8.15275 20.8319 7.83556 20.8319 7.50483C20.8319 7.1741 20.7005 6.85692 20.4667 6.62306C20.2328 6.38919 19.9156 6.25781 19.5849 6.25781C19.2542 6.25781 18.937 6.3892 18.7031 6.62306L8.99999 16.3164Z"
-                    fill="#A7A7A7"
-                    stroke="#A7A7A7"
-                    stroke-width="0.5"
-                  />
-                </svg>
+              <div className="grid grid-cols-4 gap-10 p-4">
+                {colorOptions.map((color, index) => (
+                  <button
+                    type="button"
+                    key={index}
+                    className={`w-[40px] h-[40px] rounded-[10px] focus:outline-none ${
+                      selectedColor.code === color.code
+                        ? "ring-2 ring-offset-2 ring-blue-500"
+                        : ""
+                    }`}
+                    style={{ backgroundColor: color.code }}
+                    onClick={() => setSelectedColor(color)}
+                    aria-label={color.label}
+                  >
+                    {selectedColor.code === color.code ? "✓" : ""}
+                  </button>
+                ))}
               </div>
-            </div>
-            <div className="grid grid-cols-4 gap-10 p-4">
-              {colorOptions.map((color, index) => (
-                <button
-                  type="button"
-                  key={index}
-                  className={`w-[40px] h-[40px] rounded-[10px] focus:outline-none ${
-                    selectedColor.code === color.code
-                      ? "ring-2 ring-offset-2 ring-blue-500"
-                      : ""
-                  }`}
-                  style={{ backgroundColor: color.code }}
-                  onClick={() => setSelectedColor(color)}
-                  aria-label={color.label}
-                >
-                  {selectedColor.code === color.code ? "✓" : ""}
-                </button>
-              ))}
             </div>
           </div>
         )}
         {isModify && (
           <div
-            className="w-full h-[40px] rounded-[5px] bg-[#CCC] mt-[40px] flex justify-center items-center text-[#FF6464]"
+            className="w-full h-[40px] rounded-[5px] bg-[#454545] mt-[40px] flex justify-center items-center text-[#D85B62]"
             onClick={handleDelete}
           >
             삭제하기
@@ -240,8 +245,8 @@ const Category = () => {
   };
 
   return (
-    <>
-      <div className="p-[30px] mt-[30px]">
+    <div className="p-[30px] mt-[30px] flex justify-center">
+      <div className="md:max-w-[600px] w-full">
         {!isAddView ? (
           <>
             <div className="flex items-center mb-[40px] justify-between">
@@ -281,7 +286,7 @@ const Category = () => {
       </div>
 
       <Nav />
-    </>
+    </div>
   );
 };
 
