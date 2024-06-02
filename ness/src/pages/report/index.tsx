@@ -96,7 +96,7 @@ const Index = () => {
 
   return (
     <div className="p-[20px] mb-[100px] flex justify-center ">
-      <div className="md:w-[600px]">
+      <div className="w-full md:w-[600px]">
         <div className="mt-[40px] flex w-full mb-[45px]">
           <div className="w-full flex flex-col pr-[20px] h-100px items-center gap-[40px]">
             {selectedNess == "NESS" ? (
