@@ -103,18 +103,27 @@ const Chatting = () => {
           setNewSchedule((prevSchedule) => ({
             ...prevSchedule,
             id: message.id,
-            start: new Date(data.start_time),
-            end: data.end_time
-              ? new Date(data.end_time)
+            start: new Date(data?.start_time),
+            end: data?.end_time
+              ? new Date(data?.end_time)
               : new Date(new Date(data.start_time).getTime() + 3600000),
-            categoryNum: data.category.id,
-            location: data.location ? data.location : "",
-            people: data.people ? data.people : "",
-            title: data.info,
+            categoryNum: data?.category.id,
+            location: data?.location ? data?.location : "",
+            people: data?.people ? data?.people : "",
+            title: data?.info,
           }));
         } catch (error) {
           console.error("Error parsing JSON data: ", error);
-          // JSON 파싱 에러 처리
+          setChatMessages((prevMessages) => [
+            ...prevMessages,
+            {
+              case: 0,
+              chatType: "AI",
+              text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
+              id: Date.now(),
+              createdDate: new Date().toString(),
+            },
+          ]);
         }
       }
     });
@@ -194,7 +203,7 @@ const Chatting = () => {
                 jsonData = jsonData.substring(jsonStart, jsonEnd); // JSON 데이터 추출
               }
               const data = JSON.parse(jsonData);
-              const formattedDate = moment(data.start_time)
+              const formattedDate = moment(data?.start_time)
                 .locale("ko")
                 .format("MMMM Do dddd");
               return (

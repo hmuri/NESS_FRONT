@@ -1,6 +1,6 @@
 import FloatingNess from "@/components/common/FloatingNess";
 import Nav from "@/components/common/Nav";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Image from "next/image";
 import BookImg from "../../../public/assets/book.png";
@@ -63,6 +63,84 @@ const Main = () => {
     const nextIndex = index % imageUrls.length;
     event.currentTarget.src = imageUrls[nextIndex];
   };
+  if (!scheduleList) return null;
+
+  const renderedItems: ReactNode[] = scheduleList.reduce(
+    (acc: ReactNode[], schedule: ScheduleItem, index: number) => {
+      const date = new Date(schedule.start);
+      const dateString = date.toLocaleDateString("ko-KR", {
+        month: "2-digit",
+        day: "2-digit",
+      });
+
+      const prevDate =
+        index > 0
+          ? new Date(scheduleList[index - 1].start).toLocaleDateString(
+              "ko-KR",
+              {
+                month: "2-digit",
+                day: "2-digit",
+              }
+            )
+          : null;
+
+      const dateDisplay =
+        dateString !== prevDate ? (
+          <div className="relative">
+            <div
+              key={date.toISOString()}
+              className=" font-normal text-[#717171] text-[14px] ml-[10px] mt-4 z-8 "
+            >
+              {dateString}
+            </div>
+            {/* <div className="absolute bottom-2 border-t-[2px] border-[white] w-full z-1" /> */}
+          </div>
+        ) : null;
+
+      const timeString = date.toLocaleString("ko-KR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+
+      const scheduleItem = (
+        <div key={schedule.id} className="relative flex mt-2">
+          <div className="ml-[10px] text-[#868686] text-[12px]">
+            {timeString}
+          </div>
+          <div className="absolute left-[54px] top-1 w-[12px] h-[12px] rounded-full bg-[#7A64FF]"></div>
+          <div className="pl-[40px]">
+            <div className="flex gap-[5px]">
+              <strong className="font-bold">{schedule.title}</strong>
+              <div
+                className="px-[5px] py-[3px] rounded-[5px] text-[10px]"
+                style={{ backgroundColor: schedule.categoryColor }}
+              >
+                {schedule.category}
+              </div>
+            </div>
+            <div className="text-[12px] text-[#868686] flex gap-[10px]">
+              {schedule.details.location && (
+                <div> 🧭{schedule.details.location}</div>
+              )}
+              {schedule.details.person && (
+                <div> 👯{schedule.details.person}</div>
+              )}
+            </div>
+            <div className="bg-white px-[10px] py-[5px] rounded-[16px] text-[12px] mt-[8px]">
+              {schedule.nessComment}
+            </div>
+          </div>
+        </div>
+      );
+
+      if (dateDisplay) acc.push(dateDisplay);
+      acc.push(scheduleItem);
+
+      return acc;
+    },
+    []
+  );
 
   return (
     <>
@@ -106,43 +184,10 @@ const Main = () => {
         <div className="text-[20px] w-full font-[500] mb-[10px] mt-[40px] text-left  md:max-w-[600px]">
           일정 리마인드
         </div>
-        <div className=" rounded-[10px] bg-[#F2F0FF] w-full min-h-[160px] md:max-w-[600px]">
+        <div className="rounded-[10px] bg-[#F2F0FF] w-full min-h-[160px] md:max-w-[600px]">
           <div className="m-[20px] relative">
             <div className="absolute left-[60px] top-1 bottom-0 w-[1px] bg-[#7A64FF]"></div>
-            {scheduleList?.map((schedule) => (
-              <div key={schedule.id} className="relative flex mt-8 ]">
-                <div className="ml-[10px] text-[#868686] text-[12px]">
-                  {new Date(schedule.start).toLocaleString("ko-KR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  })}
-                </div>
-                <div className="absolute left-[54px] top-1 w-[12px] h-[12px] rounded-full bg-[#7A64FF]"></div>
-                <div className="pl-[40px]">
-                  <div className="flex gap-[5px]">
-                    <strong className="font-bold">{schedule.title}</strong>{" "}
-                    <div
-                      className="px-[5px] py-[3px] rounded-[5px] text-[10px]"
-                      style={{ backgroundColor: schedule.categoryColor }}
-                    >
-                      {schedule.category}
-                    </div>
-                  </div>
-                  <div className="text-[12px] text-[#868686] flex gap-[10px]">
-                    {schedule.details.location && (
-                      <div> 🧭{schedule.details.location}</div>
-                    )}
-                    {schedule.details.person && (
-                      <div> 👯{schedule.details.person}</div>
-                    )}
-                  </div>
-                  <div className="bg-white px-[10px] py-[5px] rounded-[16px] text-[12px] mt-[8px]">
-                    {schedule.nessComment}
-                  </div>
-                </div>
-              </div>
-            ))}
+            {renderedItems}
           </div>
         </div>
       </div>
