@@ -47,7 +47,10 @@ const Index = () => {
           <div className="box-shadow text-[24px] text-center font-extrabold rounded-[20px]  p-[10px] absolute top-[-20px] bg-white">
             채팅으로 간편하게 <br /> 일정을 관리해보세요.
           </div>
-          <div className="landing-grabox text-center px-[15px] py-[10px] text-white rounded-[12px] text-[12px] absolute bottom-[32px]">
+          <div
+            className="landing-grabox text-center px-[15px] py-[10px] text-white rounded-[12px] text-[12px] absolute bottom-[32px] cursor-pointer"
+            onClick={() => router.replace("/login")}
+          >
             구글 로그인으로 간편하게
             <br /> 프로필 생성하고 모든 기능 사용해보기
           </div>
@@ -86,7 +89,7 @@ const Index = () => {
             </div>
           </div>
           <div className="flex gap-[15px] justify-center w-full md:gap-[25px]">
-            <div className="w-[220px] md:w-[350px]">
+            <div className="w-[220px] md:w-[350px] border-[1px] rounded-[10px] border-[#D9D9D9]">
               <Image alt="" src={Landing4} />
             </div>
             <div className="font-bold text-[17px] text-left  md:text-[25px]">
