@@ -2,11 +2,13 @@
 import Image from "next/image";
 import GoogleLogo from "../../../public/assets/google logo.png";
 import FloatingBigNess from "@/components/common/FloatingBigNess";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_LOGIN_URL}`;
   };
+  const router = useRouter();
 
   return (
     <div className="h-[100vh] mx-auto flex justify-center items-center flex-col px-[20px] md:px-0">
@@ -26,6 +28,12 @@ export default function Login() {
         <div className="flex w-full justify-center items-center">
           구글 아이디로 회원가입
         </div>
+      </div>
+      <div
+        className="mt-[15px] text-[14px] text-[#868686] cursor-pointer"
+        onClick={() => router.replace("/landing")}
+      >
+        홈페이지로 돌아가기
       </div>
     </div>
   );

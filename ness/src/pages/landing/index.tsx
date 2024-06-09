@@ -36,7 +36,7 @@ const Index = () => {
             <span className="font-bold text-[20px] ">NESS</span>
           </div>
           <div
-            className="landing-grabox px-[15px] py-[10px] text-white rounded-[12px] text-[15px] font-bold"
+            className="landing-grabox px-[15px] py-[10px] text-white rounded-[12px] text-[15px] font-bold cursor-pointer"
             onClick={() => router.replace("/login")}
           >
             회원가입 및 로그인
