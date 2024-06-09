@@ -9,6 +9,7 @@ import { Icon_add_category, Icon_left_arrow } from "@/module/icons";
 import { useEffect, useState } from "react";
 import LeftArrowImage from "../../../public/assets/left_arrow.png";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface IAddViewProps {
   selectedCategory: ICategory | undefined;
@@ -224,6 +225,7 @@ const Category = () => {
     ICategory | undefined
   >();
   const [isModify, setIsModify] = useState<boolean>(false);
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       const result = await getCategoryList();
@@ -249,8 +251,9 @@ const Category = () => {
       <div className="md:max-w-[600px] w-full">
         {!isAddView ? (
           <>
-            <div className="flex items-center mb-[40px] justify-between">
-              <div className="text-[20px] py-[11px]">카테고리 관리</div>
+            <div className="flex justify-between mb-[40px] items-center">
+              <Icon_left_arrow onClick={() => router.replace("/calendar")} />
+              <div className="text-[20px] ">카테고리 관리</div>
               <Icon_add_category
                 onClick={() => {
                   setIsAddView(true);
