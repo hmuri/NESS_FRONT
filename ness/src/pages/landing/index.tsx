@@ -52,26 +52,28 @@ const Index = () => {
             <br /> 프로필 생성하고 모든 기능 사용해보기
           </div>
         </div>
-        <div className="flex px-[18px] gap-[45px] flex-col w-full leading-tight">
-          <div className="flex gap-[15px] justify-center w-full">
-            <Image alt="" src={Landing2} width={200} height={153} />
-            <div className="font-bold text-[17px] text-left">
+        <div className="flex px-[18px] gap-[45px] flex-col w-full leading-tight ">
+          <div className="flex gap-[15px] justify-center w-full md:gap-[25px]">
+            <div className="w-[220px] md:w-[350px]">
+              <Image alt="" src={Landing2} />
+            </div>
+            <div className="font-bold text-[17px] text-left  md:text-[25px]">
               채팅만으로
               <br /> 일정을 간단히
               <br />
               추가할 수 있어요.
-              <div className="mt-[15px] text-[12px] font-extralight">
+              <div className="mt-[15px] text-[12px] font-extralight  md:text-[18px]">
                 채팅 한 번만 입력하면
                 <br /> 바로 캘린더에 추가 가능해요
               </div>
             </div>
           </div>
-          <div className="flex gap-[15px] justify-center w-full">
-            <div className="font-bold text-[17px] text-right">
+          <div className="flex gap-[15px] justify-center w-full md:gap-[25px]">
+            <div className="font-bold text-[17px] text-right md:text-[25px]">
               AI 비서가
               <br /> 일정을 요약하고
               <br /> 분석해줘요.
-              <div className="mt-[15px] text-[12px] font-extralight">
+              <div className="mt-[15px] text-[12px] font-extralight md:text-[18px]">
                 일일히 찾아볼 필요 없이,
                 <br /> AI 비서가 알아서
                 <br /> 관련있는 일정을 찾아
@@ -79,14 +81,18 @@ const Index = () => {
                 분석해줘요.
               </div>
             </div>
-            <Image alt="" src={Landing3} width={200} height={153} />
+            <div className="w-[220px] md:w-[350px]">
+              <Image alt="" src={Landing3} />
+            </div>
           </div>
-          <div className="flex gap-[15px] justify-center w-full">
-            <Image alt="" src={Landing4} width={200} height={153} />
-            <div className="font-bold text-[17px] text-left">
+          <div className="flex gap-[15px] justify-center w-full md:gap-[25px]">
+            <div className="w-[220px] md:w-[350px]">
+              <Image alt="" src={Landing4} />
+            </div>
+            <div className="font-bold text-[17px] text-left  md:text-[25px]">
               맞춤형 관리를
               <br /> 받아보세요.
-              <div className="mt-[15px] text-[12px] font-extralight leading-tight">
+              <div className="mt-[15px] text-[12px] font-extralight md:text-[18px]">
                 일반적인 NESS,
                 <br /> 열정적으로 삶을 관리하려면
                 <br /> HARDNESS,
@@ -101,14 +107,14 @@ const Index = () => {
         <div className="h-[157px] bg-[#F2F0FF] p-[20px] mt-[40px] leading-relaxed">
           <div className="text-[16px] font-bold mb-[10px]">NESS</div>
           <a
-            className="text-[#7A64FF] font-medium underline"
+            className="text-[#7A64FF] font-medium"
             href="https://midnight-roadrunner-22a.notion.site/6975b1228cda4e61ab8f78e8a28221f7"
           >
             개인정보 처리 방침
           </a>
           <br />
           <a
-            className="text-[#7A64FF] font-medium underline"
+            className="text-[#7A64FF] font-medium"
             href="mailto:maxcse01@gmail.com"
           >
             이메일로 연락하기
