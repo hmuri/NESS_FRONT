@@ -24,10 +24,10 @@ const Index = () => {
     };
   }, []);
   return (
-    <div className=" w-full">
+    <div className=" w-full flex justify-center">
       <div className="w-full md:w-[600px]">
         <div
-          className={`fixed px-[23px] w-full top-0 ${
+          className={`fixed px-[23px] w-full md:w-[600px] top-0 ${
             isTop ? "bg-white" : "bg-[rgba(255,255,255,0.5)]"
           } h-[76px] flex items-center justify-between z-10 transition-all duration-300`}
         >
