@@ -14,6 +14,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import Cookies from "universal-cookie";
 import DayModal from "@/components/calendar/DayModal";
 import FloatingNess from "@/components/common/FloatingNess";
+import axiosInstance from "@/module/axiosInstance";
 
 const localizer = momentLocalizer(moment);
 const cookies = new Cookies();
@@ -47,6 +48,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   const [selectedEvents, setSelectedEvents] = useState<ScheduleEvent[]>([]);
   const [loadingError, setLoadingError] = useState<string | null>(null); // 로딩 에러 상태 추가
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [updatedEvent, setUpdatedEvent] = useState<ScheduleEvent | null>(null);
 
   const prevMonth = () => {
     setMonth(moment(month).subtract(1, "months").format("YYYY-MM"));
@@ -124,12 +126,48 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
     const { event, start, end } = args;
     const updatedEvents = events.map((existingEvent) => {
       if (existingEvent.id === event.id) {
-        return { ...existingEvent, start, end };
+        const updated = { ...existingEvent, start, end };
+        setUpdatedEvent(updated); // 변경된 이벤트 상태 업데이트
+        return updated;
       }
       return existingEvent;
     });
     setEvents(updatedEvents);
   };
+
+  useEffect(() => {
+    const updateEventDetails = async () => {
+      console.log(JSON.stringify(updatedEvent));
+      if (updatedEvent) {
+        try {
+          const payload = {
+            id: updatedEvent.id,
+            title: updatedEvent.title,
+            start: updatedEvent.start.toISOString(),
+            end: updatedEvent?.end?.toISOString(),
+            location: updatedEvent.details.location,
+            person: updatedEvent.details.person,
+            categoryNum: updatedEvent.categoryNum,
+            originalTime: updatedEvent.start.toISOString(),
+          };
+          const response = await axiosInstance.put(
+            `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule`,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${cookies.get("accessToken")}`,
+              },
+            }
+          );
+          console.log("Update response:", response);
+        } catch (error) {
+          console.error("Failed to update event:", error);
+        }
+      }
+    };
+
+    updateEventDetails();
+  }, [updatedEvent]);
 
   useEffect(() => {
     const fetchEvents = async () => {
