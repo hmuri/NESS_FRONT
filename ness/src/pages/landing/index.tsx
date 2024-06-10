@@ -109,13 +109,12 @@ const Index = () => {
         </div>
         <div className="h-[157px] bg-[#F2F0FF] p-[20px] mt-[40px] leading-relaxed">
           <div className="text-[16px] font-bold mb-[10px]">NESS</div>
-          <a
-            className="text-[#7A64FF] font-medium"
-            href="https://midnight-roadrunner-22a.notion.site/6975b1228cda4e61ab8f78e8a28221f7"
+          <div
+            className="text-[#7A64FF] font-medium cursor-pointer"
+            onClick={() => router.push("/landing/privacy-policy")}
           >
             개인정보 처리 방침
-          </a>
-          <br />
+          </div>
           <a
             className="text-[#7A64FF] font-medium"
             href="mailto:maxcse01@gmail.com"
