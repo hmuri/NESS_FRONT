@@ -22,7 +22,7 @@ const Index = () => {
   }, []);
   return (
     <div className=" w-full flex justify-center">
-      <div className="w-full md:w-[600px]">
+      <div className="w-full md:w-[600px] px-[20px]">
         <div
           className={`fixed px-[23px] w-full md:w-[600px] top-0 ${
             isTop ? "bg-white" : "bg-[rgba(255,255,255,0.5)]"
