@@ -84,51 +84,6 @@ const Chatting = () => {
     fetchProfile();
   }, []);
 
-  useEffect(() => {
-    chatMessages.forEach((message) => {
-      if (message.case === 2) {
-        const parts = message.text.split("<separate>");
-        let jsonData = parts[1].trim();
-
-        const jsonStart = jsonData.indexOf("{");
-        const jsonEnd = jsonData.lastIndexOf("}") + 1;
-
-        if (jsonStart >= 0 && jsonEnd > jsonStart) {
-          jsonData = jsonData.substring(jsonStart, jsonEnd);
-        }
-
-        try {
-          const data = JSON.parse(jsonData);
-
-          setNewSchedule((prevSchedule) => ({
-            ...prevSchedule,
-            id: message.id,
-            start: new Date(data?.start_time),
-            end: data?.end_time
-              ? new Date(data?.end_time)
-              : new Date(new Date(data.start_time).getTime() + 3600000),
-            categoryNum: data?.category.id,
-            location: data?.location ? data?.location : "",
-            people: data?.people ? data?.people : "",
-            title: data?.info,
-          }));
-        } catch (error) {
-          console.error("Error parsing JSON data: ", error);
-          setChatMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              case: 0,
-              chatType: "AI",
-              text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
-              id: Date.now(),
-              createdDate: new Date().toString(),
-            },
-          ]);
-        }
-      }
-    });
-  }, [chatMessages]);
-
   const confirmSchedule = async (isAdded: boolean) => {
     const accessToken = cookies.get("accessToken");
 
@@ -202,10 +157,47 @@ const Chatting = () => {
               if (jsonStart >= 0 && jsonEnd > jsonStart) {
                 jsonData = jsonData.substring(jsonStart, jsonEnd); // JSON 데이터 추출
               }
-              const data = JSON.parse(jsonData);
-              const formattedDate = moment(data?.start_time)
-                .locale("ko")
-                .format("MMMM Do dddd");
+              console.log("json" + jsonData);
+
+              let data;
+              let formattedDate;
+              try {
+                data = JSON.parse(jsonData);
+                formattedDate = moment(data?.start_time)
+                  .locale("ko")
+                  .format("MMMM Do dddd");
+              } catch (error) {
+                return (
+                  <div className="relative mb-[5px] flex max-w-[70%]">
+                    <div
+                      className={`px-[12px] py-[10px] rounded-[16px] ${
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
+                          ? "bg-[#7A64FF] text-white"
+                          : "bg-white text-black"
+                      }`}
+                    >
+                      <Image
+                        src={
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
+                            ? RightChatImg
+                            : LeftChatImg
+                        }
+                        className={`absolute bottom-3 ${
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
+                            ? "right-[-11px]"
+                            : "left-[-11px]"
+                        }`}
+                        alt=""
+                      />
+                      <p>오류가 발생했습니다. 다시 입력해주세요</p>
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <div
                   key={index}
@@ -329,6 +321,7 @@ const Chatting = () => {
               );
             }
           })}
+
           {isLoading && <LoadingLottie />}
           <div ref={messagesEndRef} />
         </div>
