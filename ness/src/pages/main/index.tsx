@@ -1,6 +1,6 @@
 import FloatingNess from "@/components/common/FloatingNess";
 import Nav from "@/components/common/Nav";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, SetStateAction, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Image from "next/image";
 import BookImg from "../../../public/assets/book.png";
@@ -15,11 +15,39 @@ import {
   Icon_hardness,
   Icon_normal,
 } from "@/module/icons";
+import Slider from "react-slick";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
 
 const Main = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    draggable: true,
+    adaptiveHeight: true,
+    beforeChange: (current: any, next: SetStateAction<number>) =>
+      setActiveIndex(next),
+    arrows: false, // 화살표 버튼 숨기기
+    customPaging: function (i: number) {
+      return (
+        <div
+          style={{
+            width: i === activeIndex ? "12px" : "6px",
+            height: "6px",
+            borderRadius: "5px",
+            backgroundColor: i === activeIndex ? "#272B55" : "#d1d5db",
+          }}
+        ></div>
+      );
+    },
+    dotsClass: "slick-dots landing-dots", // 커스텀 dots CSS 클래스
+  };
+
   const NoIMG = "assets/no_image.png";
   const [data, setData] = useState<IMainData | undefined>(undefined);
   const [items, setItems] = useState<IActivity[] | undefined>(undefined);
@@ -29,6 +57,12 @@ const Main = () => {
   >();
 
   const imageUrls = [
+    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-1.png",
+    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-2.png",
+    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-3.png",
+  ];
+
+  const images = [
     "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-1.png",
     "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-2.png",
     "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-3.png",
@@ -179,6 +213,17 @@ const Main = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="day-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white w-[348px] h-[700px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto">
+            <Slider {...settings}>
+              {images.map((img, index) => (
+                <div key={index} className=" flex justify-center pb-0 w-full">
+                  <img src={img} alt="" className="w-full" />
+                </div>
+              ))}
+            </Slider>
+          </div>
         </div>
 
         <div className="text-[20px] w-full font-[500] mb-[10px] mt-[40px] text-left  md:max-w-[600px]">

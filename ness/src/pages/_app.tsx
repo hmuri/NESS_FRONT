@@ -2,6 +2,9 @@ import "@/styles/globals.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "@/styles/calendar/style.css";
 import "@/styles/FloatingNess.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
