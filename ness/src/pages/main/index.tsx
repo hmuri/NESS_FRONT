@@ -214,7 +214,7 @@ const Main = () => {
             </div>
           ))}
         </div>
-        <div className="day-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        {/* <div className="day-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white w-[348px] h-[700px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto">
             <Slider {...settings}>
               {images.map((img, index) => (
@@ -224,7 +224,7 @@ const Main = () => {
               ))}
             </Slider>
           </div>
-        </div>
+        </div> */}
 
         <div className="text-[20px] w-full font-[500] mb-[10px] mt-[40px] text-left  md:max-w-[600px]">
           일정 리마인드
