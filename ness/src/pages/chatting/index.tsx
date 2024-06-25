@@ -377,6 +377,13 @@ const Chatting = () => {
             value={newMessage}
             placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
             onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
+                e.preventDefault(); // Form 전송을 방지합니다.
+                handleSendMessage(); // 메시지 전송 함수 호출
+              }
+            }}
           />
           <div className="fixed right-[70px] cursor-pointer">
             {isListening ? (
