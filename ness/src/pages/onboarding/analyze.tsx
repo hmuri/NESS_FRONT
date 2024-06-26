@@ -206,6 +206,13 @@ const Chatting = () => {
       }
     );
   };
+  const handleButton = (text: string) => {
+    if (text == "일정 분석하기") {
+      addMessage();
+    } else if (text == "일정 삭제하기") {
+      router.replace("/onboarding/delete");
+    }
+  };
 
   const addMessage = () => {
     const newMessages: IChatMessage[] = [
@@ -250,8 +257,8 @@ const Chatting = () => {
               return (
                 <div
                   key={index}
-                  className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white"
-                  onClick={addMessage}
+                  className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white cursor-pointer"
+                  onClick={() => handleButton(message.text)}
                 >
                   {message.text}
                 </div>

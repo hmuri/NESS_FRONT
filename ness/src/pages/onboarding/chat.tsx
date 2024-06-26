@@ -147,28 +147,32 @@ const Chatting = () => {
     });
   }, [chatMessages]);
 
-  const confirmSchedule = async (isAdded: boolean) => {
-    const accessToken = cookies.get("accessToken");
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${newSchedule.id}`,
-        newSchedule,
-        {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        }
-      );
-      setChatMessages(response.data.chatList);
-    } catch (error) {
-      console.error("Failed to update schedule:", error);
-    }
-  };
-
-  const handleScheduleAdd = (isAdded: boolean) => {
+  const handleScheduleAdd = () => {
     setIsSelected(true);
-    confirmSchedule(isAdded);
+    setChatMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        case: 0,
+        chatType: "AI",
+        text: "일정을 추가해드렸습니다:)",
+        id: Date.now(),
+        createdDate: new Date().toString(),
+      },
+      {
+        case: 0,
+        chatType: "AI",
+        text: "잘하셨어요! 이제 이렇게 추가한 일정을 한번 확인해볼게요.",
+        id: Date.now(),
+        createdDate: new Date().toString(),
+      },
+      {
+        case: 11,
+        chatType: "AI",
+        text: "일정 확인하기로 이동",
+        id: Date.now(),
+        createdDate: new Date().toString(),
+      },
+    ]);
   };
 
   const handleSendMessage = () => {
@@ -249,8 +253,18 @@ const Chatting = () => {
               return (
                 <div
                   key={index}
-                  className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white"
+                  className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white cursor-pointer"
                   onClick={addMessage}
+                >
+                  {message.text}
+                </div>
+              );
+            }
+            if (message.case === 11) {
+              return (
+                <div
+                  className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white cursor-pointer"
+                  onClick={() => router.replace("/onboarding/analyze")}
                 >
                   {message.text}
                 </div>
@@ -330,7 +344,7 @@ const Chatting = () => {
                   )}
                   <div className="px-[10px] py-[5px] rounded-[10px] h-[30px] w-[65px] bg-white flex items-center mt-[5px] justify-between">
                     <Icon_correct
-                      onClick={() => handleScheduleAdd(true)}
+                      onClick={() => handleScheduleAdd()}
                       className="cursor-pointer"
                     />
                     <svg
@@ -347,7 +361,7 @@ const Chatting = () => {
                       />
                     </svg>
                     <Icon_wrong
-                      onClick={() => handleScheduleAdd(false)}
+                      onClick={() => handleScheduleAdd()}
                       className="cursor-pointer"
                     />
                   </div>
