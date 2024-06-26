@@ -18,7 +18,8 @@ import {
 } from "@/module/icons";
 import Slider from "react-slick";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
-import StopIcon from "../../../public/assets/Stop button.png";
+import Category from "../../../public/assets/category_des.png";
+import { useRouter } from "next/router";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -55,6 +56,7 @@ const Main = () => {
   const NoIMG = "assets/no_image.png";
   const [data, setData] = useState<IMainData | undefined>(undefined);
   const [items, setItems] = useState<IActivity[] | undefined>(undefined);
+  const [isModal, setIsModal] = useState<boolean>(true);
   const [selectedNess, setSelectedNess] = useState<string>("");
   const [scheduleList, setScheduleList] = useState<
     ScheduleItem[] | undefined
@@ -63,6 +65,8 @@ const Main = () => {
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
 
+  const router = useRouter();
+
   const imageUrls = [
     "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-1.png",
     "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-2.png",
@@ -70,9 +74,36 @@ const Main = () => {
   ];
 
   const images = [
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-1.png",
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-2.png",
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-3.png",
+    "/assets/chatting_des.png",
+    "/assets/recommend_des.png",
+    "/assets/category_des.png",
+    "/assets/persona_des.png",
+    "/assets/email_des.png",
+  ];
+
+  const steps = [
+    {
+      title: "채팅하기",
+      subtitle: "NESS와 채팅을 하며 간편하게 일정을 관리해보세요!",
+    },
+    {
+      title: "추천 확인하기",
+      subtitle:
+        "일정별 추천, 활동 추천, 한줄 추천 등 다양한 일정 기반 추천이 있어요.",
+    },
+    {
+      title: "카테고리 관리하기",
+      subtitle:
+        "캘린더의 상단 버튼을 눌러 일정의 카테고리를 수정하고 추가해요.",
+    },
+    {
+      title: "페르소나 선택하기",
+      subtitle: "선택한 페르소나에 따라 NESS의 관리 방식이 달라져요.",
+    },
+    {
+      title: "이메일 리포트",
+      subtitle: "매일 자정, 오늘의 일정을 분석한 이메일 리포트가 발송돼요.",
+    },
   ];
 
   useEffect(() => {
@@ -210,18 +241,55 @@ const Main = () => {
             )}
           </div>
         </div>
-
-        <div className="day-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white w-[348px] h-[700px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto">
-            <Slider {...settings}>
-              {images.map((img, index) => (
-                <div key={index} className=" flex justify-center pb-0 w-full">
-                  <img src={img} alt="" className="w-full" />
+        {isModal && (
+          <div className=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30">
+            <div
+              className="fixed top-[30px] right-[50px] text-[25px] text-white cursor-pointer"
+              onClick={() => setIsModal(false)}
+            >
+              X
+            </div>
+            <div
+              className="relative flex flex-col justify-center w-full h-[100vh] md:max-w-[600px] pb-[20px] overflow-auto "
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex flex-col items-center jusitfy-center mt-[30px] mb-[20px]">
+                <div className="text-center w-full text-[27px] font-bold text-[#7A64FF]">
+                  {steps[activeIndex].title}
                 </div>
-              ))}
-            </Slider>
+                <div className="text-center text-[15px] text-white w-[210px]">
+                  {steps[activeIndex].subtitle}
+                </div>
+              </div>
+              <Slider {...settings}>
+                {images.map((img, index) => (
+                  <div
+                    key={index}
+                    className=" flex justify-center pb-0 w-full items-center"
+                  >
+                    <img src={img} alt="" className="max-h-[65vh] mx-auto" />
+                  </div>
+                ))}
+              </Slider>
+              {activeIndex === 0 ? (
+                <div className="absolute bottom-[75px] w-full flex justify-center flex-col items-center text-center text-white ">
+                  <div
+                    className="landing-grabox mb-[5px] py-[5px] px-[10px] rounded-[10px] inline cursor-pointer"
+                    onClick={() => router.push("/onboarding/chat")}
+                  >
+                    채팅 사용법 확인하기
+                  </div>
+                  <div>
+                    더 자세한 채팅 사용법을 준비했어요. <br />
+                    NESS와 함께 알아볼까요?
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div className="rounded-[15px] px-[30px] py-[10px] bg-[#F2F0FF] w-full md:max-w-[600px] flex flex-col items-center">
           <div className="mb-[15px]">
             추가하고 싶은 일정을 네스에게 말해주세요!
