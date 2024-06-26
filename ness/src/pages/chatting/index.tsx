@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
 import moment from "moment";
 import "moment/locale/ko";
 import Image from "next/image";
@@ -60,12 +60,17 @@ const Chatting = () => {
 
   const { message, setMessage } = useChat();
 
-  useEffect(() => {
-    if (message) {
-      handleSendMessageFromMain(message);
-      setMessage(""); // 메시지 전송 후 초기화
+  const sendMainMessage = useCallback((newMessage: string) => {
+    console.log("here44" + newMessage);
+    if (newMessage) {
+      handleSendMessageFromMain(newMessage);
+      setMessage(""); // 상태를 바로 초기화
     }
-  }, [message]);
+  }, []);
+
+  useEffect(() => {
+    sendMainMessage(message);
+  }, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -171,11 +176,13 @@ const Chatting = () => {
     confirmSchedule(isAdded);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (message: any) => {
+    if (!message.trim()) return;
+    console.log("text22");
     const optimisticMessage: IChatMessage = {
       case: 0,
       chatType: isSTT ? "STT" : "USER",
-      text: newMessage,
+      text: message,
       id: Date.now(),
       createdDate: new Date().toString(),
     };
@@ -207,28 +214,43 @@ const Chatting = () => {
     );
   };
 
+  const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      e.key === "Enter" &&
+      !e.shiftKey &&
+      e.nativeEvent.isComposing === false
+    ) {
+      // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
+      e.preventDefault(); // Form 전송을 방지합니다.
+      handleSendMessage(newMessage); // 메시지 전송 함수 호출
+      setNewMessage("");
+    }
+  };
+
   const handleSendMessageFromMain = (text: string) => {
     console.log("text" + text);
-    const optimisticMessage: IChatMessage = {
+    console.log("here44");
+    const newOptimisticMessage: IChatMessage = {
       case: 0,
       chatType: "USER",
       text: text,
       id: Date.now(),
       createdDate: new Date().toString(),
     };
-    console.log("firsthere" + JSON.stringify(optimisticMessage));
+    console.log("firsthere" + JSON.stringify(newOptimisticMessage));
     // 낙관적 UI 업데이트
-    setChatMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+    setChatMessages((prevMessages) => [...prevMessages, newOptimisticMessage]);
     console.log("here" + JSON.stringify(chatMessages));
-    setNewMessage("");
 
     // 메시지 전송, onSuccess로 전체 리스트 업데이트
     sendMessage(
-      { newMessage: text, isSTT },
+      {
+        newMessage: text,
+        isSTT: isSTT,
+      },
       {
         onSuccess: (chatList) => {
           setChatMessages(chatList);
-          setIsSTT(false);
         },
         onError: (error) => {
           console.error("Failed to send message: ", error);
@@ -433,11 +455,7 @@ const Chatting = () => {
             placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
-                e.preventDefault(); // Form 전송을 방지합니다.
-                handleSendMessage(); // 메시지 전송 함수 호출
-              }
+              handleEnter(e);
             }}
           />
           <div className="fixed right-[70px] cursor-pointer">
@@ -447,8 +465,14 @@ const Chatting = () => {
               <Icon_mic onClick={toggleListening} />
             )}
           </div>
-          <button onClick={handleSendMessage} disabled={isLoading}></button>
-          <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
+          <button
+            onClick={() => handleSendMessage(newMessage)}
+            disabled={isLoading}
+          ></button>
+          <button
+            onClick={() => handleSendMessage(newMessage)}
+            disabled={!newMessage.trim()}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="22"

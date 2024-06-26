@@ -322,9 +322,14 @@ const Main = () => {
               placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
+                if (
+                  e.key === "Enter" &&
+                  !e.shiftKey &&
+                  e.nativeEvent.isComposing === false
+                ) {
                   // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
                   e.preventDefault(); // Form 전송을 방지합니다.
+                  console.log("there" + e.currentTarget.value);
                   setMessage(e.currentTarget.value);
                   router.push("/chatting");
                 }
