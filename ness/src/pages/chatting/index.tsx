@@ -10,14 +10,10 @@ import { useSendMessage } from "@/module/hooks/sendMessages";
 import useFetchChatMessages from "@/module/hooks/getMessages";
 import { LoadingLottie } from "@/module/LottieComponents";
 import {
-  Icon_big_calm_ness,
-  Icon_big_hard_ness,
-  Icon_big_normal_ness,
   Icon_calmness,
   Icon_correct,
   Icon_hardness,
   Icon_mic,
-  Icon_ness_main,
   Icon_normal,
   Icon_wrong,
 } from "@/module/icons";
@@ -114,16 +110,28 @@ const Chatting = () => {
           }));
         } catch (error) {
           console.error("Error parsing JSON data: ", error);
-          setChatMessages((prevMessages) => [
-            ...prevMessages,
-            {
-              case: 0,
-              chatType: "AI",
-              text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
-              id: Date.now(),
-              createdDate: new Date().toString(),
-            },
-          ]);
+
+          // 마지막 메시지가 오류 메시지가 아닌지 확인
+          setChatMessages((prevMessages) => {
+            const lastMessage = prevMessages[prevMessages.length - 1];
+            if (
+              lastMessage &&
+              lastMessage.text ===
+                "오류가 발생했습니다. 리포트를 통해 제보해주세요."
+            ) {
+              return prevMessages; // 이미 오류 메시지가 있으면 추가하지 않음
+            }
+            return [
+              ...prevMessages,
+              {
+                case: 0,
+                chatType: "AI",
+                text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
+                id: Date.now(),
+                createdDate: new Date().toString(),
+              },
+            ];
+          });
         }
       }
     });
