@@ -62,12 +62,6 @@ const Main = () => {
     "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-3.png",
   ];
 
-  const images = [
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-1.png",
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-2.png",
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-3.png",
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchRecommendMessage();
@@ -195,25 +189,7 @@ const Main = () => {
             )}
           </div>
         </div>
-        <div className="text-[20px] font-[500] mb-[10px] md:w-full md:max-w-[600px]">
-          이런 활동은 어떠세요?
-        </div>
-        <div className="flex flex-row items-center justify-between gap-[8px] overflow-x-auto md:w-full md:max-w-[600px]">
-          {items?.map((item, index) => (
-            <div key={index} className="relative">
-              <img
-                className=" w-[125px] h-[110px] rounded-[10px] relative md:w-[200px] md:h-[150px]"
-                src={item.imageTag}
-                alt=""
-                onError={(e) => handleImageError(e, index)} // onError 이벤트 핸들러 설정
-              />
-              <div className="absolute rounded-[10px] w-full bg-black opacity-50 h-full text-white left-[0px] top-[0px] z-10 p-[10px]"></div>
-              <div className="absolute rounded-[10px] w-full h-full text-white left-[0px] top-[0px] z-10 p-[10px]">
-                {item.activity}
-              </div>
-            </div>
-          ))}
-        </div>
+
         {/* <div className="day-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white w-[348px] h-[700px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto">
             <Slider {...settings}>
@@ -227,13 +203,27 @@ const Main = () => {
         </div> */}
 
         <div className="text-[20px] w-full font-[500] mb-[10px] mt-[40px] text-left  md:max-w-[600px]">
-          일정 리마인드
+          앞으로의 일정을 확인해봐요!
         </div>
         <div className="rounded-[10px] bg-[#F2F0FF] w-full min-h-[160px] md:max-w-[600px]">
           <div className="m-[20px] relative">
             <div className="absolute left-[60px] top-1 bottom-0 w-[1px] bg-[#7A64FF]"></div>
             {renderedItems}
           </div>
+        </div>
+        <div className="text-[20px] font-[500] mt-[20px] mb-[10px] md:w-full md:max-w-[600px]">
+          이런 활동은 어떠세요?
+        </div>
+        <div className="flex flex-col items-center justify-between gap-[8px] overflow-x-auto md:w-full md:max-w-[600px]">
+          {items?.map((item, index) => (
+            <div key={index} className="rounded-[10px] bg-[#F2F0FF] w-full">
+              <div className="px-[17px] py-[15px]">
+                <div className="text-[16px] font-[500] tracking-tighter text-center">
+                  {item.activity}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       <Nav />
