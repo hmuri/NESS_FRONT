@@ -192,7 +192,13 @@ const Chatting = () => {
       }
     );
   };
-
+  const handleButton = (text: string) => {
+    if (text == "일정 삭제하기") {
+      addMessage();
+    } else if (text == "일정 삭제하기") {
+      router.replace("/onboarding/delete");
+    }
+  };
   const addMessage = () => {
     const newMessages: IChatMessage[] = [
       {
@@ -223,18 +229,30 @@ const Chatting = () => {
         }`,
       },
       {
-        case: 10,
-        id: 3,
+        case: 11,
+        id: chatMessages.length + 3,
         chatType: "AI",
         createdDate: "2024-06-19T12:03:00Z",
         text: "모두 삭제",
       },
+    ];
+    setChatMessages([...chatMessages, ...newMessages]);
+  };
+  const addSecondMessage = () => {
+    const newMessages: IChatMessage[] = [
       {
-        case: 1,
-        id: chatMessages.length + 1,
-        chatType: "USER",
-        createdDate: "2024-06-19T12:05:00Z",
-        text: "수고하셨어요!",
+        case: 0,
+        id: chatMessages.length + 4,
+        chatType: "AI",
+        createdDate: "2024-06-19T13:03:00Z",
+        text: "수고하셨어요! 이제 NESS와 함께, 실제 채팅을 진행해보세요.",
+      },
+      {
+        case: 12,
+        id: chatMessages.length + 5,
+        chatType: "AI",
+        createdDate: "2024-06-19T14:03:00Z",
+        text: "채팅 바로가기",
       },
     ];
     setChatMessages([...chatMessages, ...newMessages]);
@@ -245,12 +263,33 @@ const Chatting = () => {
       <div className="relative mt-[94px] flex-1 bg-[#F2F0FF] py-[26px]">
         <div className="px-[20px] pb-[50px]">
           {chatMessages.map((message, index) => {
+            if (message.case === 12) {
+              return (
+                <div
+                  className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white cursor-pointer"
+                  onClick={() => router.replace("/chatting")}
+                >
+                  {message.text}
+                </div>
+              );
+            }
+            if (message.case === 11) {
+              return (
+                <div
+                  key={index}
+                  className="bg-white flex relative mb-[14px] py-[10px] rounded-[10px] w-[90px] justify-center text-[#E8505B] cursor-pointer"
+                  onClick={addSecondMessage}
+                >
+                  {message.text}
+                </div>
+              );
+            }
             if (message.case === 10) {
               return (
                 <div
                   key={index}
-                  className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white"
-                  onClick={addMessage}
+                  className="cursor-pointer landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white"
+                  onClick={() => handleButton(message.text)}
                 >
                   {message.text}
                 </div>
@@ -328,29 +367,6 @@ const Chatting = () => {
                       </div>
                     </div>
                   )}
-                  <div className="px-[10px] py-[5px] rounded-[10px] h-[30px] w-[65px] bg-white flex items-center mt-[5px] justify-between">
-                    <Icon_correct
-                      onClick={() => handleScheduleAdd(true)}
-                      className="cursor-pointer"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="2"
-                      height="22"
-                      viewBox="0 0 2 22"
-                      fill="none"
-                    >
-                      <path
-                        d="M1 1L1 21"
-                        stroke="#B3B3B3"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <Icon_wrong
-                      onClick={() => handleScheduleAdd(false)}
-                      className="cursor-pointer"
-                    />
-                  </div>
                 </div>
               );
             } else {
