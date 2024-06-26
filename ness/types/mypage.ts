@@ -6,4 +6,5 @@ interface Profile {
   persona: string;
   isEmailActive: boolean;
   email?: string;
+  onBoarding: boolean;
 }

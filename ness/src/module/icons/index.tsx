@@ -27,3 +27,5 @@ export { ReactComponent as Icon_calendar } from "../../../public/assets/svg/cale
 export { ReactComponent as Icon_account } from "../../../public/assets/svg/account.svg";
 export { ReactComponent as Icon_left_arrow } from "../../../public/assets/svg/left_arrow.svg";
 export { ReactComponent as Icon_mic } from "../../../public/assets/svg/mic.svg";
+export { ReactComponent as Icon_information } from "../../../public/assets/svg/information.svg";
+export { ReactComponent as Icon_floating_ness } from "../../../public/assets/svg/floating_ness.svg";

@@ -1,0 +1,22 @@
+<svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="10.5" cy="11" r="10.5" fill="url(#paint0_radial_3961_6887)"/>
+<path d="M11.3398 14.3601C11.3398 14.3601 11.8998 14.7801 13.0198 14.7801C14.1398 14.7801 14.6998 14.3601 14.6998 14.3601" stroke="black" stroke-linecap="round"/>
+<ellipse cx="15.9179" cy="13.611" rx="0.370066" ry="0.370067" fill="white"/>
+<circle cx="17.5166" cy="13.611" r="0.370067" fill="white"/>
+<ellipse cx="16.7177" cy="14.4101" rx="0.370066" ry="0.370067" fill="white"/>
+<ellipse cx="7.92475" cy="13.611" rx="0.370066" ry="0.370067" fill="white"/>
+<circle cx="9.52339" cy="13.611" r="0.370067" fill="white"/>
+<ellipse cx="8.72456" cy="14.4101" rx="0.370066" ry="0.370067" fill="white"/>
+<ellipse cx="16.199" cy="10.5988" rx="1.85033" ry="1.79852" fill="white"/>
+<ellipse cx="15.7233" cy="10.5988" rx="1.02796" ry="0.999179" fill="black"/>
+<ellipse cx="9.80443" cy="10.5988" rx="1.85033" ry="1.79852" fill="white"/>
+<ellipse cx="9.32777" cy="10.5988" rx="1.02796" ry="0.999179" fill="black"/>
+<path d="M7.55469 8.25989C7.55469 8.25989 8.55387 8.06006 9.55305 8.06006C10.5522 8.06006 11.5514 8.25989 11.5514 8.25989" stroke="black" stroke-linecap="round"/>
+<path d="M14.3486 8.25989C14.3486 8.25989 15.3478 8.06006 16.347 8.06006C17.3462 8.06006 18.3454 8.25989 18.3454 8.25989" stroke="black" stroke-linecap="round"/>
+<defs>
+<radialGradient id="paint0_radial_3961_6887" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(6.3 5.54) rotate(65.3441) scale(14.0951)">
+<stop stop-color="#AEA1FF"/>
+<stop offset="1" stop-color="#7A64FF"/>
+</radialGradient>
+</defs>
+</svg>

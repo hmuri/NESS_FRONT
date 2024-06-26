@@ -12,7 +12,9 @@ import {
   Icon_big_hard_ness,
   Icon_big_normal_ness,
   Icon_calmness,
+  Icon_floating_ness,
   Icon_hardness,
+  Icon_information,
   Icon_mic,
   Icon_normal,
 } from "@/module/icons";
@@ -122,6 +124,7 @@ const Main = () => {
       const data = await getProfile();
       if (data) {
         setSelectedNess(data.persona);
+        setIsModal(data.onBoarding);
       }
     };
 
@@ -224,8 +227,20 @@ const Main = () => {
 
   return (
     <>
-      <div className="p-[20px] mb-[100px] flex flex-col md:items-center">
-        <div className="mt-[40px] flex justify-between items-center w-full md:max-w-[600px] mb-[45px]">
+      <div className="fixed top-0 px-[12px] left-0 w-full flex justify-between h-[110px] bg-[#F0ECFF] z-10">
+        <div className="flex mt-[20px] items-center justify-center gap-[7px]">
+          <Icon_floating_ness />
+          <div className="text-[20px] font-bold">NESS</div>
+        </div>
+        <div className="flex mt-[20px] items-center justify-center">
+          <Icon_information
+            className="cursor-pointer"
+            onClick={() => setIsModal(true)}
+          />
+        </div>
+      </div>
+      <div className="p-[20px] mb-[100px] mt-[110px] flex flex-col md:items-center">
+        <div className="mt-[20px] flex justify-between items-center w-full md:max-w-[600px] mb-[45px]">
           <div className="flex h-100px md:items-center">
             <div className="text-[24px] font-medium whitespace-normal break-words">
               {data?.recommend}
