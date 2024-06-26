@@ -9,6 +9,7 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
+import { ChatProvider } from "@/module/provider/ChatContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   function setScreenSize() {
@@ -44,7 +45,9 @@ export default function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <ChatProvider>
+          <Component {...pageProps} />
+        </ChatProvider>
       </QueryClientProvider>
     </>
   );

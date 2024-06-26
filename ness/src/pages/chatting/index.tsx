@@ -23,6 +23,7 @@ import VoiceIcon from "../../../public/assets/Voice.png";
 import StopIcon from "../../../public/assets/Stop button.png";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
 import { getProfile } from "@/module/apis/mypage";
+import { useChat } from "@/module/provider/ChatContext";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -56,6 +57,15 @@ const Chatting = () => {
 
   const cookies = new Cookies();
   const router = useRouter();
+
+  const { message, setMessage } = useChat();
+
+  useEffect(() => {
+    if (message) {
+      handleSendMessageFromMain(message);
+      setMessage(""); // 메시지 전송 후 초기화
+    }
+  }, [message]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -197,6 +207,44 @@ const Chatting = () => {
     );
   };
 
+  const handleSendMessageFromMain = (text: string) => {
+    console.log("text" + text);
+    const optimisticMessage: IChatMessage = {
+      case: 0,
+      chatType: "USER",
+      text: text,
+      id: Date.now(),
+      createdDate: new Date().toString(),
+    };
+    console.log("firsthere" + JSON.stringify(optimisticMessage));
+    // 낙관적 UI 업데이트
+    setChatMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+    console.log("here" + JSON.stringify(chatMessages));
+    setNewMessage("");
+
+    // 메시지 전송, onSuccess로 전체 리스트 업데이트
+    sendMessage(
+      { newMessage: text, isSTT },
+      {
+        onSuccess: (chatList) => {
+          setChatMessages(chatList);
+          setIsSTT(false);
+        },
+        onError: (error) => {
+          console.error("Failed to send message: ", error);
+          const errorMessage: IChatMessage = {
+            case: 0,
+            chatType: "AI",
+            text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
+            id: Date.now(),
+            createdDate: new Date().toString(),
+          };
+          setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
+        },
+      }
+    );
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <div className="relative mt-[94px] flex-1 bg-[#F2F0FF] py-[26px]">
@@ -210,7 +258,6 @@ const Chatting = () => {
               if (jsonStart >= 0 && jsonEnd > jsonStart) {
                 jsonData = jsonData.substring(jsonStart, jsonEnd); // JSON 데이터 추출
               }
-              console.log("json" + jsonData);
 
               let data;
               let formattedDate;

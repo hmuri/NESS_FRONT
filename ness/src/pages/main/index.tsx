@@ -22,6 +22,8 @@ import Slider from "react-slick";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
 import Category from "../../../public/assets/category_des.png";
 import { useRouter } from "next/router";
+import StopIcon from "../../../public/assets/Stop button.png";
+import { useChat } from "@/module/provider/ChatContext";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -29,6 +31,9 @@ const token = cookies.get("accessToken") || "";
 const Main = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [newMessage, setNewMessage] = useState("");
+
+  const { setMessage } = useChat();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -309,27 +314,30 @@ const Main = () => {
           <div className="mb-[15px]">
             추가하고 싶은 일정을 네스에게 말해주세요!
           </div>
-          <input
-            className="w-full bg-white h-[41px] px-[22px] py-[13px] mr-[8px] mb-[10px] rounded-[20px] border border-purple-600 shadow-md"
-            type="text"
-            value={newMessage}
-            placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
-                e.preventDefault(); // Form 전송을 방지합니다.
-                // handleSendMessage(); // 메시지 전송 함수 호출
-              }
-            }}
-          />
-          {/* <div className="right-[70px] cursor-pointer">
-            {isListening ? (
-              <Image src={StopIcon} alt="" onClick={toggleListening} />
-            ) : (
-              <Icon_mic onClick={toggleListening} />
-            )}
-          </div> */}
+          <div className="flex items-center w-full">
+            <input
+              className="w-full bg-white h-[41px] px-[22px] py-[13px] mr-[8px] mb-[10px] rounded-[20px] border border-purple-600 shadow-md"
+              type="text"
+              value={newMessage}
+              placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
+                  e.preventDefault(); // Form 전송을 방지합니다.
+                  setMessage(e.currentTarget.value);
+                  router.push("/chatting");
+                }
+              }}
+            />
+            <div className="right-[70px] cursor-pointer mb-[10px]">
+              {isListening ? (
+                <Image src={StopIcon} alt="" onClick={toggleListening} />
+              ) : (
+                <Icon_mic onClick={toggleListening} />
+              )}
+            </div>
+          </div>
           {/* <button onClick={handleSendMessage} disabled={isLoading}></button> */}
           {/* <button onClick={} disabled={!newMessage.trim()}>
             <svg
