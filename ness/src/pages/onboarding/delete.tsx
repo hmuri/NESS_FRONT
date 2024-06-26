@@ -266,6 +266,7 @@ const Chatting = () => {
             if (message.case === 12) {
               return (
                 <div
+                  key={index}
                   className="landing-grabox max-w-[70%] relative mb-[14px] flex-col justify-start py-[5px] px-[10px] rounded-[10px] inline text-white cursor-pointer"
                   onClick={() => router.replace("/chatting")}
                 >
