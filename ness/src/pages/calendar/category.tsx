@@ -5,11 +5,16 @@ import {
   deleteCategory,
   updateCategory,
 } from "@/module/apis/edit";
-import { Icon_add_category, Icon_left_arrow } from "@/module/icons";
-import { useEffect, useState } from "react";
+import {
+  Icon_add_category,
+  Icon_information,
+  Icon_left_arrow,
+} from "@/module/icons";
+import { SetStateAction, useEffect, useState } from "react";
 import LeftArrowImage from "../../../public/assets/left_arrow.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Slider from "react-slick";
 
 interface IAddViewProps {
   selectedCategory: ICategory | undefined;
@@ -221,6 +226,8 @@ const AddView = ({
 const Category = () => {
   const [categoryList, setCategoryList] = useState<ICategoryList>();
   const [isAddView, setIsAddView] = useState<boolean>(false);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<
     ICategory | undefined
   >();
@@ -246,6 +253,42 @@ const Category = () => {
     }
   };
 
+  const images = ["/assets/category_des.png"];
+
+  const steps = [
+    {
+      title: "카테고리 관리하기",
+      subtitle:
+        "캘린더의 상단 버튼을 눌러 일정의 카테고리를 수정하고 추가해요.",
+    },
+  ];
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    draggable: true,
+    adaptiveHeight: true,
+    beforeChange: (current: any, next: SetStateAction<number>) =>
+      setActiveIndex(next),
+    arrows: false, // 화살표 버튼 숨기기
+    customPaging: function (i: number) {
+      return (
+        <div
+          style={{
+            width: i === activeIndex ? "12px" : "6px",
+            height: "6px",
+            borderRadius: "5px",
+            backgroundColor: i === activeIndex ? "#272B55" : "#d1d5db",
+          }}
+        ></div>
+      );
+    },
+    dotsClass: "slick-dots landing-dots", // 커스텀 dots CSS 클래스
+  };
+
   return (
     <div className="p-[30px] mt-[30px] flex justify-center">
       <div className="md:max-w-[600px] w-full">
@@ -254,12 +297,18 @@ const Category = () => {
             <div className="flex justify-between mb-[40px] items-center">
               <Icon_left_arrow onClick={() => router.replace("/calendar")} />
               <div className="text-[20px] ">카테고리 관리</div>
-              <Icon_add_category
-                onClick={() => {
-                  setIsAddView(true);
-                  setIsModify(false);
-                }}
-              />
+              <div className="flex gap-[4px]">
+                <Icon_add_category
+                  onClick={() => {
+                    setIsAddView(true);
+                    setIsModify(false);
+                  }}
+                />
+                <Icon_information
+                  className="cursor-pointer"
+                  onClick={() => setIsModal(true)}
+                />
+              </div>
             </div>
 
             <div className="flex flex-col w-full gap-[30px]">
@@ -287,6 +336,39 @@ const Category = () => {
           />
         )}
       </div>
+      {isModal && (
+        <div className=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30">
+          <div
+            className="fixed top-[30px] right-[50px] text-[25px] text-white cursor-pointer"
+            onClick={() => setIsModal(false)}
+          >
+            X
+          </div>
+          <div
+            className="relative flex flex-col justify-center w-full h-[100vh] md:max-w-[600px] pb-[20px] overflow-auto "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center jusitfy-center mt-[30px] mb-[20px]">
+              <div className="text-center w-full text-[27px] font-bold text-[#7A64FF]">
+                {steps[activeIndex].title}
+              </div>
+              <div className="text-center text-[15px] text-white w-[210px]">
+                {steps[activeIndex].subtitle}
+              </div>
+            </div>
+            <Slider {...settings}>
+              {images.map((img, index) => (
+                <div
+                  key={index}
+                  className=" flex justify-center pb-0 w-full items-center"
+                >
+                  <img src={img} alt="" className="max-h-[65vh] mx-auto" />
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </div>
+      )}
 
       <Nav />
     </div>

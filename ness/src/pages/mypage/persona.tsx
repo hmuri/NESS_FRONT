@@ -2,18 +2,22 @@ import Nav from "../../components/common/Nav";
 import {
   Icon_calmness,
   Icon_hardness,
+  Icon_information,
   Icon_left_arrow,
   Icon_normal,
   Icon_radio,
   Icon_unselected_radio,
 } from "@/module/icons";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { getProfile, updatePersona } from "../../module/apis/mypage";
 import { useRouter } from "next/router";
+import Slider from "react-slick";
 
 export default function Persona() {
   const [profile, setProfile] = useState<Profile | undefined>();
   const [selectedNess, setSelectedNess] = useState<string>("");
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,7 +31,40 @@ export default function Persona() {
 
     fetchProfile();
   }, []);
+  const images = ["/assets/persona_des.png"];
 
+  const steps = [
+    {
+      title: "페르소나 선택하기",
+      subtitle: "선택한 페르소나에 따라 NESS의 관리 방식이 달라져요.",
+    },
+  ];
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    draggable: true,
+    adaptiveHeight: true,
+    beforeChange: (current: any, next: SetStateAction<number>) =>
+      setActiveIndex(next),
+    arrows: false, // 화살표 버튼 숨기기
+    customPaging: function (i: number) {
+      return (
+        <div
+          style={{
+            width: i === activeIndex ? "12px" : "6px",
+            height: "6px",
+            borderRadius: "5px",
+            backgroundColor: i === activeIndex ? "#272B55" : "#d1d5db",
+          }}
+        ></div>
+      );
+    },
+    dotsClass: "slick-dots landing-dots", // 커스텀 dots CSS 클래스
+  };
   const handlePersonaChange = async (persona: string) => {
     const response = await updatePersona(persona);
     if (response) {
@@ -44,7 +81,10 @@ export default function Persona() {
         <div className="flex items-center justify-between">
           <Icon_left_arrow onClick={() => router.back()} />
           <div className="text-[20px] py-[11px]">페르소나 설정</div>
-          <div className="w-[32px]" />
+          <Icon_information
+            className="cursor-pointer"
+            onClick={() => setIsModal(true)}
+          />
         </div>
         <div className="flex flex-col w-full">
           {[
@@ -91,6 +131,39 @@ export default function Persona() {
           ))}
         </div>
       </div>
+      {isModal && (
+        <div className=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30">
+          <div
+            className="fixed top-[30px] right-[50px] text-[25px] text-white cursor-pointer"
+            onClick={() => setIsModal(false)}
+          >
+            X
+          </div>
+          <div
+            className="relative flex flex-col justify-center w-full h-[100vh] md:max-w-[600px] pb-[20px] overflow-auto "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center jusitfy-center mt-[30px] mb-[20px]">
+              <div className="text-center w-full text-[27px] font-bold text-[#7A64FF]">
+                {steps[activeIndex].title}
+              </div>
+              <div className="text-center text-[15px] text-white w-[210px]">
+                {steps[activeIndex].subtitle}
+              </div>
+            </div>
+            <Slider {...settings}>
+              {images.map((img, index) => (
+                <div
+                  key={index}
+                  className=" flex justify-center pb-0 w-full items-center"
+                >
+                  <img src={img} alt="" className="max-h-[65vh] mx-auto" />
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </div>
+      )}
       <Nav />
     </div>
   );

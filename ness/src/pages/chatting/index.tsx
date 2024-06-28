@@ -1,4 +1,11 @@
-import { KeyboardEvent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  KeyboardEvent,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import moment from "moment";
 import "moment/locale/ko";
 import Image from "next/image";
@@ -13,6 +20,7 @@ import {
   Icon_calmness,
   Icon_correct,
   Icon_hardness,
+  Icon_information,
   Icon_mic,
   Icon_normal,
   Icon_wrong,
@@ -24,6 +32,7 @@ import StopIcon from "../../../public/assets/Stop button.png";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
 import { getProfile } from "@/module/apis/mypage";
 import { useChat } from "@/module/provider/ChatContext";
+import Slider from "react-slick";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -33,6 +42,8 @@ const Chatting = () => {
   const { mutate: sendMessage, isLoading } = useSendMessage();
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [selectedNess, setSelectedNess] = useState<string>("");
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isSTT, setIsSTT] = useState(false);
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
@@ -53,6 +64,41 @@ const Chatting = () => {
       startListening();
       setIsSTT(true);
     }
+  };
+
+  const images = ["/assets/chatting_des.png"];
+
+  const steps = [
+    {
+      title: "채팅하기",
+      subtitle: "NESS와 채팅을 하며 간편하게 일정을 관리해보세요!",
+    },
+  ];
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    draggable: true,
+    adaptiveHeight: true,
+    beforeChange: (current: any, next: SetStateAction<number>) =>
+      setActiveIndex(next),
+    arrows: false, // 화살표 버튼 숨기기
+    customPaging: function (i: number) {
+      return (
+        <div
+          style={{
+            width: i === activeIndex ? "12px" : "6px",
+            height: "6px",
+            borderRadius: "5px",
+            backgroundColor: i === activeIndex ? "#272B55" : "#d1d5db",
+          }}
+        ></div>
+      );
+    },
+    dotsClass: "slick-dots landing-dots", // 커스텀 dots CSS 클래스
   };
 
   const cookies = new Cookies();
@@ -488,8 +534,8 @@ const Chatting = () => {
           </button>
         </div>
       </div>
-      <div className="z-100 border-b border-gray-200 bg-white w-full h-[94px] gap-[5px] fixed top-0 flex-col flex justify-center items-center">
-        <div className="fixed left-[10px]" onClick={() => router.push("/main")}>
+      <div className="z-100 border-b border-gray-200 bg-white w-full h-[94px] gap-[5px] fixed top-0 flex flex justify-between items-center px-[15px]">
+        <div className="" onClick={() => router.push("/main")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"
@@ -512,15 +558,70 @@ const Chatting = () => {
             />
           </svg>
         </div>
-        {selectedNess == "NESS" ? (
-          <Icon_normal />
-        ) : selectedNess == "HARDNESS" ? (
-          <Icon_hardness />
-        ) : (
-          <Icon_calmness />
-        )}
-        네스
+        <div className="flex flex-col gap-[2px] items-center">
+          {selectedNess == "NESS" ? (
+            <Icon_normal />
+          ) : selectedNess == "HARDNESS" ? (
+            <Icon_hardness />
+          ) : (
+            <Icon_calmness />
+          )}
+          네스
+        </div>
+        <Icon_information
+          className="cursor-pointer"
+          onClick={() => setIsModal(true)}
+        />
       </div>
+      {isModal && (
+        <div className=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30">
+          <div
+            className="fixed top-[30px] right-[50px] text-[25px] text-white cursor-pointer"
+            onClick={() => setIsModal(false)}
+          >
+            X
+          </div>
+          <div
+            className="relative flex flex-col justify-center w-full h-[100vh] md:max-w-[600px] pb-[20px] overflow-auto "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center jusitfy-center mt-[30px] mb-[20px]">
+              <div className="text-center w-full text-[27px] font-bold text-[#7A64FF]">
+                {steps[activeIndex].title}
+              </div>
+              <div className="text-center text-[15px] text-white w-[210px]">
+                {steps[activeIndex].subtitle}
+              </div>
+            </div>
+            <Slider {...settings}>
+              {images.map((img, index) => (
+                <div
+                  key={index}
+                  className=" flex justify-center pb-0 w-full items-center"
+                >
+                  <img src={img} alt="" className="max-h-[65vh] mx-auto" />
+                </div>
+              ))}
+            </Slider>
+            {activeIndex === 0 ? (
+              <div className="absolute bottom-[75px] w-full flex justify-center flex-col items-center text-center text-white ">
+                <div
+                  className="landing-grabox mb-[5px] py-[5px] px-[10px] rounded-[10px] inline cursor-pointer"
+                  onClick={() => router.push("/onboarding/chat")}
+                >
+                  채팅 사용법 확인하기
+                </div>
+                <div>
+                  더 자세한 채팅 사용법을 준비했어요. <br />
+                  NESS와 함께 알아볼까요?
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
