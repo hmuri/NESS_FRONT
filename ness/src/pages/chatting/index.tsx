@@ -33,6 +33,33 @@ import useSpeechRecognition from "@/module/hooks/speechRecognition";
 import { getProfile } from "@/module/apis/mypage";
 import { useChat } from "@/module/provider/ChatContext";
 import Slider from "react-slick";
+import axiosInstance from "@/module/axiosInstance";
+
+interface EventData {
+  id?: number;
+  start_time: string;
+  end_time?: string;
+  category: {
+    id: number;
+    name: string;
+    color: string;
+  };
+  location?: string;
+  people?: string;
+  info: string;
+}
+
+interface Message {
+  case: number;
+  text: string;
+  chatType: "USER" | "STT" | "AI";
+}
+
+interface DetailList {
+  id: number;
+  location?: string | null;
+  person?: string | null;
+}
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -141,85 +168,37 @@ const Chatting = () => {
     fetchProfile();
   }, []);
 
-  useEffect(() => {
-    chatMessages.forEach((message) => {
-      if (message.case === 2) {
-        const parts = message.text.split("<separate>");
-        let jsonData = parts[1].trim();
+  interface IHandleScheduleAdd {
+    data: EventData;
+    isAdded: boolean;
+  }
 
-        const jsonStart = jsonData.indexOf("{");
-        const jsonEnd = jsonData.lastIndexOf("}") + 1;
-
-        if (jsonStart >= 0 && jsonEnd > jsonStart) {
-          jsonData = jsonData.substring(jsonStart, jsonEnd);
-        }
-
-        try {
-          const data = JSON.parse(jsonData);
-
-          setNewSchedule((prevSchedule) => ({
-            ...prevSchedule,
-            id: message.id,
-            start: new Date(data?.start_time),
-            end: data?.end_time
-              ? new Date(data?.end_time)
-              : new Date(new Date(data.start_time).getTime() + 3600000),
-            categoryNum: data?.category.id,
-            location: data?.location ? data?.location : "",
-            people: data?.people ? data?.people : "",
-            title: data?.info,
-          }));
-        } catch (error) {
-          console.error("Error parsing JSON data: ", error);
-
-          // 마지막 메시지가 오류 메시지가 아닌지 확인
-          setChatMessages((prevMessages) => {
-            const lastMessage = prevMessages[prevMessages.length - 1];
-            if (
-              lastMessage &&
-              lastMessage.text ===
-                "오류가 발생했습니다. 리포트를 통해 제보해주세요."
-            ) {
-              return prevMessages; // 이미 오류 메시지가 있으면 추가하지 않음
-            }
-            return [
-              ...prevMessages,
-              {
-                case: 0,
-                chatType: "AI",
-                text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
-                id: Date.now(),
-                createdDate: new Date().toString(),
-              },
-            ];
-          });
-        }
-      }
-    });
-  }, [chatMessages]);
-
-  const confirmSchedule = async (isAdded: boolean) => {
-    const accessToken = cookies.get("accessToken");
+  const handleScheduleAdd = async ({ data, isAdded }: IHandleScheduleAdd) => {
+    setIsSelected(true);
+    const scheduleData = {
+      id: data.id,
+      title: data.info,
+      start: new Date(data.start_time),
+      end: data.end_time
+        ? new Date(data.end_time)
+        : new Date(new Date(data.start_time).getTime() + 3600000),
+      categoryNum: data.category.id,
+      location: data.location || "",
+      people: data.people || "",
+    };
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${newSchedule.id}`,
-        newSchedule,
-        {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        }
+      const response = await axiosInstance.post(
+        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${scheduleData.id}`,
+        scheduleData
       );
+
       setChatMessages(response.data.chatList);
+      setIsSelected(false);
     } catch (error) {
       console.error("Failed to update schedule:", error);
+      setIsSelected(false);
     }
-  };
-
-  const handleScheduleAdd = (isAdded: boolean) => {
-    setIsSelected(true);
-    confirmSchedule(isAdded);
   };
 
   const handleSendMessage = (message: any) => {
@@ -321,136 +300,111 @@ const Chatting = () => {
             if (message.case === 2) {
               const parts = message.text.split("<separate>");
               let jsonData = parts[1].trim();
-              const jsonStart = jsonData.indexOf("{");
-              const jsonEnd = jsonData.lastIndexOf("}") + 1;
+
+              const jsonStart = jsonData.indexOf("[");
+              const jsonEnd = jsonData.lastIndexOf("]") + 1;
               if (jsonStart >= 0 && jsonEnd > jsonStart) {
-                jsonData = jsonData.substring(jsonStart, jsonEnd); // JSON 데이터 추출
+                jsonData = jsonData.substring(jsonStart, jsonEnd);
               }
 
-              let data;
-              let formattedDate;
               try {
-                data = JSON.parse(jsonData);
-                formattedDate = moment(data?.start_time)
-                  .locale("ko")
-                  .format("MMMM Do dddd");
-              } catch (error) {
+                const dataEntries = JSON.parse(jsonData);
                 return (
-                  <div className="relative mb-[5px] flex max-w-[70%]">
+                  <div
+                    key={index}
+                    className="flex flex-col max-w-[70%] mb-[14px]"
+                  >
+                    <div className="relative mb-[5px]">
+                      <div
+                        className={`${
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
+                            ? "bg-[#7A64FF] text-white"
+                            : "bg-white text-black"
+                        } px-[12px] py-[10px] rounded-[16px]`}
+                      >
+                        <p>{parts[0]}</p>
+                      </div>
+                    </div>
+                    {dataEntries.map((data: EventData, dataIndex: number) => {
+                      const formattedDate = moment(data.start_time)
+                        .locale("ko")
+                        .format("MMMM Do dddd");
+                      return (
+                        <div
+                          key={`${index}-${dataIndex}`}
+                          className="flex flex-col relative mb-[5px]"
+                        >
+                          <div className="p-[12px] mt-[4px] rounded-[16px] inline bg-white text-[#333]">
+                            <div className="text-[15px] font-semibold mb-[11px]">
+                              {formattedDate}
+                            </div>
+                            <div className="flex gap-[11px] flex-row text-[15px]">
+                              <div
+                                className="rounded-[8px] h-[38px] px-[7px] text-[12px] flex items-center inline font-semibold text-center text-white"
+                                style={{ backgroundColor: data.category.color }}
+                              >
+                                {data.category.name}
+                              </div>
+                              <div>
+                                <div>{data.info}</div>
+                                <div>
+                                  {data.location && (
+                                    <div>🧭 {data.location}</div>
+                                  )}
+                                </div>
+                                <div>
+                                  {data.people && <div>👯 {data.people}</div>}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="px-[10px] py-[5px] rounded-[10px] h-[30px] w-[65px] bg-white flex items-center mt-[5px] justify-between">
+                            <Icon_correct
+                              onClick={() =>
+                                handleScheduleAdd({
+                                  data: { ...data, id: message.id },
+
+                                  isAdded: true,
+                                })
+                              }
+                              className="cursor-pointer"
+                            />
+                            <Icon_wrong
+                              onClick={() =>
+                                handleScheduleAdd({
+                                  data: { ...data, id: message.id },
+                                  isAdded: false,
+                                })
+                              }
+                              className="cursor-pointer"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              } catch (error) {
+                console.error("Error parsing JSON data: ", error);
+                return (
+                  <div
+                    className="relative mb-[5px] flex max-w-[70%]"
+                    key={index}
+                  >
                     <div
-                      className={`px-[12px] py-[10px] rounded-[16px] ${
+                      className={`${
                         message.chatType === "USER" ||
                         message.chatType === "STT"
                           ? "bg-[#7A64FF] text-white"
                           : "bg-white text-black"
-                      }`}
+                      } px-[12px] py-[10px] rounded-[16px]`}
                     >
-                      <Image
-                        src={
-                          message.chatType === "USER" ||
-                          message.chatType === "STT"
-                            ? RightChatImg
-                            : LeftChatImg
-                        }
-                        className={`absolute bottom-3 ${
-                          message.chatType === "USER" ||
-                          message.chatType === "STT"
-                            ? "right-[-11px]"
-                            : "left-[-11px]"
-                        }`}
-                        alt=""
-                      />
-                      <p>오류가 발생했습니다. 다시 입력해주세요</p>
+                      <p>오류가 발생했습니다. 다시 입력해주세요.</p>
                     </div>
                   </div>
                 );
               }
-
-              return (
-                <div
-                  key={index}
-                  className={`flex max-w-[70%] relative mb-[14px] flex-col ${
-                    message.chatType === "USER" || message.chatType === "STT"
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
-                  <div className="relative mb-[5px]">
-                    <div
-                      className={`px-[12px] py-[10px] rounded-[16px] ${
-                        message.chatType === "USER" ||
-                        message.chatType === "STT"
-                          ? "bg-[#7A64FF] text-white"
-                          : "bg-white text-black"
-                      }`}
-                    >
-                      <Image
-                        src={
-                          message.chatType === "USER" ||
-                          message.chatType === "STT"
-                            ? RightChatImg
-                            : LeftChatImg
-                        }
-                        className={`absolute bottom-3 ${
-                          message.chatType === "USER" ||
-                          message.chatType === "STT"
-                            ? "right-[-11px]"
-                            : "left-[-11px]"
-                        }`}
-                        alt=""
-                      />
-                      <p>{parts[0]}</p>
-                    </div>
-                  </div>
-                  {parts[1] && (
-                    <div className="p-[12px] mt-[4px] rounded-[16px] max-w-[70%] inline bg-white text-[#333]">
-                      <div className="text-[15px] font-semibold mb-[11px]">
-                        {formattedDate}
-                      </div>
-                      <div className="flex gap-[11px] flex-row text-[15px]">
-                        <div
-                          className="rounded-[8px] h-[38px] px-[7px] text-[12px] flex items-center inline font-semibold text-center text-white"
-                          style={{
-                            backgroundColor: data.category.color,
-                          }}
-                        >
-                          {data.category.name}
-                        </div>
-                        <div>
-                          <div>{data.info}</div>
-                          <div>
-                            {data.location && <div>🧭 {data.location}</div>}
-                            {data.people && <div>👯 {data.people}</div>}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div className="px-[10px] py-[5px] rounded-[10px] h-[30px] w-[65px] bg-white flex items-center mt-[5px] justify-between">
-                    <Icon_correct
-                      onClick={() => handleScheduleAdd(true)}
-                      className="cursor-pointer"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="2"
-                      height="22"
-                      viewBox="0 0 2 22"
-                      fill="none"
-                    >
-                      <path
-                        d="M1 1L1 21"
-                        stroke="#B3B3B3"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                    <Icon_wrong
-                      onClick={() => handleScheduleAdd(false)}
-                      className="cursor-pointer"
-                    />
-                  </div>
-                </div>
-              );
             } else {
               return (
                 <div
@@ -462,27 +416,12 @@ const Chatting = () => {
                   }`}
                 >
                   <div
-                    className={`max-w-[70%] px-[12px] py-[10px] rounded-[16px] ${
+                    className={`${
                       message.chatType === "USER" || message.chatType === "STT"
                         ? "bg-[#7A64FF] text-white"
                         : "bg-white text-black"
-                    }`}
+                    } max-w-[70%] px-[12px] py-[10px] rounded-[16px]`}
                   >
-                    <Image
-                      src={
-                        message.chatType === "USER" ||
-                        message.chatType === "STT"
-                          ? RightChatImg
-                          : LeftChatImg
-                      }
-                      className={`absolute bottom-3 ${
-                        message.chatType === "USER" ||
-                        message.chatType === "STT"
-                          ? "right-[-11px]"
-                          : "left-[-11px]"
-                      }`}
-                      alt=""
-                    />
                     <p>{message.text}</p>
                   </div>
                 </div>

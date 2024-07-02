@@ -1,0 +1,7 @@
+{
+  "id": 339,
+  "createdDate": "2024-07-02T03:22:46.987854Z",
+  "text": "            다음주 수요일에 혜승이랑 영화 보기와 다음주 금요일에 채원언니랑 식사 약속을 일정에 추가해 드릴까요?\n            <separate>\n            [\n              {\n                \"info\": \"혜승이랑 영화 보기\",\n                \"location\": null,\n                \"person\": \"혜승\",\n                \"start_time\": \"2024-07-10T00:00:00+09:00\",\n                \"end_time\": \"2024-07-10T23:59:59+09:00\",\n                \"category\": {\n                  \"name\": \"\uD83C\uDF40미분류\",\n                  \"id\": 1,\n                  \"color\": \"#D9D9D9\"\n                }\n              },\n              {\n                \"info\": \"채원언니랑 밥 먹기\",\n                \"location\": null,\n                \"person\": \"채원언니\",\n                \"start_time\": \"2024-07-12T00:00:00+09:00\",\n                \"end_time\": \"2024-07-12T23:59:59+09:00\",\n                \"category\": {\n                  \"name\": \"\uD83C\uDF40미분류\",\n                  \"id\": 1,\n                  \"color\": \"#D9D9D9\"\n                }\n              }\n            ]",
+  "chatType": "AI",
+  "case": 2
+}
