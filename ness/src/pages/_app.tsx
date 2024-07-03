@@ -33,6 +33,24 @@ export default function App({ Component, pageProps }: AppProps) {
       window.removeEventListener("resize", setScreenSize);
     };
   }, []);
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("/sw.js").then(
+          (registration) => {
+            console.log(
+              "ServiceWorker registration successful with scope: ",
+              registration.scope
+            );
+          },
+          (err) => {
+            console.log("ServiceWorker registration failed: ", err);
+          }
+        );
+      });
+    }
+  }, []);
   return (
     <>
       <Head>
@@ -43,7 +61,6 @@ export default function App({ Component, pageProps }: AppProps) {
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable-dynamic-subset.css"
         />
-        <link rel="manifest" href="manifest.json" />
       </Head>
       <QueryClientProvider client={queryClient}>
         <ChatProvider>
