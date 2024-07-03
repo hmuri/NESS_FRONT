@@ -20,6 +20,7 @@ import Category from "../../../public/assets/category_des.png";
 import { useRouter } from "next/router";
 import StopIcon from "../../../public/assets/Stop button.png";
 import { useChat } from "@/module/provider/ChatContext";
+import { useQuery } from "react-query";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -27,6 +28,21 @@ const token = cookies.get("accessToken") || "";
 const Main = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [newMessage, setNewMessage] = useState("");
+  const profileQuery = useQuery("profile", getProfile, {
+    onSuccess: (data) => {
+      setSelectedNess(data.persona);
+      setIsModal(data.onBoarding);
+    },
+  });
+
+  // 추천 메시지 데이터 패치
+  const recommendQuery = useQuery("recommendations", fetchRecommendMessage, {
+    onSuccess: (data) => {
+      setData(data);
+      setItems(data?.activityList);
+      setScheduleList(data?.scheduleList);
+    },
+  });
 
   const { setMessage } = useChat();
 
@@ -65,6 +81,7 @@ const Main = () => {
     ScheduleItem[] | undefined
   >();
   const [isSTT, setIsSTT] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
 
@@ -109,29 +126,13 @@ const Main = () => {
     },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await fetchRecommendMessage();
-      setData(result);
-      setItems(result?.activityList);
-      setScheduleList(result?.scheduleList);
-    };
+  if (profileQuery.isLoading || recommendQuery.isLoading) {
+    return <div className="fixed w-[100vw] h-[100vh] bg-red">Loading...</div>;
+  }
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const data = await getProfile();
-      if (data) {
-        setSelectedNess(data.persona);
-        setIsModal(data.onBoarding);
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
+  if (profileQuery.error || recommendQuery.error) {
+    return <div>Error loading data!</div>;
+  }
   const toggleListening = () => {
     if (isListening) {
       stopListening();
@@ -140,13 +141,7 @@ const Main = () => {
       setIsSTT(true);
     }
   };
-  const handleImageError = (
-    event: React.SyntheticEvent<HTMLImageElement>,
-    index: number
-  ) => {
-    const nextIndex = index % imageUrls.length;
-    event.currentTarget.src = imageUrls[nextIndex];
-  };
+
   if (!scheduleList) return null;
 
   const renderedItems: ReactNode[] = scheduleList.reduce(
