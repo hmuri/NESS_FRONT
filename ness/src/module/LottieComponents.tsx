@@ -1,5 +1,5 @@
 import Lottie from "react-lottie";
-import loadingAnimation from "../../public/assets/loading.json";
+import loadingAnimation from "../../public/assets/lottie/loading.json";
 
 export const LoadingLottie = () => {
   const defaultOptions = {

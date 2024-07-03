@@ -21,6 +21,8 @@ import { useRouter } from "next/router";
 import StopIcon from "../../../public/assets/Stop button.png";
 import { useChat } from "@/module/provider/ChatContext";
 import { useQuery } from "react-query";
+import FloatingBigNess from "@/components/common/FloatingBigNess";
+import FloatingCalmNess from "@/components/common/FloatingCalmNess";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -127,7 +129,21 @@ const Main = () => {
   ];
 
   if (profileQuery.isLoading || recommendQuery.isLoading) {
-    return <div className="fixed w-[100vw] h-[100vh] bg-red">Loading...</div>;
+    return (
+      <div className="fixed w-[100vw] h-[100vh] bg-[#F2F0FF]">
+        <div className="h-[100vh] mx-auto flex justify-center items-center flex-col px-[20px] md:px-0">
+          <div className="flex justify-center mb-[20px]">
+            <FloatingCalmNess />
+          </div>
+          <div className="text-center text-[20px] mt-[20px]">
+            오늘의 데이터
+            <br />
+            로딩 중
+          </div>
+          <div className="loader w-[30px] h-[30px] mt-[70px]"></div>
+        </div>
+      </div>
+    );
   }
 
   if (profileQuery.error || recommendQuery.error) {
@@ -223,8 +239,8 @@ const Main = () => {
 
   return (
     <>
-      <div className="fixed top-0 px-[12px] left-0 w-full flex justify-between h-[76px] bg-[#F0ECFF] z-10">
-        <div className="flex mt-[20px] items-center justify-center gap-[7px]">
+      <div className="fixed top-0 px-[12px] left-0 w-full flex justify-between items-center h-[76px] bg-[#F0ECFF] z-10">
+        <div className="flex items-center justify-center gap-[7px]">
           <Icon_floating_ness />
           <div className="text-[20px] font-bold">NESS</div>
         </div>
@@ -235,7 +251,7 @@ const Main = () => {
           />
         </div>
       </div>
-      <div className="p-[20px] mb-[100px] mt-[110px] flex flex-col md:items-center">
+      <div className="p-[20px] mb-[100px] mt-[80px] flex flex-col md:items-center">
         <div className="mt-[20px] flex justify-between items-center w-full md:max-w-[600px] mb-[45px]">
           <div className="flex h-100px md:items-center">
             <div className="text-[24px] font-medium whitespace-normal break-words">
