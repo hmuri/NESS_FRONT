@@ -3,17 +3,13 @@ import Nav from "@/components/common/Nav";
 import { ReactNode, SetStateAction, useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import Image from "next/image";
-import BookImg from "../../../public/assets/book.png";
-import NoIMG from "../../../public/assets/no_image.png";
 import { fetchRecommendMessage } from "../../module/apis/main";
 import { getProfile } from "@/module/apis/mypage";
 import {
   Icon_big_calm_ness,
   Icon_big_hard_ness,
   Icon_big_normal_ness,
-  Icon_calmness,
   Icon_floating_ness,
-  Icon_hardness,
   Icon_information,
   Icon_mic,
   Icon_normal,
@@ -232,7 +228,7 @@ const Main = () => {
 
   return (
     <>
-      <div className="fixed top-0 px-[12px] left-0 w-full flex justify-between h-[110px] bg-[#F0ECFF] z-10">
+      <div className="fixed top-0 px-[12px] left-0 w-full flex justify-between h-[76px] bg-[#F0ECFF] z-10">
         <div className="flex mt-[20px] items-center justify-center gap-[7px]">
           <Icon_floating_ness />
           <div className="text-[20px] font-bold">NESS</div>
