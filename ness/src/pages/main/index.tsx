@@ -253,8 +253,8 @@ const Main = () => {
       </div>
       <div className="p-[20px] mb-[100px] mt-[80px] flex flex-col md:items-center">
         <div className="mt-[20px] flex justify-between items-center w-full md:max-w-[600px] mb-[45px]">
-          <div className="flex h-100px md:items-center">
-            <div className="text-[24px] font-medium whitespace-normal break-words">
+          <div className="flex md:h-[100px] md:items-center">
+            <div className="text-[24px] font-medium word-break w-full">
               {data?.recommend}
             </div>
           </div>
