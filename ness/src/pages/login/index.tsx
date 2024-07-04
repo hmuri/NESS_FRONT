@@ -7,7 +7,12 @@ import { useEffect } from "react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "refused" }>;
+  userChoice: Promise<ChoiceResult>;
+}
+
+interface ChoiceResult {
+  outcome: "accepted" | "rejected";
+  platform: string;
 }
 
 export default function Login() {
@@ -17,29 +22,33 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
+    let deferredPrompt: BeforeInstallPromptEvent | null = null;
+
+    window.addEventListener("beforeinstallprompt", (e) => {
       e.preventDefault(); // 기본 이벤트 차단
-      e.prompt(); // 프롬프트를 표시
-      e.userChoice.then((choiceResult: { outcome: "accepted" | "refused" }) => {
-        if (choiceResult.outcome === "accepted") {
-          console.log("User accepted the install prompt");
-        } else {
-          console.log("User dismissed the install prompt");
-        }
-      });
+      deferredPrompt = e as BeforeInstallPromptEvent; // 이벤트 타입 캐스팅
+    });
+
+    const addToHomeScreen = () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt().then(() => {
+          deferredPrompt!.userChoice.then((choiceResult: ChoiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User accepted the A2HS prompt");
+            } else {
+              console.log("User dismissed the A2HS prompt");
+            }
+            deferredPrompt = null;
+          });
+        });
+      }
     };
 
-    window.addEventListener(
-      "beforeinstallprompt",
-      handleBeforeInstallPrompt as any
-    );
-
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt as any
-      );
-    };
+    // 예: 설치 유도 버튼에 이벤트 리스너 추가
+    const installButton = document.getElementById("installButton");
+    if (installButton) {
+      installButton.addEventListener("click", addToHomeScreen);
+    }
   }, []);
 
   return (

@@ -36,18 +36,18 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", function () {
-        navigator.serviceWorker.register("/sw.js").then(
-          (registration) => {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then((registration) => {
+            console.log("Service Worker registered: ", registration);
+          })
+          .catch((registrationError) => {
             console.log(
-              "ServiceWorker registration successful with scope: ",
-              registration.scope
+              "Service Worker registration failed: ",
+              registrationError
             );
-          },
-          (err) => {
-            console.log("ServiceWorker registration failed: ", err);
-          }
-        );
+          });
       });
     }
   }, []);
