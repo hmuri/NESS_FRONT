@@ -3,12 +3,44 @@ import Image from "next/image";
 import GoogleLogo from "../../../public/assets/google logo.png";
 import FloatingBigNess from "@/components/common/FloatingBigNess";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "refused" }>;
+}
 
 export default function Login() {
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_REACT_APP_GOOGLE_LOGIN_URL}`;
   };
   const router = useRouter();
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
+      e.preventDefault(); // 기본 이벤트 차단
+      e.prompt(); // 프롬프트를 표시
+      e.userChoice.then((choiceResult: { outcome: "accepted" | "refused" }) => {
+        if (choiceResult.outcome === "accepted") {
+          console.log("User accepted the install prompt");
+        } else {
+          console.log("User dismissed the install prompt");
+        }
+      });
+    };
+
+    window.addEventListener(
+      "beforeinstallprompt",
+      handleBeforeInstallPrompt as any
+    );
+
+    return () => {
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt as any
+      );
+    };
+  }, []);
 
   return (
     <div className="h-[100vh] mx-auto flex justify-center items-center flex-col px-[20px] md:px-0">
