@@ -210,6 +210,7 @@ const Chatting = () => {
       text: message,
       id: Date.now(),
       createdDate: new Date().toString(),
+      metadata: null,
     };
 
     // 낙관적 UI 업데이트
@@ -232,6 +233,7 @@ const Chatting = () => {
             text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
             id: Date.now(),
             createdDate: new Date().toString(),
+            metadata: null,
           };
           setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
         },
@@ -261,6 +263,7 @@ const Chatting = () => {
       text: text,
       id: Date.now(),
       createdDate: new Date().toString(),
+      metadata: null,
     };
     console.log("firsthere" + JSON.stringify(newOptimisticMessage));
     // 낙관적 UI 업데이트
@@ -285,6 +288,7 @@ const Chatting = () => {
             text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
             id: Date.now(),
             createdDate: new Date().toString(),
+            metadata: null,
           };
           setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
         },
@@ -298,8 +302,8 @@ const Chatting = () => {
         <div className="px-[20px] pb-[50px]">
           {chatMessages.map((message, index) => {
             if (message.case === 2) {
-              const parts = message.text.split("<separate>");
-              let jsonData = parts[1].trim();
+              if (message.metadata == null) return;
+              let jsonData = message.metadata?.trim();
 
               const jsonStart = jsonData.indexOf("[");
               const jsonEnd = jsonData.lastIndexOf("]") + 1;
@@ -323,7 +327,7 @@ const Chatting = () => {
                             : "bg-white text-black"
                         } px-[12px] py-[10px] rounded-[16px]`}
                       >
-                        <p>{parts[0]}</p>
+                        <p>{message.text}</p>
                       </div>
                     </div>
                     {dataEntries.map((data: EventData, dataIndex: number) => {

@@ -4,6 +4,7 @@ export interface IChatMessage {
   chatType: "USER" | "AI" | "STT";
   createdDate: string;
   text: string;
+  metadata: string | null;
 }
 
 export interface ISendMessage {
