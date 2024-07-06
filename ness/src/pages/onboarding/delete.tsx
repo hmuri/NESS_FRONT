@@ -32,6 +32,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:00:00Z",
       text: "성공적으로 일정 분석을 진행했어요!\n이제 일정을 삭제해불까요?",
+      metadata: null,
     },
     {
       case: 10,
@@ -39,6 +40,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:03:00Z",
       text: "일정 삭제하기",
+      metadata: null,
     },
   ]);
   const [newMessage, setNewMessage] = useState("");
@@ -126,6 +128,7 @@ const Chatting = () => {
               text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
               id: Date.now(),
               createdDate: new Date().toString(),
+              metadata: null,
             },
           ]);
         }
@@ -164,6 +167,7 @@ const Chatting = () => {
       text: newMessage,
       id: Date.now(),
       createdDate: new Date().toString(),
+      metadata: null,
     };
 
     // 낙관적 UI 업데이트
@@ -186,6 +190,7 @@ const Chatting = () => {
             text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
             id: Date.now(),
             createdDate: new Date().toString(),
+            metadata: null,
           };
           setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
         },
@@ -207,6 +212,7 @@ const Chatting = () => {
         chatType: "USER",
         createdDate: "2024-06-19T12:05:00Z",
         text: "여가 관련 일정 삭제",
+        metadata: null,
       },
       {
         case: 2,
@@ -227,6 +233,7 @@ const Chatting = () => {
             "color": "#759CFF"
           }
         }`,
+        metadata: null,
       },
       {
         case: 11,
@@ -234,6 +241,7 @@ const Chatting = () => {
         chatType: "AI",
         createdDate: "2024-06-19T12:03:00Z",
         text: "모두 삭제",
+        metadata: null,
       },
     ];
     setChatMessages([...chatMessages, ...newMessages]);
@@ -246,6 +254,7 @@ const Chatting = () => {
         chatType: "AI",
         createdDate: "2024-06-19T13:03:00Z",
         text: "수고하셨어요! 이제 NESS와 함께, 실제 채팅을 진행해보세요.",
+        metadata: null,
       },
       {
         case: 12,
@@ -253,6 +262,7 @@ const Chatting = () => {
         chatType: "AI",
         createdDate: "2024-06-19T14:03:00Z",
         text: "채팅 바로가기",
+        metadata: null,
       },
     ];
     setChatMessages([...chatMessages, ...newMessages]);

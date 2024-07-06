@@ -32,6 +32,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:00:00Z",
       text: "처음 오셨군요, 환영해요!\n저와 함께 온보딩을 시작해 보실까요?",
+      metadata: null,
     },
     {
       case: 1,
@@ -39,6 +40,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:01:00Z",
       text: "저는 채팅으로 편리하게 일정 관리를 할 수 있게 돕는 인공 지능 비서, NESS에요. 채팅을 통해 일정 추가, 조회, 분석, 삭제 등을 돕고 있어요.",
+      metadata: null,
     },
     {
       case: 1,
@@ -46,6 +48,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:02:00Z",
       text: "먼저 아래 버튼을 클릭해 “내일 오후 2시 홍길동이랑 신촌 쇼핑가기 일정 추가” 일정을 추가해볼게요!",
+      metadata: null,
     },
     {
       case: 10,
@@ -53,6 +56,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:03:00Z",
       text: "일정 추가하기",
+      metadata: null,
     },
   ]);
   const [newMessage, setNewMessage] = useState("");
@@ -140,6 +144,7 @@ const Chatting = () => {
               text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
               id: Date.now(),
               createdDate: new Date().toString(),
+              metadata: null,
             },
           ]);
         }
@@ -157,6 +162,7 @@ const Chatting = () => {
         text: "일정을 추가해드렸습니다:)",
         id: Date.now(),
         createdDate: new Date().toString(),
+        metadata: null,
       },
       {
         case: 0,
@@ -164,6 +170,7 @@ const Chatting = () => {
         text: "잘하셨어요! 이제 이렇게 추가한 일정을 한번 확인해볼게요.",
         id: Date.now(),
         createdDate: new Date().toString(),
+        metadata: null,
       },
       {
         case: 11,
@@ -171,6 +178,7 @@ const Chatting = () => {
         text: "일정 확인하기로 이동",
         id: Date.now(),
         createdDate: new Date().toString(),
+        metadata: null,
       },
     ]);
   };
@@ -182,6 +190,7 @@ const Chatting = () => {
       text: newMessage,
       id: Date.now(),
       createdDate: new Date().toString(),
+      metadata: null,
     };
 
     // 낙관적 UI 업데이트
@@ -204,6 +213,7 @@ const Chatting = () => {
             text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
             id: Date.now(),
             createdDate: new Date().toString(),
+            metadata: null,
           };
           setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
         },
@@ -219,12 +229,14 @@ const Chatting = () => {
         chatType: "USER",
         createdDate: "2024-06-19T12:05:00Z",
         text: "내일 오후 2시 홍길동이랑 신촌 쇼핑가기 일정 추가해줘.",
+        metadata: null,
       },
       {
         case: 2,
         id: chatMessages.length + 2,
         chatType: "AI",
         createdDate: "2024-06-19T12:06:00Z",
+        metadata: null,
         text: `쇼핑 일정을 아래처럼 추가해 드릴까요?
         <separate>
         {

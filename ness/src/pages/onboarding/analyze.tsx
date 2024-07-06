@@ -32,6 +32,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:00:00Z",
       text: "일정을 추가해드렸습니다:)",
+      metadata: null,
     },
     {
       case: 1,
@@ -39,6 +40,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:01:00Z",
       text: "잘하셨어요! 이제 이렇게 추가한 일정을 한번 확인해볼게요.",
+      metadata: null,
     },
     {
       case: 1,
@@ -46,6 +48,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:02:00Z",
       text: "아래 버튼을 클릭해 “이번 달 일정 분석”을 한 번 해볼까요?",
+      metadata: null,
     },
     {
       case: 10,
@@ -53,6 +56,7 @@ const Chatting = () => {
       chatType: "AI",
       createdDate: "2024-06-19T12:03:00Z",
       text: "일정 분석하기",
+      metadata: null,
     },
   ]);
   const [newMessage, setNewMessage] = useState("");
@@ -140,6 +144,7 @@ const Chatting = () => {
               text: "오류가 발생했습니다. 리포트를 통해 제보해주세요.",
               id: Date.now(),
               createdDate: new Date().toString(),
+              metadata: null,
             },
           ]);
         }
@@ -178,6 +183,7 @@ const Chatting = () => {
       text: newMessage,
       id: Date.now(),
       createdDate: new Date().toString(),
+      metadata: null,
     };
 
     // 낙관적 UI 업데이트
@@ -200,6 +206,7 @@ const Chatting = () => {
             text: "예상치 못한 에러가 발생했습니다. 문제가 지속될 경우 maxcse01@gmail.com으로 연락 주세요.",
             id: Date.now(),
             createdDate: new Date().toString(),
+            metadata: null,
           };
           setChatMessages((prevMessages) => [...prevMessages, errorMessage]);
         },
@@ -222,6 +229,7 @@ const Chatting = () => {
         chatType: "USER",
         createdDate: "2024-06-19T12:05:00Z",
         text: "나 이번 달에 무슨 일정 있는 지 알려줘.",
+        metadata: null,
       },
       {
         case: 1,
@@ -229,6 +237,7 @@ const Chatting = () => {
         chatType: "AI",
         createdDate: "2024-06-19T12:06:00Z",
         text: "안녕하세요! 이번 달에는 약속과 관련된 활동을 하셨군요. “신촌에서 쇼핑하기” 활동을 진행하셨어요. 이런 활동들을 통해서 휴식을 가지셨을 것으로 예상돼요. 추가로 궁금하신 점이 있으시면 말씀해주세요.",
+        metadata: null,
       },
       {
         case: 1,
@@ -236,6 +245,7 @@ const Chatting = () => {
         chatType: "AI",
         createdDate: "2024-06-19T12:06:00Z",
         text: "성공적으로 일정 분석을 진행했어요! 이제 일정을 삭제해볼까요?",
+        metadata: null,
       },
       {
         case: 10,
@@ -243,6 +253,7 @@ const Chatting = () => {
         chatType: "AI",
         createdDate: "2024-06-19T12:03:00Z",
         text: "일정 삭제하기",
+        metadata: null,
       },
     ];
     setChatMessages([...chatMessages, ...newMessages]);
