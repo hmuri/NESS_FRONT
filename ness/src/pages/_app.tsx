@@ -10,8 +10,12 @@ import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import { ChatProvider } from "@/module/provider/ChatContext";
+import { useRouter } from "next/router";
+import Cookies from "universal-cookie";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const cookies = new Cookies();
   function setScreenSize() {
     let vh = window.innerHeight * 0.01;
     let vw = window.innerWidth * 0.01;
@@ -33,6 +37,15 @@ export default function App({ Component, pageProps }: AppProps) {
       window.removeEventListener("resize", setScreenSize);
     };
   }, []);
+
+  useEffect(() => {
+    const allowedPaths = ["/landing", "/login"];
+    const accessToken = cookies.get("accessToken");
+
+    if (!accessToken && !allowedPaths.includes(router.pathname)) {
+      router.push("/login");
+    }
+  }, [router]);
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {

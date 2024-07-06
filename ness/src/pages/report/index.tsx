@@ -9,9 +9,6 @@ import {
   Icon_big_calm_ness,
   Icon_big_hard_ness,
   Icon_big_normal_ness,
-  Icon_calmness,
-  Icon_hardness,
-  Icon_normal,
 } from "@/module/icons";
 
 const Index = () => {
