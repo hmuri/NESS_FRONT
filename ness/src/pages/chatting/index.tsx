@@ -73,6 +73,7 @@ const Chatting = () => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSTT, setIsSTT] = useState(false);
+  const [isSubmitted, setIsSubmmited] = useState(false);
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
   const [newSchedule, setNewSchedule] = useState({
@@ -172,9 +173,52 @@ const Chatting = () => {
   interface IHandleScheduleAdd {
     data: EventData;
     isAdded: boolean;
+    isSubmitted: boolean;
   }
 
-  const handleScheduleAdd = async ({ data, isAdded }: IHandleScheduleAdd) => {
+  const handleScheduleAdd = async ({
+    data,
+    isAdded,
+    isSubmitted,
+  }: IHandleScheduleAdd) => {
+    if (isSubmitted) return;
+    setIsSelected(true);
+    const scheduleData = {
+      id: data.id,
+      title: data.info,
+      start: new Date(data.start_time),
+      end: data.end_time
+        ? new Date(data.end_time)
+        : new Date(new Date(data.start_time).getTime() + 3600000),
+      categoryNum: data.category.id,
+      location: data.location || "",
+      people: data.people || "",
+    };
+
+    try {
+      const response = await axiosInstance.post(
+        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${scheduleData.id}`,
+        scheduleData
+      );
+
+      setChatMessages(response.data.chatList);
+      setIsSelected(false);
+      setIsSubmmited(true);
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+      setIsSelected(false);
+    }
+  };
+
+  interface IHandleScheduleDelete {
+    data: EventData;
+    isAdded: boolean;
+  }
+
+  const handleScheduleDelete = async ({
+    data,
+    isAdded,
+  }: IHandleScheduleDelete) => {
     setIsSelected(true);
     const scheduleData = {
       id: data.id,
@@ -369,8 +413,8 @@ const Chatting = () => {
                               onClick={() =>
                                 handleScheduleAdd({
                                   data: { ...data, id: message.id },
-
                                   isAdded: true,
+                                  isSubmitted: isSubmitted,
                                 })
                               }
                               className="cursor-pointer"
@@ -380,6 +424,7 @@ const Chatting = () => {
                                 handleScheduleAdd({
                                   data: { ...data, id: message.id },
                                   isAdded: false,
+                                  isSubmitted: isSubmitted,
                                 })
                               }
                               className="cursor-pointer"
@@ -477,7 +522,15 @@ const Chatting = () => {
                               </div>
                             </div>
                             <div className="flex bg-white p-[5px] h-[26px] rounded-[10px]">
-                              <Icon_trash_bin />
+                              <Icon_trash_bin
+                                onClick={() =>
+                                  handleScheduleDelete({
+                                    data: { ...data, id: message.id },
+                                    isAdded: true,
+                                  })
+                                }
+                                className="cursor-pointer"
+                              />
                             </div>
                           </div>
                           <div className="py-[5px] rounded-[10px] h-[30px] w-[75px] text-[15px] inline bg-white text-[#E8505B] flex items-center justify-center mt-[5px]">
