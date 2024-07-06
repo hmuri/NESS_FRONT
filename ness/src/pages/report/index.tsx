@@ -11,10 +11,30 @@ import {
   Icon_big_normal_ness,
 } from "@/module/icons";
 
+interface ReportMemory {
+  id: number;
+  memory: string;
+  createdDate: string;
+}
+
+function splitIntoRows(
+  data: ReportMemory[],
+  itemsPerRow: number
+): ReportMemory[][] {
+  return data.reduce<ReportMemory[][]>((rows, item, index) => {
+    if (index % itemsPerRow === 0) {
+      rows.push([item]);
+    } else {
+      rows[rows.length - 1].push(item);
+    }
+    return rows;
+  }, []);
+}
+
 const Index = () => {
   const [tags, setTags] = useState<ReportTag[] | undefined>();
   const [reportMemoryList, setMemories] = useState<
-    ReportMemory[] | undefined
+    ReportMemory[][] | undefined
   >();
   const [selectedTag, setSelectedTag] = useState<ReportTag | undefined>();
   const [isModal, setIsModal] = useState(false);
@@ -31,8 +51,9 @@ const Index = () => {
   };
   const fetchMemories = async () => {
     const data = await getReportMemories();
-    if (data) {
-      setMemories(data.reportMemoryList);
+    if (data && data.reportMemoryList) {
+      const rows = splitIntoRows(data.reportMemoryList, 7);
+      setMemories(rows);
     }
   };
 
@@ -46,30 +67,6 @@ const Index = () => {
     fetchMemories();
     fetchData();
   }, []);
-
-  useEffect(() => {
-    const startDay = new Date();
-    startDay.setDate(startDay.getDate() - 13); // 14일 전부터 오늘까지
-    const dateArray = [];
-    const memoryMap: { [key: string]: string } = {};
-
-    for (let i = 0; i < 14; i++) {
-      const date = new Date(startDay);
-      date.setDate(startDay.getDate() + i);
-      const formattedDate = date.toISOString().split("T")[0]; // YYYY-MM-DD 형식
-      dateArray.push(formattedDate);
-      memoryMap[formattedDate] = "";
-    }
-
-    reportMemoryList?.forEach((memory) => {
-      const memoryDate = memory.createdDate.split("T")[0];
-      if (memoryMap.hasOwnProperty(memoryDate)) {
-        memoryMap[memoryDate] = memory.memory;
-      }
-    });
-
-    setMemoriesByDate(memoryMap);
-  }, [reportMemoryList]);
 
   const memoryEntries = Object.entries(memoriesByDate);
   const firstRow = memoryEntries.slice(0, 7);
@@ -111,26 +108,18 @@ const Index = () => {
         <div className="text-[20px] font-[500] mb-[10px]">당신의 메모리</div>
         <div className="rounded-[10px] bg-[#F2F0FF] w-full h-[114px] flex items-center">
           <div className="w-full px-[5px]">
-            <div className=" flex justify-between ">
-              {firstRow.map(([date, memory]) => (
-                <div
-                  key={date}
-                  className="w-[43px] h-[43px] rounded-[12px] text-[30px] flex items-center justify-center m-1"
-                >
-                  {memory ? <>{memory}</> : <></>}
-                </div>
-              ))}
-            </div>
-            <div className=" flex justify-between">
-              {secondRow.map(([date, memory]) => (
-                <div
-                  key={date}
-                  className="w-[43px] h-[43px] rounded-[12px] text-[30px] flex items-center justify-center m-1"
-                >
-                  {memory ? <>{memory}</> : <></>}
-                </div>
-              ))}
-            </div>
+            {reportMemoryList?.map((row, index) => (
+              <div key={index} className="flex justify-between">
+                {row.map((memory) => (
+                  <div
+                    key={memory.createdDate}
+                    className="w-[43px] h-[43px] rounded-[12px] text-[30px] flex items-center justify-center m-1"
+                  >
+                    {memory.memory}
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
         <div className="text-[20px] font-[500] mb-[15px] mt-[40px]">
