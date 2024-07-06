@@ -23,6 +23,7 @@ import { useChat } from "@/module/provider/ChatContext";
 import { useQuery } from "react-query";
 import FloatingBigNess from "@/components/common/FloatingBigNess";
 import FloatingCalmNess from "@/components/common/FloatingCalmNess";
+import axiosInstance from "@/module/axiosInstance";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -33,7 +34,7 @@ const Main = () => {
   const profileQuery = useQuery("profile", getProfile, {
     onSuccess: (data) => {
       setSelectedNess(data.persona);
-      setIsModal(data.onBoarding);
+      setIsModal(!data.onBoarding);
     },
   });
 
@@ -127,6 +128,20 @@ const Main = () => {
       subtitle: "매일 자정, 오늘의 일정을 분석한 이메일 리포트가 발송돼요.",
     },
   ];
+
+  const handleModal = async () => {
+    setIsModal(false);
+    try {
+      const response = await axiosInstance.patch(
+        `/profile/onboarding?isOnBoarded=true`
+      );
+      console.log("Data:", response.data);
+      return response;
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+      throw error;
+    }
+  };
 
   if (profileQuery.isLoading || recommendQuery.isLoading) {
     return (
@@ -244,7 +259,7 @@ const Main = () => {
           <Icon_floating_ness />
           <div className="text-[20px] font-bold">NESS</div>
         </div>
-        <div className="flex mt-[20px] items-center justify-center">
+        <div className="flex items-center justify-center">
           <Icon_information
             className="cursor-pointer"
             onClick={() => setIsModal(true)}
@@ -272,7 +287,7 @@ const Main = () => {
           <div className=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30">
             <div
               className="fixed top-[30px] right-[50px] text-[25px] text-white cursor-pointer"
-              onClick={() => setIsModal(false)}
+              onClick={handleModal}
             >
               X
             </div>
