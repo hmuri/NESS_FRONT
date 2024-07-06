@@ -29,3 +29,4 @@ export { ReactComponent as Icon_left_arrow } from "../../../public/assets/svg/le
 export { ReactComponent as Icon_mic } from "../../../public/assets/svg/mic.svg";
 export { ReactComponent as Icon_information } from "../../../public/assets/svg/information.svg";
 export { ReactComponent as Icon_floating_ness } from "../../../public/assets/svg/floating_ness.svg";
+export { ReactComponent as Icon_trash_bin } from "../../../public/assets/svg/trash_bin.svg";

@@ -23,6 +23,7 @@ import {
   Icon_information,
   Icon_mic,
   Icon_normal,
+  Icon_trash_bin,
   Icon_wrong,
 } from "@/module/icons";
 import Cookies from "universal-cookie";
@@ -383,6 +384,104 @@ const Chatting = () => {
                               }
                               className="cursor-pointer"
                             />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              } catch (error) {
+                console.error("Error parsing JSON data: ", error);
+                return (
+                  <div
+                    className="relative mb-[5px] flex max-w-[70%]"
+                    key={index}
+                  >
+                    <div
+                      className={`${
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
+                          ? "bg-[#7A64FF] text-white"
+                          : "bg-white text-black"
+                      } px-[12px] py-[10px] rounded-[16px]`}
+                    >
+                      <p>오류가 발생했습니다. 다시 입력해주세요.</p>
+                    </div>
+                  </div>
+                );
+              }
+            } else if (message.case === 4) {
+              if (message.metadata == null) return;
+              let jsonData = message.metadata?.trim();
+
+              const jsonStart = jsonData.indexOf("[");
+              const jsonEnd = jsonData.lastIndexOf("]") + 1;
+              if (jsonStart >= 0 && jsonEnd > jsonStart) {
+                jsonData = jsonData.substring(jsonStart, jsonEnd);
+              }
+
+              try {
+                const dataEntries = JSON.parse(jsonData);
+                console.log("here77" + JSON.stringify(dataEntries));
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-col max-w-[70%] mb-[14px]"
+                  >
+                    <div className="relative mb-[5px]">
+                      <div
+                        className={`${
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
+                            ? "bg-[#7A64FF] text-white"
+                            : "bg-white text-black"
+                        } px-[12px] py-[10px] rounded-[16px]`}
+                      >
+                        <p>{message.text}</p>
+                      </div>
+                    </div>
+                    {dataEntries.map((data: EventData, dataIndex: number) => {
+                      const formattedDate = moment(data.start_time)
+                        .locale("ko")
+                        .format("MMMM Do dddd");
+                      return (
+                        <div
+                          key={`${index}-${dataIndex}`}
+                          className="flex flex-col relative mb-[5px]"
+                        >
+                          <div className="flex items-end gap-[5px]">
+                            <div className="w-full p-[12px] mt-[4px] rounded-[16px] inline bg-white text-[#333]">
+                              <div className="text-[15px] font-semibold mb-[11px]">
+                                {formattedDate}
+                              </div>
+                              <div className="flex gap-[11px] flex-row text-[15px]">
+                                <div
+                                  className="rounded-[8px] h-[38px] px-[7px] text-[12px] flex items-center inline font-semibold text-center text-white"
+                                  style={{
+                                    backgroundColor: data.category.color,
+                                  }}
+                                >
+                                  {data.category.name}
+                                </div>
+                                <div>
+                                  <div>{data.info}</div>
+                                  <div>
+                                    {data.location && (
+                                      <div>🧭 {data.location}</div>
+                                    )}
+                                  </div>
+                                  <div>
+                                    {data.people && <div>👯 {data.people}</div>}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex bg-white p-[5px] h-[26px] rounded-[10px]">
+                              <Icon_trash_bin />
+                            </div>
+                          </div>
+                          <div className="py-[5px] rounded-[10px] h-[30px] w-[75px] text-[15px] inline bg-white text-[#E8505B] flex items-center justify-center mt-[5px]">
+                            모두 삭제
                           </div>
                         </div>
                       );
