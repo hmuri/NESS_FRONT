@@ -533,12 +533,12 @@ const Chatting = () => {
                               />
                             </div>
                           </div>
-                          <div className="py-[5px] rounded-[10px] h-[30px] w-[75px] text-[15px] inline bg-white text-[#E8505B] flex items-center justify-center mt-[5px]">
-                            모두 삭제
-                          </div>
                         </div>
                       );
                     })}
+                    <div className="py-[5px] rounded-[10px] h-[30px] w-[75px] text-[15px] inline bg-white text-[#E8505B] flex items-center justify-center mt-[5px]">
+                      모두 삭제
+                    </div>
                   </div>
                 );
               } catch (error) {
