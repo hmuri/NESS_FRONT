@@ -10,9 +10,18 @@ import {
   Icon_spoit,
 } from "@/module/icons";
 import urls from "@/module/urls";
+import Cookies from "universal-cookie";
 
 export default function MyPage({ profile }: any) {
   const router = useRouter();
+  const cookies = new Cookies();
+
+  const handleLogout = () => {
+    cookies.remove("accessToken");
+    cookies.remove("refreshToken");
+
+    router.push("/login");
+  };
   return (
     <div className="flex w-full justify-center items-center">
       <div className="p-[25px] w-full md:w-[600px] md:px-0">
@@ -76,16 +85,12 @@ export default function MyPage({ profile }: any) {
             </div>
             <Icon_right_arrow />
           </div>
-          {/* <div className="rounded-[10px] w-full h-[43px] flex items-center justify-between border-[#ECECEC] my-[18px]">
-            <div className="flex gap-[15px] items-center">
-              <Icon_spoit />
-              <div className="text-[16px] font-[500] flex flex-col items-start">
-                <div>기타 버튼</div>
-                <div className="text-[#454545]">기타 버튼입니다.</div>
-              </div>
-            </div>
-            <Icon_right_arrow />
-          </div> */}
+          <div
+            className="w-full h-[40px] rounded-[5px] bg-[#A7A7A7] mt-[40px] flex justify-center items-center text-white cursor-pointer"
+            onClick={handleLogout}
+          >
+            로그아웃
+          </div>
         </div>
       </div>
       <Nav />

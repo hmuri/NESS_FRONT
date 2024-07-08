@@ -60,7 +60,7 @@ export default function Login() {
         내 손 안의 비서, NESS
       </div>
       <div
-        className=" h-[44px] rounded-[4px] flex border border-gray-300 mt-[200px] w-full md:w-[600px]"
+        className=" h-[44px] rounded-[4px] flex border border-gray-300 mt-[200px] w-full md:w-[600px] cursor-pointer"
         onClick={handleGoogleLogin}
       >
         <div className="w-[51px] h-full py-[8px] flex border-r justify-center">
