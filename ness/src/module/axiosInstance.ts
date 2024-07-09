@@ -61,13 +61,19 @@ axiosInstance.interceptors.response.use(
             jwtRefreshToken: refreshTokenValue,
           };
           try {
-            const { data } = await axiosInstance.post(
-              "/auth/reIssuance",
-              payload
+            const { data } = await axios.post(
+              `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/auth/reIssuance`,
+              payload,
+              {
+                headers: {
+                  Authorization: refreshTokenValue, // Authorization 헤더에 Bearer 토큰 형태로 추가
+                },
+              }
             );
             console.log("새로운 accessToken 발급", data);
 
             const { jwtAccessToken, jwtRefreshToken } = data;
+            console.log("herejwt" + jwtAccessToken + jwtRefreshToken);
             setAccessToken(jwtAccessToken); // 새로운 access token을 쿠키에 저장
             setRefreshToken(jwtRefreshToken);
 

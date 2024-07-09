@@ -6,7 +6,7 @@ export const setAccessToken = (accessToken: string): void => {
   const today = new Date();
   const expireDate = today.setDate(today.getDate() + 7);
 
-  cookies.set("access_token", accessToken, {
+  cookies.set("accessToken", accessToken, {
     sameSite: "strict",
     path: "/",
     expires: new Date(expireDate),
@@ -17,7 +17,7 @@ export const setRefreshToken = (refreshToken: string): void => {
   const today = new Date();
   const expireDate = today.setDate(today.getDate() + 14);
 
-  cookies.set("refresh_token", refreshToken, {
+  cookies.set("refreshToken", refreshToken, {
     sameSite: "none",
     path: "/",
     httpOnly: false,
