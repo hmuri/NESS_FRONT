@@ -19,11 +19,17 @@ export default function MyPage() {
   const router = useRouter();
   const cookies = new Cookies();
 
-  const handleLogout = () => {
-    cookies.remove("accessToken");
-    cookies.remove("refreshToken");
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.post(`/auth/logout`);
+      console.log("Update response:", response);
+      cookies.remove("accessToken");
+      cookies.remove("refreshToken");
 
-    router.push("/login");
+      router.push("/login");
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+    }
   };
   const [profile, setProfile] = useState<Profile | undefined>();
 
