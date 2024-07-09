@@ -22,6 +22,7 @@ import axios from "axios";
 import StopIcon from "../../../public/assets/Stop button.png";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
 import { getProfile } from "@/module/apis/mypage";
+import axiosInstance from "@/module/axiosInstance";
 
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
@@ -156,14 +157,9 @@ const Chatting = () => {
     const accessToken = cookies.get("accessToken");
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${newSchedule.id}`,
-        newSchedule,
-        {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        }
+      const response = await axiosInstance.post(
+        `/schedule/ai?isAccepted=${isAdded}&chatId=${newSchedule.id}`,
+        newSchedule
       );
       setChatMessages(response.data.chatList);
     } catch (error) {

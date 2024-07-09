@@ -2,6 +2,7 @@
 import { useMutation } from "react-query";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import axiosInstance from "../axiosInstance";
 
 const cookies = new Cookies();
 const token = cookies.get("accessToken") || "";
@@ -16,15 +17,10 @@ export const useSendMessage = () => {
       isSTT: boolean;
     }) => {
       const chatType = isSTT ? "STT" : "USER";
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/chat`,
-        { chatType: chatType, text: messageText },
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const response = await axiosInstance.post(`/chat`, {
+        chatType: chatType,
+        text: messageText,
+      });
       return response.data.chatList; // 서버로부터의 응답 반환
     }
   );

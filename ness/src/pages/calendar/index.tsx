@@ -150,15 +150,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
             categoryNum: updatedEvent.categoryNum,
             originalTime: updatedEvent.start.toISOString(),
           };
-          const response = await axiosInstance.put(
-            `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule`,
-            payload,
-            {
-              headers: {
-                Authorization: `Bearer ${cookies.get("accessToken")}`,
-              },
-            }
-          );
+          const response = await axiosInstance.put(`/schedule`, payload);
           console.log("Update response:", response);
         } catch (error) {
           console.error("Failed to update event:", error);
@@ -176,14 +168,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
       console.log("here" + process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL);
       setLoadingError(null); // 요청 전 에러 상태 초기화
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule?month=${month}`,
-          {
-            headers: {
-              Authorization: `${accessToken}`,
-            },
-          }
-        );
+        const response = await axiosInstance.get(`/schedule?month=${month}`);
         const fetchedScheduleList = response.data.scheduleList;
 
         const mappedEvents = fetchedScheduleList?.map(

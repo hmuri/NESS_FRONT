@@ -11,6 +11,7 @@ import {
 } from "@/module/icons";
 import urls from "@/module/urls";
 import Cookies from "universal-cookie";
+import axiosInstance from "@/module/axiosInstance";
 
 export default function MyPage({ profile }: any) {
   const router = useRouter();
@@ -117,14 +118,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/profile`,
-      {
-        headers: {
-          Authorization: `${accessToken}`,
-        },
-      }
-    );
+    const response = await axiosInstance.get(`/profile`);
     const profile = response.data;
 
     // 페이지 컴포넌트로 프로필 정보 전달

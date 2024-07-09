@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import axios from "axios";
 import Cookies from "universal-cookie"; // react-cookie 패키지가 필요합니다.
+import axiosInstance from "../axiosInstance";
 
 const useFetchChatMessages = () => {
   const cookies = new Cookies();
@@ -9,14 +10,7 @@ const useFetchChatMessages = () => {
   return useQuery(
     "chatMessages",
     async () => {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/chat`,
-        {
-          headers: {
-            Authorization: `${token || ""}`,
-          },
-        }
-      );
+      const response = await axiosInstance.get(`/chat`);
       return response.data.chatList;
     },
     {

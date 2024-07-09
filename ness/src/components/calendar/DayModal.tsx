@@ -8,6 +8,7 @@ import LeftArrowImage from "../../../public/assets/left_arrow.png";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { getCategoryList } from "@/module/apis/calendar";
+import axiosInstance from "@/module/axiosInstance";
 
 interface ScheduleEvent {
   id: number;
@@ -85,15 +86,7 @@ const EditSchedule = ({
       };
 
       try {
-        const response = await axios.put(
-          `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule`,
-          payload,
-          {
-            headers: {
-              Authorization: `${accessToken}`,
-            },
-          }
-        );
+        const response = await axiosInstance.put(`/schedule`, payload);
         console.log("Update response:", response);
         setUpdatedEvent(response.data?.scheduleList);
       } catch (error) {
@@ -105,14 +98,7 @@ const EditSchedule = ({
 
   const deleteSchedule = async (id: number) => {
     try {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule?id=${id}`,
-        {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        }
-      );
+      const response = await axiosInstance.delete(`/schedule?id=${id}`);
       setUpdatedEvent(response.data?.scheduleList);
       setIsAllVisible(true);
       console.log("Update response:", response);
@@ -258,15 +244,7 @@ const AddSchedule = ({
     };
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule`,
-        payload,
-        {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        }
-      );
+      const response = await axiosInstance.post(`/schedule`, payload);
       console.log("Update response:", response);
       console.log("scheduleList" + response.data?.scheduleList);
       setIsAllVisible(true);

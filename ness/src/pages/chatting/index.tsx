@@ -197,7 +197,7 @@ const Chatting = () => {
 
     try {
       const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${scheduleData.id}`,
+        `/schedule/ai?isAccepted=${isAdded}&chatId=${scheduleData.id}`,
         scheduleData
       );
 
@@ -234,7 +234,7 @@ const Chatting = () => {
 
     try {
       const response = await axiosInstance.post(
-        `${process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL}/schedule/ai?isAccepted=${isAdded}&chatId=${scheduleData.id}`,
+        `/schedule/ai?isAccepted=${isAdded}&chatId=${scheduleData.id}`,
         scheduleData
       );
 
