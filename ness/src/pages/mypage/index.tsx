@@ -14,14 +14,19 @@ import Cookies from "universal-cookie";
 import axiosInstance from "@/module/axiosInstance";
 import { useEffect, useState } from "react";
 import { getProfile } from "@/module/apis/mypage";
+import { getRefreshToken } from "@/module/cookies";
 
 export default function MyPage() {
   const router = useRouter();
   const cookies = new Cookies();
 
   const handleLogout = async () => {
+    const refreshTokenValue = getRefreshToken();
     try {
-      const response = await axiosInstance.post(`/auth/logout`);
+      const payload = {
+        jwtRefreshToken: refreshTokenValue,
+      };
+      const response = await axiosInstance.post(`/auth/logout`, payload);
       console.log("Update response:", response);
       cookies.remove("accessToken");
       cookies.remove("refreshToken");
