@@ -7,7 +7,6 @@ import {
   setAccessToken,
   setRefreshToken,
 } from "./cookies";
-import { useRouter } from "next/router";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL,
@@ -52,22 +51,28 @@ axiosInstance.interceptors.response.use(
     console.log("에러입니다", status);
 
     if (status === 401) {
-      const router = useRouter();
       if (retryCount < MAX_RETRY_COUNT) {
         retryCount++;
         const originalRequest = config;
         const refreshTokenValue = getRefreshToken(); // 쿠키에서 refresh_token을 얻어옴
 
         if (refreshTokenValue) {
+          const payload = {
+            jwtRefreshToken: refreshTokenValue,
+          };
           try {
-            const { data } = await axiosInstance.get("/v1/auth/refresh");
+            const { data } = await axiosInstance.post(
+              "/auth/reIssuance",
+              payload
+            );
             console.log("새로운 accessToken 발급", data);
 
-            const { access_token } = data;
-            setAccessToken(access_token); // 새로운 access token을 쿠키에 저장
+            const { jwtAccessToken, jwtRefreshToken } = data;
+            setAccessToken(jwtAccessToken); // 새로운 access token을 쿠키에 저장
+            setRefreshToken(jwtRefreshToken);
 
             // 요청을 보낼 때 헤더에 새로운 access token을 추가
-            originalRequest.headers.authorization = `Bearer ${access_token}`;
+            originalRequest.headers.authorization = `${jwtAccessToken}`;
 
             retryCount = 0; // 재시도 횟수 초기화
             return axiosInstance(originalRequest); // 원래 요청을 재시도하고 응답 반환
@@ -79,13 +84,10 @@ axiosInstance.interceptors.response.use(
             removeAccessToken();
             removeRefreshToken();
             alert("로그인 정보가 만료되었습니다. 다시 로그인 해주세요.");
-
-            router.push("/login");
           }
         } else {
           alert("로그인 시간이 만료되었습니다. 다시 로그인해주세요.");
           console.log("리프레시 토큰이 쿠키에 없음");
-          router.push("/login");
         }
       } else {
         console.log("재시도 횟수 초과");
