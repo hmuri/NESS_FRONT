@@ -138,8 +138,6 @@ const Chatting = () => {
   }, [chatMessages]);
 
   const confirmSchedule = async (isAdded: boolean) => {
-    const accessToken = cookies.get("accessToken");
-
     try {
       const response = await axiosInstance.post(
         `/schedule/ai?isAccepted=${isAdded}&chatId=${newSchedule.id}`,

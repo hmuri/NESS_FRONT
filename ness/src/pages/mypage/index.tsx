@@ -12,8 +12,10 @@ import {
 import urls from "@/module/urls";
 import Cookies from "universal-cookie";
 import axiosInstance from "@/module/axiosInstance";
+import { useEffect, useState } from "react";
+import { getProfile } from "@/module/apis/mypage";
 
-export default function MyPage({ profile }: any) {
+export default function MyPage() {
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -23,20 +25,32 @@ export default function MyPage({ profile }: any) {
 
     router.push("/login");
   };
+  const [profile, setProfile] = useState<Profile | undefined>();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getProfile();
+      if (data) {
+        setProfile(data);
+      }
+    };
+
+    fetchProfile();
+  }, []);
   return (
     <div className="flex w-full justify-center items-center">
       <div className="p-[25px] w-full md:w-[600px] md:px-0">
         <div className="mt-[76px] flex flex-col w-full items-center">
           <div>
             <img
-              src={profile.pictureUrl}
+              src={profile?.pictureUrl}
               alt="Profile"
               className="w-[86px] h-[86px] bg-[#F2F0FF] rounded-[50%]"
             />
           </div>
           <div className="flex items-center pt-[36px]">
             <div className="text-[24px] font-medium w-[200px] text-center overflow-wrap-break-word mb-[20px]">
-              {profile.nickname}
+              {profile?.nickname}
             </div>
           </div>
         </div>
