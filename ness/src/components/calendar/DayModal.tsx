@@ -62,7 +62,6 @@ const EditSchedule = ({
   const [person, setPerson] = useState(event.details.person || "");
 
   const cookies = new Cookies();
-  const accessToken = cookies.get("accessToken");
 
   useEffect(() => {
     setSelectedCategory({
@@ -370,7 +369,7 @@ interface ICategoryModal {
   setCategoryModalOpen: any;
 }
 
-const CategoryModal = ({
+export const CategoryModal = ({
   setSelectedCategory,
   categoryList,
   setCategoryModalOpen,

@@ -12,13 +12,182 @@ import Header from "@/components/calendar/Header";
 import Nav from "@/components/common/Nav";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Cookies from "universal-cookie";
-import DayModal from "@/components/calendar/DayModal";
+import DayModal, { CategoryModal } from "@/components/calendar/DayModal";
 import FloatingNess from "@/components/common/FloatingNess";
 import axiosInstance from "@/module/axiosInstance";
+import TrashBinImage from "../../../public/assets/trash-bin.png";
+import Image from "next/image";
+import { getCategoryList } from "@/module/apis/calendar";
 
 const localizer = momentLocalizer(moment);
 const cookies = new Cookies();
 const DnDCalendar = withDragAndDrop(BigCalendar);
+
+interface IEditScheduleProps {
+  event: ScheduleEvent | null;
+}
+const EditSchedule = ({ event }: IEditScheduleProps) => {
+  // 상태를 관리할 useState 훅 추가
+  const [title, setTitle] = useState(event?.title);
+  const [startTime, setStartTime] = useState(event?.start || "");
+  const [endTime, setEndTime] = useState(event?.end || "");
+  const [location, setLocation] = useState(event?.details.location || "");
+  const [person, setPerson] = useState(event?.details.person || "");
+  const [categoryList, setCategoryList] = useState<ICategoryList>();
+  const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+
+  const [selectedCategory, setSelectedCategory] = useState<
+    ICategory | undefined
+  >({
+    categoryNum: 1,
+    category: "🍀미분류",
+    categoryColor: "#D9D9D9",
+  });
+
+  useEffect(() => {
+    if (event)
+      setSelectedCategory({
+        categoryNum: event.categoryNum,
+        category: event.category,
+        categoryColor: event.categoryColor,
+      });
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getCategoryList();
+      setCategoryList(result);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const updateSchedule = async () => {
+      const payload = {
+        id: event?.id,
+        title: title,
+        start: startTime,
+        end: endTime || null,
+        location: location,
+        person: person,
+        categoryNum: selectedCategory?.categoryNum,
+        originalTime: event?.start.toISOString(),
+      };
+
+      try {
+        const response = await axiosInstance.put(`/schedule`, payload);
+        console.log("Update response:", response);
+      } catch (error) {
+        console.error("Failed to update schedule:", error);
+      }
+    };
+    updateSchedule();
+  }, [title, startTime, endTime, location, person, selectedCategory]);
+
+  const deleteSchedule = async (id: number) => {
+    try {
+      const response = await axiosInstance.delete(`/schedule?id=${id}`);
+      window.location.reload();
+      console.log("Update response:", response);
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+    }
+  };
+  if (!event) return;
+
+  return (
+    <div className="w-full px-[7px] mt-[10px]">
+      <div className="flex justify-between items-center cursor-pointer">
+        <div className="w-[24px]"></div>
+        <div
+          className="rounded-[20px] w-[115px] h-[40px] py-[10px] px-[2px] text-[15px] font-semibold text-center"
+          style={{
+            backgroundColor: selectedCategory?.categoryColor,
+          }}
+          onClick={() => setCategoryModalOpen(true)}
+        >
+          {selectedCategory?.category}
+        </div>
+
+        <div onClick={() => deleteSchedule(event.id)}>
+          <Image src={TrashBinImage} alt="" />
+        </div>
+      </div>
+      <div className="w-full py-[18px] text-[24px] font-semibold">
+        <input
+          type="text"
+          className="w-full"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
+      </div>
+      <div className="text-[14px] text-[#868686]">
+        <div className="flex justify-between py-[9px]">
+          <div className="w-[70px]">⏰ 시간</div>
+          <div className=" flex flex-col justify-end">
+            <input
+              type="datetime-local"
+              className="text-right w-full ml-[0px]"
+              value={moment(startTime).format("YYYY-MM-DDTHH:mm")} // datetime-local 형식에 맞게 값을 포맷합니다
+              onChange={(e) => {
+                setStartTime(moment(e.target.value).toDate());
+              }}
+            />
+            <div>
+              ~ {"  "}
+              <input
+                type="datetime-local"
+                className="text-right w-[200px]"
+                value={
+                  endTime ? moment(endTime).format("YYYY-MM-DDTHH:mm") : ""
+                }
+                onChange={(e) => {
+                  setEndTime(moment(e.target.value, "HH:mm").toDate());
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-between py-[9px]">
+          <div>🧭 위치</div>
+          <div>
+            <input
+              type="text"
+              className="w-full text-right"
+              value={location}
+              onChange={(e) => {
+                setLocation(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+        <div className="flex justify-between py-[9px]">
+          <div>👯 사람</div>
+          <div>
+            <input
+              type="text"
+              className="w-full text-right"
+              value={person}
+              onChange={(e) => {
+                setPerson(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      {categoryModalOpen && (
+        <CategoryModal
+          setSelectedCategory={setSelectedCategory}
+          categoryList={categoryList}
+          setCategoryModalOpen={setCategoryModalOpen}
+        />
+      )}
+    </div>
+  );
+};
 
 interface ScheduleEvent {
   id: number;
@@ -45,10 +214,14 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
   const [month, setMonth] = useState(moment().format("YYYY-MM"));
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<ScheduleEvent[]>([]);
   const [loadingError, setLoadingError] = useState<string | null>(null); // 로딩 에러 상태 추가
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [updatedEvent, setUpdatedEvent] = useState<ScheduleEvent | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
+    null
+  );
 
   const prevMonth = () => {
     setMonth(moment(month).subtract(1, "months").format("YYYY-MM"));
@@ -133,6 +306,23 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
       return existingEvent;
     });
     setEvents(updatedEvents);
+  };
+
+  const handleEventClick = (
+    event: object,
+    e: React.SyntheticEvent<HTMLElement, Event>
+  ) => {
+    // Cast the event object to your specific type (ScheduleEvent) inside the function
+    const customEvent = event as ScheduleEvent;
+    setEditModalIsOpen(true);
+    setSelectedEvent(customEvent);
+
+    console.log("Event clicked:", JSON.stringify(event));
+  };
+
+  const handleEditClose = () => {
+    setEditModalIsOpen(false);
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -225,6 +415,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
               dateCellWrapper: CustomDateCellWrapper,
             }}
             eventPropGetter={eventStyleGetter}
+            onSelectEvent={handleEventClick}
           />
           <Nav />
           {modalIsOpen && (
@@ -234,6 +425,19 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
               selectedDate={selectedDate}
               onRequestClose={() => setModalIsOpen(false)}
             />
+          )}
+          {editModalIsOpen && (
+            <div
+              className="day-modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+              onClick={handleEditClose}
+            >
+              <div
+                className="bg-white w-[348px] h-[501px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <EditSchedule event={selectedEvent} />
+              </div>
+            </div>
           )}
           {loadingError && <div className="alert-error">{loadingError}</div>}{" "}
           {/* 로딩 에러 메시지 표시 */}
