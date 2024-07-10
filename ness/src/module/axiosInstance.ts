@@ -90,13 +90,16 @@ axiosInstance.interceptors.response.use(
             removeAccessToken();
             removeRefreshToken();
             alert("로그인 정보가 만료되었습니다. 다시 로그인 해주세요.");
+            window.location.href = "/login";
           }
         } else {
           alert("로그인 시간이 만료되었습니다. 다시 로그인해주세요.");
           console.log("리프레시 토큰이 쿠키에 없음");
+          window.location.href = "/login";
         }
       } else {
         console.log("재시도 횟수 초과");
+        window.location.href = "/login";
       }
     }
 
