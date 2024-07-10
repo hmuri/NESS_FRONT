@@ -416,6 +416,7 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
             }}
             eventPropGetter={eventStyleGetter}
             onSelectEvent={handleEventClick}
+            onDrillDown={handleSelectSlot}
           />
           <Nav />
           {modalIsOpen && (
