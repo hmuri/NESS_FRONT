@@ -37,12 +37,33 @@ const Main = () => {
     },
   });
 
+  function createDefaultScheduleItem(): ScheduleItem {
+    return {
+      id: -1, // 임의의 고유 ID
+      start: new Date().toISOString(),
+      end: new Date().toISOString(),
+      title: "NESS와 함께 일정 추가하기",
+      category: "기본",
+      categoryNum: 0,
+      categoryColor: "#ffffff",
+      details: {
+        location: "지금",
+        person: "NESS",
+      },
+      nessComment: "다가오는 일정이 없으시네요! 지금 추가해보세요.",
+    };
+  }
+
   // 추천 메시지 데이터 패치
   const recommendQuery = useQuery("recommendations", fetchRecommendMessage, {
     onSuccess: (data) => {
       setData(data);
       setItems(data?.activityList);
-      setScheduleList(data?.scheduleList);
+      const defaultSchedule =
+        data?.scheduleList.length === 0
+          ? [createDefaultScheduleItem()]
+          : data?.scheduleList;
+      setScheduleList(defaultSchedule);
     },
   });
 
@@ -236,8 +257,17 @@ const Main = () => {
                 <div> 👯{schedule.details.person}</div>
               )}
             </div>
+
             <div className="bg-white px-[10px] py-[5px] rounded-[16px] text-[12px] mt-[8px]">
               {schedule.nessComment}
+              {schedule.id == -1 && (
+                <div
+                  className="underline"
+                  onClick={() => router.push("/calendar")}
+                >
+                  🔗캘린더 바로가기
+                </div>
+              )}
             </div>
           </div>
         </div>
