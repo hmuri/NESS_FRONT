@@ -136,7 +136,6 @@ const Chatting = () => {
   const { message, setMessage } = useChat();
 
   const sendMainMessage = useCallback((newMessage: string) => {
-    console.log("here44" + newMessage);
     if (newMessage) {
       handleSendMessageFromMain(newMessage);
       setMessage(""); // 상태를 바로 초기화
@@ -300,8 +299,6 @@ const Chatting = () => {
   };
 
   const handleSendMessageFromMain = (text: string) => {
-    console.log("text" + text);
-    console.log("here44");
     const newOptimisticMessage: IChatMessage = {
       case: 0,
       chatType: "USER",
@@ -310,10 +307,8 @@ const Chatting = () => {
       createdDate: new Date().toString(),
       metadata: null,
     };
-    console.log("firsthere" + JSON.stringify(newOptimisticMessage));
     // 낙관적 UI 업데이트
     setChatMessages((prevMessages) => [...prevMessages, newOptimisticMessage]);
-    console.log("here" + JSON.stringify(chatMessages));
 
     // 메시지 전송, onSuccess로 전체 리스트 업데이트
     sendMessage(
@@ -467,7 +462,6 @@ const Chatting = () => {
 
               try {
                 const dataEntries = JSON.parse(jsonData);
-                console.log("here77" + JSON.stringify(dataEntries));
                 return (
                   <div
                     key={index}
@@ -536,9 +530,9 @@ const Chatting = () => {
                         </div>
                       );
                     })}
-                    <div className="py-[5px] rounded-[10px] h-[30px] w-[75px] text-[15px] inline bg-white text-[#E8505B] flex items-center justify-center mt-[5px]">
+                    {/* <div className="py-[5px] rounded-[10px] h-[30px] w-[75px] text-[15px] inline bg-white text-[#E8505B] flex items-center justify-center mt-[5px]">
                       모두 삭제
-                    </div>
+                    </div> */}
                   </div>
                 );
               } catch (error) {

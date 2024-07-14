@@ -55,7 +55,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         permanent: false,
       },
     };
-    console.log("there is no code");
   }
 
   // 이 부분은 실행되지 않지만, Next.js 함수의 형식을 유지하기 위해 필요

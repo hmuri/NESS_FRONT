@@ -73,7 +73,6 @@ axiosInstance.interceptors.response.use(
             console.log("새로운 accessToken 발급", data);
 
             const { jwtAccessToken, jwtRefreshToken } = data;
-            console.log("herejwt" + jwtAccessToken + jwtRefreshToken);
             setAccessToken(jwtAccessToken); // 새로운 access token을 쿠키에 저장
             setRefreshToken(jwtRefreshToken);
 

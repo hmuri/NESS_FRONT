@@ -386,7 +386,7 @@ const Main = () => {
                   ) {
                     // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
                     e.preventDefault(); // Form 전송을 방지합니다.
-                    console.log("there" + e.currentTarget.value);
+
                     setMessage(e.currentTarget.value);
                     router.push("/chatting");
                   }

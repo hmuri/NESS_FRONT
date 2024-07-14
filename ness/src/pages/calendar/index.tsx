@@ -353,9 +353,6 @@ const CalendarPage: React.FC<ScheduleDetail> = () => {
 
   useEffect(() => {
     const fetchEvents = async () => {
-      console.log("currentMonth", month);
-      const accessToken = cookies.get("accessToken");
-      console.log("here" + process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL);
       setLoadingError(null); // 요청 전 에러 상태 초기화
       try {
         const response = await axiosInstance.get(`/schedule?month=${month}`);
