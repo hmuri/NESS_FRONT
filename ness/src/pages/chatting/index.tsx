@@ -48,6 +48,7 @@ interface EventData {
   location?: string;
   people?: string;
   info: string;
+  searchKeyword?: string;
 }
 
 interface Message {
@@ -62,6 +63,24 @@ interface DetailList {
   person?: string | null;
 }
 
+const Kakao = axios.create({
+  baseURL: "https://dapi.kakao.com",
+  headers: {
+    Authorization: `KakaoAK ${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}`,
+  },
+});
+
+interface SearchResult {
+  contents: string;
+  datetime: string;
+  title: string;
+  url: string;
+}
+
+interface SearchResults {
+  documents: SearchResult[];
+}
+
 const Chatting = () => {
   const { data: initialChatMessages } = useFetchChatMessages();
   const [chatMessages, setChatMessages] = useState<IChatMessage[]>([]);
@@ -74,17 +93,11 @@ const Chatting = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSTT, setIsSTT] = useState(false);
   const [isSubmitted, setIsSubmmited] = useState(false);
+  const [searchResults, setSearchResults] = useState<
+    Record<string, SearchResults>
+  >({});
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
-  const [newSchedule, setNewSchedule] = useState({
-    id: 0,
-    title: "",
-    start: moment().toDate(),
-    end: moment().toDate(),
-    categoryNum: 0,
-    location: "",
-    people: "",
-  });
 
   const toggleListening = () => {
     if (isListening) {
@@ -169,6 +182,27 @@ const Chatting = () => {
     fetchProfile();
   }, []);
 
+  useEffect(() => {
+    chatMessages.forEach((message, index) => {
+      if (message.case === 2 && message.metadata) {
+        const jsonData = message.metadata.trim();
+        const jsonStart = jsonData.indexOf("[");
+        const jsonEnd = jsonData.lastIndexOf("]") + 1;
+        if (jsonStart >= 0 && jsonEnd > jsonStart) {
+          const dataEntries = JSON.parse(
+            jsonData.substring(jsonStart, jsonEnd)
+          ) as EventData[];
+          dataEntries.forEach((data, dataIndex) => {
+            const uniqueKey = `${index}-${dataIndex}`;
+            if (data.info) {
+              fetchSearchResults(data.info, `${index}`);
+            }
+          });
+        }
+      }
+    });
+  }, [chatMessages]);
+
   interface IHandleScheduleAdd {
     data: EventData;
     isAdded: boolean;
@@ -206,6 +240,18 @@ const Chatting = () => {
     } catch (error) {
       console.error("Failed to update schedule:", error);
       setIsSelected(false);
+    }
+  };
+
+  const fetchSearchResults = async (searchKeyword: string, key: string) => {
+    try {
+      const response = await Kakao.get<any>(`/v2/search/web`, {
+        params: { query: `${searchKeyword} 추천`, size: 5 },
+      });
+      setSearchResults((prev) => ({ ...prev, [key]: response.data }));
+      console.log("here" + JSON.stringify(searchResults));
+    } catch (error) {
+      console.error("Error fetching search results:", error);
     }
   };
 
@@ -374,9 +420,14 @@ const Chatting = () => {
                       const formattedDate = moment(data.start_time)
                         .locale("ko")
                         .format("MMMM Do dddd");
+
+                      console.log("there" + index);
+                      console.log(
+                        "resulthere" + JSON.stringify(searchResults[`${index}`])
+                      );
                       return (
                         <div
-                          key={`${index}-${dataIndex}`}
+                          key={`${index}`}
                           className="flex flex-col relative mb-[5px]"
                         >
                           <div className="p-[12px] mt-[4px] rounded-[16px] inline bg-white text-[#333]">
@@ -424,6 +475,41 @@ const Chatting = () => {
                               }
                               className="cursor-pointer"
                             />
+                          </div>
+                          <div className="bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
+                            <div>#{data.info}</div>
+                            {searchResults[`${index}`]?.documents.map(
+                              (result, resIndex) => (
+                                <div key={resIndex}>
+                                  <h3
+                                    className="text-lg font-bold mb-2"
+                                    dangerouslySetInnerHTML={{
+                                      __html: result.title,
+                                    }}
+                                  />
+                                  <p className="text-sm text-gray-500 mb-3">
+                                    {new Date(
+                                      result.datetime
+                                    ).toLocaleDateString()}{" "}
+                                    - {new URL(result.url).hostname}
+                                  </p>
+                                  <div
+                                    className="text-gray-800 text-base mb-4"
+                                    dangerouslySetInnerHTML={{
+                                      __html: result.contents,
+                                    }}
+                                  />
+                                  <a
+                                    href={result.url}
+                                    className="text-blue-500 hover:text-blue-700 transition-colors"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    Read more
+                                  </a>
+                                </div>
+                              )
+                            )}
                           </div>
                         </div>
                       );
