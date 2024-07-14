@@ -21,12 +21,11 @@ import { useRouter } from "next/router";
 import StopIcon from "../../../public/assets/Stop button.png";
 import { useChat } from "@/module/provider/ChatContext";
 import { useQuery } from "react-query";
-import FloatingBigNess from "@/components/common/FloatingBigNess";
+import ChatBack from "../../../public/assets/chatBack.png";
 import FloatingCalmNess from "@/components/common/FloatingCalmNess";
 import axiosInstance from "@/module/axiosInstance";
 
 const cookies = new Cookies();
-const token = cookies.get("accessToken") || "";
 
 const Main = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -332,54 +331,46 @@ const Main = () => {
             </div>
           </div>
         )}
-        <div className="rounded-[15px] px-[30px] py-[10px] bg-[#F2F0FF] w-full md:max-w-[600px] flex flex-col items-center">
-          <div className="mb-[15px]">
-            추가하고 싶은 일정을 네스에게 말해주세요!
-          </div>
-          <div className="flex items-center w-full">
-            <input
-              className="w-full bg-white h-[41px] px-[22px] py-[13px] mr-[8px] mb-[10px] rounded-[20px] border border-purple-600 shadow-md"
-              type="text"
-              value={newMessage}
-              placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (
-                  e.key === "Enter" &&
-                  !e.shiftKey &&
-                  e.nativeEvent.isComposing === false
-                ) {
-                  // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
-                  e.preventDefault(); // Form 전송을 방지합니다.
-                  console.log("there" + e.currentTarget.value);
-                  setMessage(e.currentTarget.value);
-                  router.push("/chatting");
-                }
-              }}
-            />
-            <div className="right-[70px] cursor-pointer mb-[10px]">
-              {isListening ? (
-                <Image src={StopIcon} alt="" onClick={toggleListening} />
-              ) : (
-                <Icon_mic onClick={toggleListening} />
-              )}
+        <div className="relative w-full md:max-w-[600px]">
+          <Image
+            src={ChatBack}
+            alt="no image"
+            className="absolute w-full h-[110px] top-0 left-0 rounded-[15px]"
+          />
+          <div className="top-0 left-0  px-[30px] py-[10px] relative flex flex-col items-center">
+            <div className="mb-[15px] text-white">
+              추가하고 싶은 일정을 네스에게 말해주세요!
+            </div>
+            <div className="flex items-center w-full">
+              <input
+                className="w-full bg-white h-[41px] px-[22px] py-[13px] mr-[8px] mb-[10px] rounded-[20px] border border-purple-600 shadow-md"
+                type="text"
+                value={newMessage}
+                placeholder={isListening ? "듣는 중" : "채팅 입력하기"}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === "Enter" &&
+                    !e.shiftKey &&
+                    e.nativeEvent.isComposing === false
+                  ) {
+                    // shiftKey를 누르지 않은 상태에서 Enter를 눌렀을 경우
+                    e.preventDefault(); // Form 전송을 방지합니다.
+                    console.log("there" + e.currentTarget.value);
+                    setMessage(e.currentTarget.value);
+                    router.push("/chatting");
+                  }
+                }}
+              />
+              <div className="right-[70px] cursor-pointer mb-[10px]">
+                {isListening ? (
+                  <Image src={StopIcon} alt="" onClick={toggleListening} />
+                ) : (
+                  <Icon_mic onClick={toggleListening} />
+                )}
+              </div>
             </div>
           </div>
-          {/* <button onClick={handleSendMessage} disabled={isLoading}></button> */}
-          {/* <button onClick={} disabled={!newMessage.trim()}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              fill="none"
-            >
-              <path
-                d="M11.0001 0C11.2043 0.000109065 11.4045 0.0570724 11.5782 0.16451C11.7519 0.271948 11.8922 0.425618 11.9835 0.60831L21.8843 20.4086C21.977 20.5945 22.0152 20.8027 21.9945 21.0094C21.9738 21.216 21.895 21.4125 21.7673 21.5763C21.6396 21.74 21.4681 21.8643 21.2727 21.9346C21.0773 22.005 20.866 22.0186 20.6632 21.974L11.0001 19.8267L1.33804 21.974C1.13514 22.0189 0.923671 22.0055 0.728101 21.9352C0.532531 21.8649 0.360865 21.7407 0.232979 21.5769C0.105093 21.4131 0.0262184 21.2165 0.00548795 21.0097C-0.0152425 20.803 0.0230191 20.5945 0.115843 20.4086L10.0166 0.60831C10.1079 0.425618 10.2482 0.271948 10.4219 0.16451C10.5956 0.0570724 10.7958 0.000109065 11.0001 0ZM12.1002 17.8181L18.8833 19.3251L12.1002 5.75969V17.8181Z"
-                fill={newMessage.trim() ? "#7A64FF" : "#777777"}
-              />
-            </svg>
-          </button> */}
         </div>
         <div className="text-[20px] w-full font-[500] mb-[10px] mt-[40px] text-left  md:max-w-[600px]">
           앞으로의 일정을 확인해봐요!
