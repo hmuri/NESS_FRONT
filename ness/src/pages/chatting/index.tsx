@@ -35,6 +35,7 @@ import { getProfile } from "@/module/apis/mypage";
 import { useChat } from "@/module/provider/ChatContext";
 import Slider from "react-slick";
 import axiosInstance from "@/module/axiosInstance";
+import DaumSearchLink from "@/components/main/DaumSearchLink";
 
 interface EventData {
   id?: number;
@@ -482,8 +483,8 @@ const Chatting = () => {
                               className="cursor-pointer"
                             />
                           </div>
-                          <div className="bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
-                            <div className="text-[18px] font-bold mb-3 border-b pb-2">
+                          <div className="w-full bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
+                            <div className="text-[15px] font-semibold mb-3 border-b pb-2">
                               # {data.info}
                             </div>{" "}
                             {/* 나중에 keyword로 바꾸기 */}
@@ -492,12 +493,12 @@ const Chatting = () => {
                                 <div key={resIndex} className="border-b mb-3">
                                   <a
                                     href={result.url}
-                                    className=" mb-2 text-[#7A64FF] underline"
+                                    className="text-[15px] mb-2 text-[#7A64FF] underline"
                                     dangerouslySetInnerHTML={{
                                       __html: result.title,
                                     }}
                                   />
-                                  <p className="text-sm text-gray-500 mb-1">
+                                  <p className="text-[12px] text-gray-500 mb-1">
                                     {new Date(
                                       result.datetime
                                     ).toLocaleDateString()}{" "}
@@ -515,6 +516,7 @@ const Chatting = () => {
                                 </div>
                               )
                             )}
+                            <DaumSearchLink dataInfo={data.info} />
                           </div>
                         </div>
                       );
