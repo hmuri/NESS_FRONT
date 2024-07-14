@@ -15,7 +15,7 @@ const DaumSearchLink: React.FC<Props> = ({ dataInfo }) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        '{dataInfo}' 검색결과 더보기
+        '&apos;{dataInfo}&apos;' 검색결과 더보기
       </a>
     </div>
   );
