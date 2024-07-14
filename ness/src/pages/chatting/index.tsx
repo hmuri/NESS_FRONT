@@ -155,6 +155,18 @@ const Chatting = () => {
     }
   }, []);
 
+  function truncateHtmlText(htmlContent: string, maxLength: number): string {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlContent; // HTML 문자열을 DOM 요소로 변환
+    let plainText = tempDiv.textContent || tempDiv.innerText || ""; // 텍스트 추출
+
+    // 길이 제한
+    if (plainText.length > maxLength) {
+      return plainText.substring(0, maxLength) + "..."; // 지정된 길이까지 자르고 말줄임표 추가
+    }
+    return plainText;
+  }
+
   useEffect(() => {
     sendMainMessage(message);
   }, []);
@@ -245,11 +257,10 @@ const Chatting = () => {
 
   const fetchSearchResults = async (searchKeyword: string, key: string) => {
     try {
-      const response = await Kakao.get<any>(`/v2/search/web`, {
-        params: { query: `${searchKeyword} 추천`, size: 5 },
+      const response = await Kakao.get<any>(`/v2/search/blog`, {
+        params: { query: `${searchKeyword} 추천`, size: 3 },
       });
       setSearchResults((prev) => ({ ...prev, [key]: response.data }));
-      console.log("here" + JSON.stringify(searchResults));
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
@@ -293,7 +304,6 @@ const Chatting = () => {
 
   const handleSendMessage = (message: any) => {
     if (!message.trim()) return;
-    console.log("text22");
     const optimisticMessage: IChatMessage = {
       case: 0,
       chatType: isSTT ? "STT" : "USER",
@@ -421,10 +431,6 @@ const Chatting = () => {
                         .locale("ko")
                         .format("MMMM Do dddd");
 
-                      console.log("there" + index);
-                      console.log(
-                        "resulthere" + JSON.stringify(searchResults[`${index}`])
-                      );
                       return (
                         <div
                           key={`${index}`}
@@ -477,36 +483,35 @@ const Chatting = () => {
                             />
                           </div>
                           <div className="bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
-                            <div>#{data.info}</div>
+                            <div className="text-[18px] font-bold mb-3 border-b pb-2">
+                              # {data.info}
+                            </div>{" "}
+                            {/* 나중에 keyword로 바꾸기 */}
                             {searchResults[`${index}`]?.documents.map(
                               (result, resIndex) => (
-                                <div key={resIndex}>
-                                  <h3
-                                    className="text-lg font-bold mb-2"
+                                <div key={resIndex} className="border-b mb-3">
+                                  <a
+                                    href={result.url}
+                                    className=" mb-2 text-[#7A64FF] underline"
                                     dangerouslySetInnerHTML={{
                                       __html: result.title,
                                     }}
                                   />
-                                  <p className="text-sm text-gray-500 mb-3">
+                                  <p className="text-sm text-gray-500 mb-1">
                                     {new Date(
                                       result.datetime
                                     ).toLocaleDateString()}{" "}
                                     - {new URL(result.url).hostname}
                                   </p>
                                   <div
-                                    className="text-gray-800 text-base mb-4"
+                                    className="text-gray-800 text-[13px] mb-2"
                                     dangerouslySetInnerHTML={{
-                                      __html: result.contents,
+                                      __html: truncateHtmlText(
+                                        result.contents,
+                                        100
+                                      ),
                                     }}
                                   />
-                                  <a
-                                    href={result.url}
-                                    className="text-blue-500 hover:text-blue-700 transition-colors"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    Read more
-                                  </a>
                                 </div>
                               )
                             )}
@@ -666,7 +671,7 @@ const Chatting = () => {
           })}
 
           {isLoading && <LoadingLottie />}
-          <div ref={messagesEndRef} />
+          {/* <div ref={messagesEndRef} /> */}
         </div>
         <div className="fixed bg-[#F2F0FF] h-[66px] bottom-0 left-[20px] right-[20px] flex items-center">
           <input
