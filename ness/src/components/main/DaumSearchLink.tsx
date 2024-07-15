@@ -11,11 +11,13 @@ const DaumSearchLink: React.FC<Props> = ({ dataInfo }) => {
     <div className="mt-4 w-full flex">
       <a
         href={daumSearchUrl}
-        className="bg-gray-400 flex justify-center hover:bg-gray-500 w-full text-white font-semibold py-2 px-4 rounded"
+        className="text-center word-break bg-gray-400 flex justify-center hover:bg-gray-500 w-full text-white font-semibold py-2 px-4 rounded"
         target="_blank"
         rel="noopener noreferrer"
       >
-        &apos;{dataInfo}&apos; 검색결과 더보기
+        {/* &apos;{dataInfo}&apos; */}
+        {/* <br /> */}
+        검색결과 더보기
       </a>
     </div>
   );
