@@ -18,11 +18,13 @@ import useFetchChatMessages from "@/module/hooks/getMessages";
 import { LoadingLottie } from "@/module/LottieComponents";
 import {
   Icon_calmness,
+  Icon_copy,
   Icon_correct,
   Icon_hardness,
   Icon_information,
   Icon_mic,
   Icon_normal,
+  Icon_star,
   Icon_trash_bin,
   Icon_wrong,
 } from "@/module/icons";
@@ -342,6 +344,15 @@ const Chatting = () => {
     );
   };
 
+  const handleCopy = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("URL이 클립보드에 복사되었습니다.");
+    } catch (err) {
+      console.error("클립보드 복사에 실패했습니다:", err);
+    }
+  };
+
   const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (
       e.key === "Enter" &&
@@ -498,12 +509,29 @@ const Chatting = () => {
                                       __html: result.title,
                                     }}
                                   />
-                                  <p className="text-[12px] text-gray-500 mb-1">
-                                    {new Date(
-                                      result.datetime
-                                    ).toLocaleDateString()}{" "}
-                                    - {new URL(result.url).hostname}
-                                  </p>
+                                  <div className="flex justify-between items-center h-[24px]">
+                                    <p className="text-[12px] text-gray-500 mb-1">
+                                      {new Date(
+                                        result.datetime
+                                      ).toLocaleDateString()}{" "}
+                                      - {new URL(result.url).hostname}
+                                    </p>
+                                    <div className="flex column gap-[5px]">
+                                      <Icon_copy
+                                        onClick={() => handleCopy(result.url)}
+                                        width={20}
+                                        height={20}
+                                        color="#545454"
+                                        className="cursor-pointer"
+                                      />
+                                      <Icon_star
+                                        width={20}
+                                        height={20}
+                                        color="#ffd233"
+                                        className="cursor-pointer"
+                                      />
+                                    </div>
+                                  </div>
                                   <div
                                     className="text-gray-800 text-[13px] mb-2"
                                     dangerouslySetInnerHTML={{

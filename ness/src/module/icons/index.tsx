@@ -30,3 +30,5 @@ export { ReactComponent as Icon_mic } from "../../../public/assets/svg/mic.svg";
 export { ReactComponent as Icon_information } from "../../../public/assets/svg/information.svg";
 export { ReactComponent as Icon_floating_ness } from "../../../public/assets/svg/floating_ness.svg";
 export { ReactComponent as Icon_trash_bin } from "../../../public/assets/svg/trash_bin.svg";
+export { ReactComponent as Icon_star } from "../../../public/assets/svg/star.svg";
+export { ReactComponent as Icon_copy } from "../../../public/assets/svg/copy.svg";
