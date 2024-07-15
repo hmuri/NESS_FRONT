@@ -69,10 +69,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="icon" href="assets/ness_chat.png" type="image/png"></link>
         <link
-          rel="preload"
+          rel="stylesheet"
           as="style"
           crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable-dynamic-subset.css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
       </Head>
       <QueryClientProvider client={queryClient}>
