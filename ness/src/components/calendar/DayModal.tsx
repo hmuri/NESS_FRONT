@@ -11,7 +11,7 @@ import { getCategoryList } from "@/module/apis/calendar";
 import axiosInstance from "@/module/axiosInstance";
 
 interface ScheduleEvent {
-  id: number;
+  id: number | undefined;
   title: string;
   start: Date;
   end?: Date;
@@ -95,8 +95,9 @@ const EditSchedule = ({
     updateSchedule();
   }, [title, startTime, endTime, location, person, selectedCategory]);
 
-  const deleteSchedule = async (id: number) => {
+  const deleteSchedule = async (id: number | undefined) => {
     try {
+      if (!id) return;
       const response = await axiosInstance.delete(`/schedule?id=${id}`);
       setUpdatedEvent(response.data?.scheduleList);
       setIsAllVisible(true);

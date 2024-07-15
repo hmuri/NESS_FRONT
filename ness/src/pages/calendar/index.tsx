@@ -26,7 +26,7 @@ const DnDCalendar = withDragAndDrop(BigCalendar);
 interface IEditScheduleProps {
   event: ScheduleEvent | null;
 }
-const EditSchedule = ({ event }: IEditScheduleProps) => {
+export const EditSchedule = ({ event }: IEditScheduleProps) => {
   // 상태를 관리할 useState 훅 추가
   const [title, setTitle] = useState(event?.title);
   const [startTime, setStartTime] = useState(event?.start || "");
@@ -85,8 +85,9 @@ const EditSchedule = ({ event }: IEditScheduleProps) => {
     updateSchedule();
   }, [title, startTime, endTime, location, person, selectedCategory]);
 
-  const deleteSchedule = async (id: number) => {
+  const deleteSchedule = async (id: number | undefined) => {
     try {
+      if (!id) return;
       const response = await axiosInstance.delete(`/schedule?id=${id}`);
       window.location.reload();
       console.log("Update response:", response);
@@ -190,7 +191,7 @@ const EditSchedule = ({ event }: IEditScheduleProps) => {
 };
 
 interface ScheduleEvent {
-  id: number;
+  id: number | undefined;
   title: string;
   start: Date;
   end?: Date;

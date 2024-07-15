@@ -24,8 +24,24 @@ import { useQuery } from "react-query";
 import ChatBack from "../../../public/assets/chatBack.png";
 import FloatingCalmNess from "@/components/common/FloatingCalmNess";
 import axiosInstance from "@/module/axiosInstance";
+import { EditSchedule } from "../calendar";
 
-const cookies = new Cookies();
+interface ScheduleEvent {
+  id: number;
+  title: string;
+  start: Date;
+  end?: Date;
+  category: string;
+  categoryColor: string;
+  categoryNum: number;
+  details: DetailList;
+}
+
+interface DetailList {
+  id: number;
+  location?: string | null;
+  person: string | null;
+}
 
 const Main = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -95,7 +111,6 @@ const Main = () => {
     dotsClass: "slick-dots landing-dots", // 커스텀 dots CSS 클래스
   };
 
-  const NoIMG = "assets/no_image.png";
   const [data, setData] = useState<IMainData | undefined>(undefined);
   const [items, setItems] = useState<IActivity[] | undefined>(undefined);
   const [isModal, setIsModal] = useState<boolean>(true);
@@ -103,18 +118,17 @@ const Main = () => {
   const [scheduleList, setScheduleList] = useState<
     ScheduleItem[] | undefined
   >();
+  const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
+    null
+  );
+
   const [isSTT, setIsSTT] = useState(false);
   const [loading, setLoading] = useState(true);
   const { isListening, stopListening, startListening } =
     useSpeechRecognition(setNewMessage);
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
   const router = useRouter();
-
-  const imageUrls = [
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-1.png",
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-2.png",
-    "https://ness-static-s3.s3.ap-northeast-2.amazonaws.com/background-3.png",
-  ];
 
   const images = [
     "/assets/chatting_des.png",
@@ -148,6 +162,32 @@ const Main = () => {
       subtitle: "매일 자정, 오늘의 일정을 분석한 이메일 리포트가 발송돼요.",
     },
   ];
+
+  const handleEditClose = () => {
+    setEditModalIsOpen(false);
+    window.location.reload();
+  };
+
+  const handleEventClick = (event: ScheduleItem) => {
+    // Cast the event object to your specific type (ScheduleEvent) inside the function
+    const filteredEvent = {
+      id: event.id,
+      title: event.title,
+      start: new Date(event.start),
+      end: new Date(event.end),
+      category: event.category,
+      categoryColor: event.categoryColor,
+      categoryNum: event.categoryNum,
+      details: {
+        ...event.details,
+        id: event.details.id || 0,
+      },
+    };
+    setEditModalIsOpen(true);
+    setSelectedEvent(filteredEvent);
+
+    console.log("Event clicked:", JSON.stringify(event));
+  };
 
   const handleModal = async () => {
     setIsModal(false);
@@ -239,7 +279,12 @@ const Main = () => {
             {timeString}
           </div>
           <div className="absolute left-[54px] top-1 w-[12px] h-[12px] rounded-full bg-[#7A64FF]"></div>
-          <div className="pl-[40px]">
+          <div
+            className="pl-[40px]"
+            onClick={(e) => {
+              handleEventClick(schedule);
+            }}
+          >
             <div className="flex gap-[5px]">
               <strong className="font-bold">{schedule.title}</strong>
               <div
@@ -425,6 +470,19 @@ const Main = () => {
             </div>
           ))}
         </div>
+        {editModalIsOpen && (
+          <div
+            className="day-modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+            onClick={handleEditClose}
+          >
+            <div
+              className="bg-white w-[348px] h-[501px] px-[25px] rounded-[20px] pt-[9px] pb-[20px] overflow-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <EditSchedule event={selectedEvent} />
+            </div>
+          </div>
+        )}
       </div>
       <Nav />
       <FloatingNess message="환영해요!" />

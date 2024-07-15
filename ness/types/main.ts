@@ -10,8 +10,9 @@ interface IActivity {
 }
 
 interface ScheduleDetails {
-  location: string;
-  person: string;
+  id?: number;
+  location?: string | null;
+  person: string | null;
 }
 
 interface ScheduleItem {
