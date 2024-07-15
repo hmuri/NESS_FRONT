@@ -199,21 +199,10 @@ const Chatting = () => {
 
   useEffect(() => {
     chatMessages.forEach((message, index) => {
-      if (message.case === 2 && message.metadata) {
-        const jsonData = message.metadata.trim();
-        const jsonStart = jsonData.indexOf("[");
-        const jsonEnd = jsonData.lastIndexOf("]") + 1;
-        if (jsonStart >= 0 && jsonEnd > jsonStart) {
-          const dataEntries = JSON.parse(
-            jsonData.substring(jsonStart, jsonEnd)
-          ) as EventData[];
-          dataEntries.forEach((data, dataIndex) => {
-            const uniqueKey = `${index}-${dataIndex}`;
-            if (data.info) {
-              fetchSearchResults(data.info, `${index}`);
-            }
-          });
-        }
+      if (message.case === 10 && message.metadata) {
+        const jsonData = JSON.parse(message.metadata);
+
+        fetchSearchResults(jsonData.keyword, `${index}`);
       }
     });
   }, [chatMessages]);
@@ -240,7 +229,8 @@ const Chatting = () => {
         : new Date(new Date(data.start_time).getTime() + 3600000),
       categoryNum: data.category.id,
       location: data.location || "",
-      people: data.people || "",
+      person: data.people || "",
+      keyword: data.search_keyword || "",
     };
 
     try {
@@ -494,58 +484,6 @@ const Chatting = () => {
                               className="cursor-pointer"
                             />
                           </div>
-                          <div className="w-full bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
-                            <div className="text-[15px] font-semibold mb-3 border-b pb-2">
-                              # {data.search_keyword}
-                            </div>{" "}
-                            {/* 나중에 keyword로 바꾸기 */}
-                            {searchResults[`${index}`]?.documents.map(
-                              (result, resIndex) => (
-                                <div key={resIndex} className="border-b mb-3">
-                                  <a
-                                    href={result.url}
-                                    className="text-[15px] mb-2 text-[#7A64FF] underline"
-                                    dangerouslySetInnerHTML={{
-                                      __html: result.title,
-                                    }}
-                                  />
-                                  <div className="flex justify-between items-center h-[24px]">
-                                    <p className="text-[12px] text-gray-500 mb-1">
-                                      {new Date(
-                                        result.datetime
-                                      ).toLocaleDateString()}{" "}
-                                      - {new URL(result.url).hostname}
-                                    </p>
-                                    <div className="flex column gap-[5px]">
-                                      <Icon_copy
-                                        onClick={() => handleCopy(result.url)}
-                                        width={20}
-                                        height={20}
-                                        color="#545454"
-                                        className="cursor-pointer"
-                                      />
-                                      <Icon_star
-                                        width={20}
-                                        height={20}
-                                        color="#ffd233"
-                                        className="cursor-pointer"
-                                      />
-                                    </div>
-                                  </div>
-                                  <div
-                                    className="text-gray-800 text-[13px] mb-2"
-                                    dangerouslySetInnerHTML={{
-                                      __html: truncateHtmlText(
-                                        result.contents,
-                                        100
-                                      ),
-                                    }}
-                                  />
-                                </div>
-                              )
-                            )}
-                            <DaumSearchLink dataInfo={data.search_keyword} />
-                          </div>
                         </div>
                       );
                     })}
@@ -571,6 +509,76 @@ const Chatting = () => {
                   </div>
                 );
               }
+            } else if (message.case === 10) {
+              if (message.metadata == null) return;
+              const searchData = JSON.parse(message.metadata);
+              console.log("2" + message.metadata);
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col max-w-[70%] mb-[14px]"
+                >
+                  <div className="relative mb-[5px]">
+                    <div
+                      className={`${
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
+                          ? "bg-[#7A64FF] text-white"
+                          : "bg-white text-black"
+                      } px-[12px] py-[10px] rounded-[16px]`}
+                    >
+                      <p>{message.text}</p>
+                    </div>
+                  </div>
+                  <div className="w-full bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
+                    <div className="text-[15px] font-semibold mb-3 border-b pb-2">
+                      # {searchData?.keyword}
+                    </div>{" "}
+                    {/* 나중에 keyword로 바꾸기 */}
+                    {searchResults[`${index}`]?.documents.map(
+                      (result, resIndex) => (
+                        <div key={resIndex} className="border-b mb-3">
+                          <a
+                            href={result.url}
+                            className="text-[15px] mb-2 text-[#7A64FF] underline"
+                            dangerouslySetInnerHTML={{
+                              __html: result.title,
+                            }}
+                          />
+                          <div className="flex justify-between items-center h-[24px]">
+                            <p className="text-[12px] text-gray-500 mb-1">
+                              {new Date(result.datetime).toLocaleDateString()} -{" "}
+                              {new URL(result.url).hostname}
+                            </p>
+                            <div className="flex column gap-[5px]">
+                              <Icon_copy
+                                onClick={() => handleCopy(result.url)}
+                                width={20}
+                                height={20}
+                                color="#545454"
+                                className="cursor-pointer"
+                              />
+                              <Icon_star
+                                width={20}
+                                height={20}
+                                color="#ffd233"
+                                className="cursor-pointer"
+                              />
+                            </div>
+                          </div>
+                          <div
+                            className="text-gray-800 text-[13px] mb-2"
+                            dangerouslySetInnerHTML={{
+                              __html: truncateHtmlText(result.contents, 100),
+                            }}
+                          />
+                        </div>
+                      )
+                    )}
+                    <DaumSearchLink dataInfo={searchData?.keyword} />
+                  </div>
+                </div>
+              );
             } else if (message.case === 4) {
               if (message.metadata == null) return;
               let jsonData = message.metadata?.trim();
