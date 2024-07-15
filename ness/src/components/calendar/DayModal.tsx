@@ -10,6 +10,7 @@ import Cookies from "universal-cookie";
 import { getCategoryList } from "@/module/apis/calendar";
 import axiosInstance from "@/module/axiosInstance";
 import DaumSearchLink from "../main/DaumSearchLink";
+import { Icon_bookmark } from "@/module/icons";
 
 interface ScheduleEvent {
   id: number | undefined;
@@ -236,32 +237,38 @@ const EditSchedule = ({
           </div>
         </div>
       </div>
+
       {Boolean(bookmarks?.length) && (
-        <div className="w-full bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
-          {bookmarks?.map((bookmark, index) => (
-            <>
-              <div key={index} className="border-b mb-3">
-                <a
-                  href={bookmark.url}
-                  className="text-[15px] mb-2 text-[#7A64FF] underline"
-                  dangerouslySetInnerHTML={{ __html: bookmark.title }}
-                />
-                <div className="flex justify-between items-center h-[24px]">
-                  <p className="text-[12px] text-gray-500 mb-1">
-                    {new Date(bookmark.datetime).toLocaleDateString()} -{" "}
-                    {new URL(bookmark.url).hostname}
-                  </p>
+        <>
+          <div className="flex items-center text-[20px] mt-[10px] text-[#000000] gap-[5px]">
+            <Icon_bookmark width={30} height={30} color="#00C09E" /> 북마크
+          </div>
+          <div className="w-full bg-white shadow-lg rounded-lg p-4 mb-4 ">
+            {bookmarks?.map((bookmark, index) => (
+              <>
+                <div key={index} className="border-b mb-3">
+                  <a
+                    href={bookmark.url}
+                    className="text-[15px] mb-2 text-[#7A64FF]"
+                    dangerouslySetInnerHTML={{ __html: bookmark.title }}
+                  />
+                  <div className="flex justify-between items-center h-[24px]">
+                    <p className="text-[12px] text-gray-500 mb-1">
+                      {new Date(bookmark.datetime).toLocaleDateString()} -{" "}
+                      {new URL(bookmark.url).hostname}
+                    </p>
+                  </div>
+                  <div
+                    className="text-gray-800 text-[13px] mb-2"
+                    dangerouslySetInnerHTML={{
+                      __html: truncateHtmlText(bookmark.contents, 50),
+                    }}
+                  />
                 </div>
-                <div
-                  className="text-gray-800 text-[13px] mb-2"
-                  dangerouslySetInnerHTML={{
-                    __html: truncateHtmlText(bookmark.contents, 100),
-                  }}
-                />
-              </div>
-            </>
-          ))}
-        </div>
+              </>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

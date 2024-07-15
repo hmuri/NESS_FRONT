@@ -211,7 +211,7 @@ const Chatting = () => {
     try {
       const bookmarkData = {
         ...result,
-        id: id,
+        scheduleId: id,
       };
       const response = await axiosInstance.post(`bookmark`, bookmarkData);
       alert(`북마크에 추가되었습니다!`);
@@ -547,7 +547,6 @@ const Chatting = () => {
                     <div className="text-[15px] font-semibold mb-3 border-b pb-2">
                       # {searchData?.keyword}
                     </div>{" "}
-                    {/* 나중에 keyword로 바꾸기 */}
                     {searchResults[`${index}`]?.documents.map(
                       (result, resIndex) => (
                         <div key={resIndex} className="border-b mb-3">

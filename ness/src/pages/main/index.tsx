@@ -280,7 +280,7 @@ const Main = () => {
           </div>
           <div className="absolute left-[54px] top-1 w-[12px] h-[12px] rounded-full bg-[#7A64FF]"></div>
           <div
-            className="pl-[40px]"
+            className="pl-[40px] cursor-pointer"
             onClick={(e) => {
               handleEventClick(schedule);
             }}
