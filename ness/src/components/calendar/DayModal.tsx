@@ -9,6 +9,7 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { getCategoryList } from "@/module/apis/calendar";
 import axiosInstance from "@/module/axiosInstance";
+import DaumSearchLink from "../main/DaumSearchLink";
 
 interface ScheduleEvent {
   id: number | undefined;
@@ -44,6 +45,18 @@ interface IEditScheduleProps {
   categoryList: ICategoryList | undefined;
   setCategoryModalOpen: any;
 }
+
+interface Bookmark {
+  id: number;
+  contents: string;
+  datetime: string;
+  title: string;
+  url: string;
+}
+
+interface BookmarkList {
+  bookmarkList: Bookmark[];
+}
 const EditSchedule = ({
   event,
   setIsAllVisible,
@@ -60,8 +73,7 @@ const EditSchedule = ({
   const [endTime, setEndTime] = useState(event.end || "");
   const [location, setLocation] = useState(event.details.location || "");
   const [person, setPerson] = useState(event.details.person || "");
-
-  const cookies = new Cookies();
+  const [bookmarks, setBookmarks] = useState<Bookmark[] | undefined>();
 
   useEffect(() => {
     setSelectedCategory({
@@ -70,6 +82,40 @@ const EditSchedule = ({
       categoryColor: event.categoryColor,
     });
   }, []);
+
+  const getBookmark = async (
+    id: number | undefined
+  ): Promise<Bookmark[] | undefined> => {
+    try {
+      const response = await axiosInstance.get<BookmarkList>(
+        `/bookmark?scheduleId=${id}`
+      );
+      return response.data.bookmarkList;
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+    }
+  };
+
+  function truncateHtmlText(htmlContent: string, maxLength: number): string {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlContent; // HTML 문자열을 DOM 요소로 변환
+    let plainText = tempDiv.textContent || tempDiv.innerText || ""; // 텍스트 추출
+
+    // 길이 제한
+    if (plainText.length > maxLength) {
+      return plainText.substring(0, maxLength) + "..."; // 지정된 길이까지 자르고 말줄임표 추가
+    }
+    return plainText;
+  }
+
+  useEffect(() => {
+    const fetchBookmark = async () => {
+      const data = await getBookmark(event.id); // `event.id`가 정의되어 있다고 가정
+      setBookmarks(data);
+    };
+
+    fetchBookmark();
+  }, [event]);
 
   useEffect(() => {
     const updateSchedule = async () => {
@@ -190,6 +236,33 @@ const EditSchedule = ({
           </div>
         </div>
       </div>
+      {Boolean(bookmarks?.length) && (
+        <div className="w-full bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
+          {bookmarks?.map((bookmark, index) => (
+            <>
+              <div key={index} className="border-b mb-3">
+                <a
+                  href={bookmark.url}
+                  className="text-[15px] mb-2 text-[#7A64FF] underline"
+                  dangerouslySetInnerHTML={{ __html: bookmark.title }}
+                />
+                <div className="flex justify-between items-center h-[24px]">
+                  <p className="text-[12px] text-gray-500 mb-1">
+                    {new Date(bookmark.datetime).toLocaleDateString()} -{" "}
+                    {new URL(bookmark.url).hostname}
+                  </p>
+                </div>
+                <div
+                  className="text-gray-800 text-[13px] mb-2"
+                  dangerouslySetInnerHTML={{
+                    __html: truncateHtmlText(bookmark.contents, 100),
+                  }}
+                />
+              </div>
+            </>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
