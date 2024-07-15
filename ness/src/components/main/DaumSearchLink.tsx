@@ -1,9 +1,10 @@
 interface Props {
-  dataInfo: string; // `data.info` 값을 props로 받아옵니다.
+  dataInfo: string | undefined; // `data.info` 값을 props로 받아옵니다.
 }
 
 const DaumSearchLink: React.FC<Props> = ({ dataInfo }) => {
   // 인코딩된 검색어를 포함하는 URL 생성
+  if (!dataInfo) return;
   const encodedQuery = encodeURIComponent(dataInfo);
   const daumSearchUrl = `https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&q=${encodedQuery}`;
 

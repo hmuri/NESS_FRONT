@@ -51,7 +51,7 @@ interface EventData {
   location?: string;
   people?: string;
   info: string;
-  searchKeyword?: string;
+  search_keyword?: string;
 }
 
 interface Message {
@@ -496,7 +496,7 @@ const Chatting = () => {
                           </div>
                           <div className="w-full bg-white shadow-lg rounded-lg p-4 mb-4 mt-[10px]">
                             <div className="text-[15px] font-semibold mb-3 border-b pb-2">
-                              # {data.info}
+                              # {data.search_keyword}
                             </div>{" "}
                             {/* 나중에 keyword로 바꾸기 */}
                             {searchResults[`${index}`]?.documents.map(
@@ -544,7 +544,7 @@ const Chatting = () => {
                                 </div>
                               )
                             )}
-                            <DaumSearchLink dataInfo={data.info} />
+                            <DaumSearchLink dataInfo={data.search_keyword} />
                           </div>
                         </div>
                       );
