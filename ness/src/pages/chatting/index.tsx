@@ -24,9 +24,9 @@ import {
   Icon_information,
   Icon_mic,
   Icon_normal,
-  Icon_star,
   Icon_trash_bin,
   Icon_wrong,
+  Icon_bookmark,
 } from "@/module/icons";
 import Cookies from "universal-cookie";
 import axios from "axios";
@@ -206,6 +206,19 @@ const Chatting = () => {
       }
     });
   }, [chatMessages]);
+
+  const handleAddBookmark = async (id: string, result: SearchResult) => {
+    try {
+      const bookmarkData = {
+        ...result,
+        id: id,
+      };
+      const response = await axiosInstance.post(`bookmark`, bookmarkData);
+      alert(`북마크에 추가되었습니다!`);
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+    }
+  };
 
   interface IHandleScheduleAdd {
     data: EventData;
@@ -551,18 +564,24 @@ const Chatting = () => {
                               {new URL(result.url).hostname}
                             </p>
                             <div className="flex column gap-[5px]">
-                              <Icon_copy
+                              {/* <Icon_copy
                                 onClick={() => handleCopy(result.url)}
                                 width={20}
                                 height={20}
                                 color="#545454"
                                 className="cursor-pointer"
-                              />
-                              <Icon_star
-                                width={20}
-                                height={20}
-                                color="#ffd233"
+                              /> */}
+                              <Icon_bookmark
+                                width={24}
+                                height={24}
+                                color="#00C09E"
                                 className="cursor-pointer"
+                                onClick={() =>
+                                  handleAddBookmark(
+                                    searchData.scheduleId,
+                                    result
+                                  )
+                                }
                               />
                             </div>
                           </div>
