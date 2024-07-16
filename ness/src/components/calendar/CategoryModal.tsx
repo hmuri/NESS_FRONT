@@ -22,7 +22,7 @@ const CategoryModal = ({
     fetchData();
   }, []);
   return (
-    <div className="box-shadow w-full h-[50vh] max-h-[400px] rounded-t-[20px] bg-white fixed left-0 z-40 p-[40px]">
+    <div className="box-shadow w-full h-[50vh] max-h-[400px] rounded-t-[20px] bg-white fixed left-0 bottom-0 z-40 p-[40px]">
       <div className="flex justify-between mb-[20px]">
         <div className="text-[#454545] text-[20px] font-semibold">카테고리</div>
         <div>
