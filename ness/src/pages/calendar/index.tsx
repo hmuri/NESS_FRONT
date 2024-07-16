@@ -17,7 +17,7 @@ import FloatingNess from "@/components/common/FloatingNess";
 import axiosInstance from "@/module/axiosInstance";
 import TrashBinImage from "../../../public/assets/trash-bin.png";
 import Image from "next/image";
-import { Icon_bookmark } from "@/module/icons";
+import { Icon_bookmark, Icon_trash_bin } from "@/module/icons";
 import CategoryModal from "@/components/calendar/CategoryModal";
 
 const localizer = momentLocalizer(moment);
@@ -118,6 +118,22 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
     };
     updateSchedule();
   }, [title, startTime, endTime, location, person, selectedCategory]);
+
+  const handleDeleteBookmark = async (id: number | undefined) => {
+    try {
+      if (!id) return;
+      const response = await axiosInstance.delete(`/bookmark?bookmarkId=${id}`);
+      alert("북마크가 삭제되었습니다.");
+      if (bookmarks) {
+        const updatedBookmarks = bookmarks.filter(
+          (bookmark) => bookmark.id !== id
+        );
+        setBookmarks(updatedBookmarks);
+      }
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+    }
+  };
 
   const deleteSchedule = async (id: number | undefined) => {
     try {
@@ -234,6 +250,13 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
                         {new Date(bookmark.datetime).toLocaleDateString()} -{" "}
                         {new URL(bookmark.url).hostname}
                       </p>
+                      <Icon_trash_bin
+                        width={24}
+                        height={24}
+                        color="#00C09E"
+                        className="cursor-pointer"
+                        onClick={() => handleDeleteBookmark(bookmark.id)}
+                      />
                     </div>
                     <div
                       className="text-gray-800 text-[13px] mb-2"

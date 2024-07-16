@@ -10,7 +10,7 @@ import Cookies from "universal-cookie";
 import { getCategoryList } from "@/module/apis/calendar";
 import axiosInstance from "@/module/axiosInstance";
 import DaumSearchLink from "../main/DaumSearchLink";
-import { Icon_bookmark } from "@/module/icons";
+import { Icon_bookmark, Icon_trash_bin } from "@/module/icons";
 import CategoryModal from "./CategoryModal";
 
 interface ScheduleEvent {
@@ -151,6 +151,22 @@ const EditSchedule = ({
     }
   };
 
+  const handleDeleteBookmark = async (id: number | undefined) => {
+    try {
+      if (!id) return;
+      const response = await axiosInstance.delete(`/bookmark?bookmarkId=${id}`);
+      alert("북마크가 삭제되었습니다.");
+      if (bookmarks) {
+        const updatedBookmarks = bookmarks.filter(
+          (bookmark) => bookmark.id !== id
+        );
+        setBookmarks(updatedBookmarks);
+      }
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+    }
+  };
+
   return (
     <div className="w-full px-[7px] mt-[10px]">
       <div className="flex justify-between items-center cursor-pointer">
@@ -254,6 +270,13 @@ const EditSchedule = ({
                       {new Date(bookmark.datetime).toLocaleDateString()} -{" "}
                       {new URL(bookmark.url).hostname}
                     </p>
+                    <Icon_trash_bin
+                      width={24}
+                      height={24}
+                      color="#00C09E"
+                      className="cursor-pointer"
+                      onClick={() => handleDeleteBookmark(bookmark.id)}
+                    />
                   </div>
                   <div
                     className="text-gray-800 text-[13px] mb-2"
