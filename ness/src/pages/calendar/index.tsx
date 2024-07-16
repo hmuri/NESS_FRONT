@@ -12,13 +12,13 @@ import Header from "@/components/calendar/Header";
 import Nav from "@/components/common/Nav";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import Cookies from "universal-cookie";
-import DayModal, { CategoryModal } from "@/components/calendar/DayModal";
+import DayModal from "@/components/calendar/DayModal";
 import FloatingNess from "@/components/common/FloatingNess";
 import axiosInstance from "@/module/axiosInstance";
 import TrashBinImage from "../../../public/assets/trash-bin.png";
 import Image from "next/image";
-import { getCategoryList } from "@/module/apis/calendar";
 import { Icon_bookmark } from "@/module/icons";
+import CategoryModal from "@/components/calendar/CategoryModal";
 
 const localizer = momentLocalizer(moment);
 const cookies = new Cookies();
@@ -46,17 +46,12 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
   const [endTime, setEndTime] = useState(event?.end || "");
   const [location, setLocation] = useState(event?.details.location || "");
   const [person, setPerson] = useState(event?.details.person || "");
-  const [categoryList, setCategoryList] = useState<ICategoryList>();
   const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
   const [bookmarks, setBookmarks] = useState<Bookmark[] | undefined>();
 
   const [selectedCategory, setSelectedCategory] = useState<
     ICategory | undefined
-  >({
-    categoryNum: 1,
-    category: "🍀미분류",
-    categoryColor: "#D9D9D9",
-  });
+  >();
 
   const getBookmark = async (
     id: number | undefined
@@ -99,16 +94,7 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
         category: event.category,
         categoryColor: event.categoryColor,
       });
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getCategoryList();
-      setCategoryList(result);
-    };
-
-    fetchData();
-  }, []);
+  }, [event]);
 
   useEffect(() => {
     const updateSchedule = async () => {
@@ -154,7 +140,10 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
           style={{
             backgroundColor: selectedCategory?.categoryColor,
           }}
-          onClick={() => setCategoryModalOpen(true)}
+          onClick={() => {
+            setCategoryModalOpen(true);
+            console.log(categoryModalOpen);
+          }}
         >
           {selectedCategory?.category}
         </div>
@@ -261,8 +250,8 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
       </div>
       {categoryModalOpen && (
         <CategoryModal
+          selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
-          categoryList={categoryList}
           setCategoryModalOpen={setCategoryModalOpen}
         />
       )}

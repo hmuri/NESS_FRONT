@@ -32,3 +32,4 @@ export { ReactComponent as Icon_floating_ness } from "../../../public/assets/svg
 export { ReactComponent as Icon_trash_bin } from "../../../public/assets/svg/trash_bin.svg";
 export { ReactComponent as Icon_bookmark } from "../../../public/assets/svg/bookmark.svg";
 export { ReactComponent as Icon_copy } from "../../../public/assets/svg/copy.svg";
+export { ReactComponent as Icon_xbutton } from "../../../public/assets/svg/xbutton.svg";

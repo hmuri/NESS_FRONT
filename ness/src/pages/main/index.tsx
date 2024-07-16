@@ -13,6 +13,7 @@ import {
   Icon_information,
   Icon_mic,
   Icon_normal,
+  Icon_xbutton,
 } from "@/module/icons";
 import Slider from "react-slick";
 import useSpeechRecognition from "@/module/hooks/speechRecognition";
@@ -360,10 +361,10 @@ const Main = () => {
         {isModal && (
           <div className=" fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-30">
             <div
-              className="fixed top-[30px] right-[50px] text-[25px] text-white cursor-pointer"
+              className="fixed top-[30px] right-[50px] text-[25px] text-white cursor-pointer z-40"
               onClick={handleModal}
             >
-              X
+              <Icon_xbutton />
             </div>
             <div
               className="relative flex flex-col justify-center w-full h-[100vh] md:max-w-[600px] pb-[20px] overflow-auto "

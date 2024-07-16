@@ -220,6 +220,21 @@ const Chatting = () => {
     }
   };
 
+  const handleScheduleDelete = async (
+    isAdded: boolean,
+    id: number | undefined
+  ) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/schedule/ai?isAccepted=${isAdded}&scheduleId=${id}`
+      );
+      setChatMessages(response.data.chatList);
+    } catch (error) {
+      console.error("Failed to update schedule:", error);
+      setIsSelected(false);
+    }
+  };
+
   interface IHandleScheduleAdd {
     data: EventData;
     isAdded: boolean;
@@ -269,42 +284,6 @@ const Chatting = () => {
       setSearchResults((prev) => ({ ...prev, [key]: response.data }));
     } catch (error) {
       console.error("Error fetching search results:", error);
-    }
-  };
-
-  interface IHandleScheduleDelete {
-    data: EventData;
-    isAdded: boolean;
-  }
-
-  const handleScheduleDelete = async ({
-    data,
-    isAdded,
-  }: IHandleScheduleDelete) => {
-    setIsSelected(true);
-    const scheduleData = {
-      id: data.id,
-      title: data.info,
-      start: new Date(data.start_time),
-      end: data.end_time
-        ? new Date(data.end_time)
-        : new Date(new Date(data.start_time).getTime() + 3600000),
-      categoryNum: data.category.id,
-      location: data.location || "",
-      people: data.people || "",
-    };
-
-    try {
-      const response = await axiosInstance.post(
-        `/schedule/ai?isAccepted=${isAdded}&chatId=${scheduleData.id}`,
-        scheduleData
-      );
-
-      setChatMessages(response.data.chatList);
-      setIsSelected(false);
-    } catch (error) {
-      console.error("Failed to update schedule:", error);
-      setIsSelected(false);
     }
   };
 
@@ -665,10 +644,7 @@ const Chatting = () => {
                             <div className="flex bg-white p-[5px] h-[26px] rounded-[10px]">
                               <Icon_trash_bin
                                 onClick={() =>
-                                  handleScheduleDelete({
-                                    data: { ...data, id: message.id },
-                                    isAdded: true,
-                                  })
+                                  handleScheduleDelete(true, data.id)
                                 }
                                 className="cursor-pointer"
                               />
