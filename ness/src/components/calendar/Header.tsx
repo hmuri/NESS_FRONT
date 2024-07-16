@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import LeftArrow from "../../../public/assets/left_arrow.png";
 import RightArrow from "../../../public/assets/right_arrow.png";
 import Image from "next/image";
-import { Icon_category } from "@/module/icons";
+import {
+  Icon_category,
+  Icon_simple_left_arrow,
+  Icon_simple_right_arrow,
+} from "@/module/icons";
 import { useRouter } from "next/router";
 
 const localizer = momentLocalizer(moment);
@@ -34,7 +38,7 @@ const Header: React.FC<
     <div className="z-3 w-full fixed top-[50px]  mb-[21.5px] px-[30px]">
       <div className="relative flex items-center justify-between w-full">
         <button onClick={onPrevMonth}>
-          <Image src={LeftArrow} alt="" />
+          <Icon_simple_left_arrow />
         </button>
         <div className="h-[41px] flex gap-[8px] bg-white">
           <div className="text-white font-semibold w-[100px] px-[12px] pb-[6px] pt-[4px] rounded-md calendar-header">
@@ -51,7 +55,7 @@ const Header: React.FC<
           <Icon_category />
         </div>
         <button onClick={onNextMonth}>
-          <Image src={RightArrow} alt="" />
+          <Icon_simple_right_arrow />
         </button>
       </div>
     </div>

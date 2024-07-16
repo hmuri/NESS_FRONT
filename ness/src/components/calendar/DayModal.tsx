@@ -10,7 +10,11 @@ import Cookies from "universal-cookie";
 import { getCategoryList } from "@/module/apis/calendar";
 import axiosInstance from "@/module/axiosInstance";
 import DaumSearchLink from "../main/DaumSearchLink";
-import { Icon_bookmark, Icon_trash_bin } from "@/module/icons";
+import {
+  Icon_bookmark,
+  Icon_simple_left_arrow,
+  Icon_trash_bin,
+} from "@/module/icons";
 import CategoryModal from "./CategoryModal";
 
 interface ScheduleEvent {
@@ -171,7 +175,7 @@ const EditSchedule = ({
     <div className="w-full px-[7px] mt-[10px]">
       <div className="flex justify-between items-center cursor-pointer">
         <div onClick={() => setIsAllVisible(true)}>
-          <Image src={LeftArrowImage} alt="" />
+          <Icon_simple_left_arrow />
         </div>
         <div
           className="rounded-[20px] w-[115px] h-[40px] py-[10px] px-[2px] text-[15px] font-semibold text-center"

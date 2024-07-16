@@ -11,8 +11,6 @@ import {
   Icon_left_arrow,
 } from "@/module/icons";
 import { SetStateAction, useEffect, useState } from "react";
-import LeftArrowImage from "../../../public/assets/left_arrow.png";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Slider from "react-slick";
 

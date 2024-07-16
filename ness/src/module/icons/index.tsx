@@ -33,3 +33,5 @@ export { ReactComponent as Icon_trash_bin } from "../../../public/assets/svg/tra
 export { ReactComponent as Icon_bookmark } from "../../../public/assets/svg/bookmark.svg";
 export { ReactComponent as Icon_copy } from "../../../public/assets/svg/copy.svg";
 export { ReactComponent as Icon_xbutton } from "../../../public/assets/svg/xbutton.svg";
+export { ReactComponent as Icon_simple_left_arrow } from "../../../public/assets/svg/simple_left_arrow.svg";
+export { ReactComponent as Icon_simple_right_arrow } from "../../../public/assets/svg/simple_right_arrow.svg";
