@@ -132,10 +132,6 @@ export default function Alarm() {
                 {emailSelected ? <Icon_select_on /> : <Icon_select_off />}
               </button>
             </div>
-            <div className="w-full text-[16px] font-[500] text-center flex flex-col items-start my-[18px]">
-              <div>기타 기능</div>
-              <div className="text-[#454545]">기타 기능입니다.</div>
-            </div>
           </div>
         </div>
       </div>
