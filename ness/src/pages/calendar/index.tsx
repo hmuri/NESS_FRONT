@@ -185,7 +185,7 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
             <div className="flex justify-end">
               <input
                 type="datetime-local"
-                className="text-right w-full ml-[12px]"
+                className="text-right w-full ml-[12px] bg-white"
                 value={moment(startTime).format("YYYY-MM-DDTHH:mm")}
                 onChange={(e) => {
                   setStartTime(
