@@ -212,7 +212,7 @@ const EditSchedule = ({
                 setStartTime(moment(e.target.value).toDate());
               }}
             />
-            <div>
+            <div className="flex justify-end">
               ~ {"  "}
               <input
                 type="datetime-local"
@@ -227,7 +227,7 @@ const EditSchedule = ({
             </div>
           </div>
         </div>
-        <div className="flex justify-between py-[9px]">
+        <div className="w-[290px] flex justify-between py-[9px]">
           <div>🧭 위치</div>
           <div>
             <input
@@ -240,7 +240,7 @@ const EditSchedule = ({
             />
           </div>
         </div>
-        <div className="flex justify-between py-[9px]">
+        <div className="w-[290px] flex justify-between py-[9px]">
           <div>👯 사람</div>
           <div>
             <input
@@ -425,7 +425,7 @@ const AddSchedule = ({
                 );
               }}
             />
-            <div>
+            <div className="flex justify-end">
               ~ {"  "}
               <input
                 type="datetime-local"
@@ -442,7 +442,7 @@ const AddSchedule = ({
             </div>
           </div>
         </div>
-        <div className="flex justify-between py-[9px]">
+        <div className="w-[290px] flex justify-between py-[9px]">
           <div>🧭 위치</div>
           <div>
             <input
@@ -456,7 +456,7 @@ const AddSchedule = ({
             />
           </div>
         </div>
-        <div className="flex justify-between py-[9px]">
+        <div className="w-[290px] flex justify-between py-[9px]">
           <div>👯 사람</div>
           <div>
             <input

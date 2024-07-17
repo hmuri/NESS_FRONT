@@ -190,7 +190,7 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
                 setStartTime(moment(e.target.value).toDate());
               }}
             />
-            <div>
+            <div className="flex justify-end">
               ~ {"  "}
               <input
                 type="datetime-local"
@@ -205,7 +205,7 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between py-[9px]">
+        <div className="w-[290px] flex justify-between py-[9px]">
           <div>🧭 위치</div>
           <div>
             <input
@@ -218,7 +218,7 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
             />
           </div>
         </div>
-        <div className="flex justify-between py-[9px]">
+        <div className="w-[290px] flex justify-between py-[9px]">
           <div>👯 사람</div>
           <div>
             <input
