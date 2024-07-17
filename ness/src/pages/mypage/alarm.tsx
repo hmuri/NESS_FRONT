@@ -38,9 +38,7 @@ export default function Alarm() {
   const handleEmailSend = async () => {
     const response = await testEmail();
     if (response) {
-      alert(
-        `${profile?.id}로 테스트 이메일이 발송되었습니다. 1분 내에 확인이 가능합니다.`
-      );
+      alert(`테스트 이메일이 발송되었습니다. 1분 내에 확인이 가능합니다.`);
     } else {
       alert(
         "이메일 발송에 실패했습니다. 문제가 계속될 경우, maxcse01@gmail.com으로 연락 바랍니다."
