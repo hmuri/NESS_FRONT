@@ -703,7 +703,7 @@ const Chatting = () => {
           })}
 
           {isLoading && <LoadingLottie />}
-          {/* <div ref={messagesEndRef} /> */}
+          <div ref={messagesEndRef} />
         </div>
         <div className="fixed bg-[#F2F0FF] h-[66px] bottom-0 left-[20px] right-[20px] flex items-center">
           <input
