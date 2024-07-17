@@ -10,7 +10,7 @@ import {
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_REACT_APP_API_BASE_URL,
-  timeout: 20000,
+  timeout: 40000,
   withCredentials: true,
 });
 
