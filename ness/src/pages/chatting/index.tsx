@@ -417,6 +417,21 @@ const Chatting = () => {
                             : "bg-white text-black"
                         } px-[12px] py-[10px] rounded-[16px]`}
                       >
+                        <Image
+                          src={
+                            message.chatType === "USER" ||
+                            message.chatType === "STT"
+                              ? RightChatImg
+                              : LeftChatImg
+                          }
+                          className={`absolute bottom-3 ${
+                            message.chatType === "USER" ||
+                            message.chatType === "STT"
+                              ? "right-[-11px]"
+                              : "left-[-11px]"
+                          }`}
+                          alt=""
+                        />
                         <p>{message.text}</p>
                       </div>
                     </div>
@@ -519,6 +534,21 @@ const Chatting = () => {
                           : "bg-white text-black"
                       } px-[12px] py-[10px] rounded-[16px]`}
                     >
+                      <Image
+                        src={
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
+                            ? RightChatImg
+                            : LeftChatImg
+                        }
+                        className={`absolute bottom-3 ${
+                          message.chatType === "USER" ||
+                          message.chatType === "STT"
+                            ? "right-[-11px]"
+                            : "left-[-11px]"
+                        }`}
+                        alt=""
+                      />
                       <p>{message.text}</p>
                     </div>
                   </div>
@@ -602,6 +632,21 @@ const Chatting = () => {
                             : "bg-white text-black"
                         } px-[12px] py-[10px] rounded-[16px]`}
                       >
+                        <Image
+                          src={
+                            message.chatType === "USER" ||
+                            message.chatType === "STT"
+                              ? RightChatImg
+                              : LeftChatImg
+                          }
+                          className={`absolute bottom-3 ${
+                            message.chatType === "USER" ||
+                            message.chatType === "STT"
+                              ? "right-[-11px]"
+                              : "left-[-11px]"
+                          }`}
+                          alt=""
+                        />
                         <p>{message.text}</p>
                       </div>
                     </div>
@@ -695,6 +740,21 @@ const Chatting = () => {
                         : "bg-white text-black"
                     } max-w-[70%] px-[12px] py-[10px] rounded-[16px]`}
                   >
+                    <Image
+                      src={
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
+                          ? RightChatImg
+                          : LeftChatImg
+                      }
+                      className={`absolute bottom-3 ${
+                        message.chatType === "USER" ||
+                        message.chatType === "STT"
+                          ? "right-[-11px]"
+                          : "left-[-11px]"
+                      }`}
+                      alt=""
+                    />
                     <p>{message.text}</p>
                   </div>
                 </div>
@@ -703,7 +763,7 @@ const Chatting = () => {
           })}
 
           {isLoading && <LoadingLottie />}
-          {/* <div ref={messagesEndRef} /> */}
+          <div ref={messagesEndRef} />
         </div>
         <div className="fixed bg-[#F2F0FF] h-[66px] bottom-0 left-[20px] right-[20px] flex items-center">
           <input
