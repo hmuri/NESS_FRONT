@@ -182,24 +182,29 @@ export const EditSchedule = ({ event }: IEditScheduleProps) => {
         <div className="flex justify-between py-[9px]">
           <div className="w-[70px]">⏰ 시간</div>
           <div className=" flex flex-col justify-end">
-            <input
-              type="datetime-local"
-              className="text-right w-full ml-[0px]"
-              value={moment(startTime).format("YYYY-MM-DDTHH:mm")} // datetime-local 형식에 맞게 값을 포맷합니다
-              onChange={(e) => {
-                setStartTime(moment(e.target.value).toDate());
-              }}
-            />
             <div className="flex justify-end">
-              ~ {"  "}
               <input
                 type="datetime-local"
-                className="text-right w-[200px]"
+                className="text-right w-full ml-[12px]"
+                value={moment(startTime).format("YYYY-MM-DDTHH:mm")}
+                onChange={(e) => {
+                  setStartTime(
+                    moment(e.target.value, "YYYY-MM-DDTHH:mm").toDate()
+                  );
+                }}
+              />
+            </div>
+            <div className="flex justify-end">
+              <input
+                type="datetime-local"
+                className="text-right w-full ml-[12px] bg-white"
                 value={
                   endTime ? moment(endTime).format("YYYY-MM-DDTHH:mm") : ""
                 }
                 onChange={(e) => {
-                  setEndTime(moment(e.target.value, "HH:mm").toDate());
+                  setEndTime(
+                    moment(e.target.value, "YYYY-MM-DDTHH:mm").toDate()
+                  );
                 }}
               />
             </div>

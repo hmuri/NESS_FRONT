@@ -653,7 +653,7 @@ const Chatting = () => {
                     {dataEntries.map((data: EventData, dataIndex: number) => {
                       const formattedDate = moment(data.start_time)
                         .locale("ko")
-                        .format("MMMM Do dddd");
+                        .format("MMMM Do dddd A h:mm");
                       return (
                         <div
                           key={`${index}-${dataIndex}`}
