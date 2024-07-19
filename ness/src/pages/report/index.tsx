@@ -105,7 +105,10 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <div className="text-[20px] font-[500] mb-[10px]">당신의 메모리</div>
+        <div className="flex justify-between items-end mb-[10px]">
+          <div className="text-[20px] font-[500] ">당신의 메모리</div>
+          <div className="text-[13px] text-[#7A64FF]">매일 업데이트</div>
+        </div>
         <div className="rounded-[10px] bg-[#F2F0FF] w-full h-[114px] flex items-center">
           <div className="w-full px-[5px]">
             {reportMemoryList?.map((row, index) => (
@@ -122,8 +125,9 @@ const Index = () => {
             ))}
           </div>
         </div>
-        <div className="text-[20px] font-[500] mb-[15px] mt-[40px]">
-          당신의 태그
+        <div className="flex justify-between items-end  mb-[15px] mt-[40px]">
+          <div className="text-[20px] font-[500]">당신의 태그</div>
+          <div className="text-[13px] text-[#7A64FF]">매월 1일 업데이트</div>
         </div>
         <div className="flex gap-[6px] flex-col">
           {tags?.map((tag) => (
