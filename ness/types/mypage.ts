@@ -7,4 +7,5 @@ interface Profile {
   isEmailActive: boolean;
   email?: string;
   onBoarding: boolean;
+  pictureKey?: string | undefined;
 }

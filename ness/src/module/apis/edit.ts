@@ -27,7 +27,10 @@ export const uploadFileToS3 = async (preSignedUrl: string, file: File) => {
   }
 };
 
-export const updateProfile = async (imageUrl: string, nickname: string) => {
+export const updateProfile = async (
+  imageUrl: string | undefined,
+  nickname: string
+) => {
   const payload = { nickname, imageUrl };
   try {
     const response = await axiosInstance.put(`/profile`, payload);

@@ -13,6 +13,7 @@ export default function Edit() {
   const [profile, setProfile] = useState<Profile | undefined>();
   const [nickname, setNickname] = useState<string>("");
   const [pictureUrl, setPictureUrl] = useState<string>("");
+  const [pictureKey, setPictureKey] = useState<string | undefined>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null | undefined>(null);
 
@@ -23,6 +24,7 @@ export default function Edit() {
         setProfile(data);
         setNickname(data.nickname);
         setPictureUrl(data.pictureUrl);
+        setPictureKey(data.pictureKey);
       }
     };
 
@@ -41,6 +43,7 @@ export default function Edit() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setPictureUrl(reader.result as string);
+        setPictureKey(reader.result as string);
       };
       reader.readAsDataURL(newFile);
     }
@@ -57,11 +60,13 @@ export default function Edit() {
       );
       if (uploadSuccess) {
         await updateProfile(preSignedUrlData.key, nickname);
+        alert("프로필이 정상적으로 수정되었습니다.");
       } else {
         console.error("Failed to upload file to S3");
       }
     } else {
-      await updateProfile(pictureUrl, nickname);
+      await updateProfile(pictureKey, nickname);
+      alert("프로필이 정상적으로 수정되었습니다.");
     }
   };
 
